@@ -145,14 +145,22 @@ export default function App() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
-      // Auto-close mobile menu if user scrolls significantly
-      if (isMenuOpen && window.scrollY > 100) {
-        setIsMenuOpen(false);
-      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMenuOpen]);
 
   const handleQuoteSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -235,8 +243,9 @@ export default function App() {
             </button>
           </div>
         </div>
+      </nav>
 
-        {/* Mobile Menu Dropdown */}
+      {/* Mobile Menu Dropdown */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
@@ -287,7 +296,6 @@ export default function App() {
             </motion.div>
           )}
         </AnimatePresence>
-      </nav>
 
       {/* Hero Section */}
       <header className="min-h-screen flex flex-col justify-center pt-32 md:pt-48 pb-12 md:pb-24 px-8 max-w-screen-2xl mx-auto">

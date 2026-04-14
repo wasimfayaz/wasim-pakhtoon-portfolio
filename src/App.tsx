@@ -187,7 +187,7 @@ export default function App() {
         }`}
       >
         <div className="flex justify-between items-center w-full px-8 max-w-screen-2xl mx-auto">
-          <a href="#" className="text-2xl font-black tracking-tighter text-white">
+          <a href="#" className="text-xl md:text-2xl font-black tracking-tighter text-white shrink-0">
             WASIM PAKHTOON
           </a>
           <div className="hidden md:flex gap-12">
@@ -206,7 +206,7 @@ export default function App() {
           </div>
           <a
             href="#contact"
-            className="font-label uppercase tracking-[0.1em] text-[0.6875rem] font-medium text-white hover:opacity-70 transition-opacity"
+            className="font-label uppercase tracking-[0.1em] text-[0.625rem] font-bold text-white border border-white/20 px-5 py-2.5 hover:bg-white hover:text-black transition-all duration-300"
           >
             CONTACT
           </a>

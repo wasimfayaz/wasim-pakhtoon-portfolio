@@ -184,9 +184,9 @@ export default function App() {
     <div className="min-h-screen bg-background text-on-surface selection:bg-white selection:text-black scroll-smooth">
       {/* Navigation */}
       <nav 
-        className={`fixed top-0 w-full z-[70] transition-all duration-300 ${
+        className={`fixed top-0 w-full z-[100] transition-all duration-300 ${
           scrolled 
-            ? "bg-[#131313]/70 backdrop-blur-md border-b border-outline/20 py-4" 
+            ? "bg-[#131313]/80 backdrop-blur-md border-b border-outline/20 py-4" 
             : "bg-transparent border-b border-transparent py-6"
         }`}
       >
@@ -243,9 +243,9 @@ export default function App() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="fixed inset-0 top-0 bg-[#0E0E0E]/95 backdrop-blur-2xl z-[65] md:hidden overflow-y-auto"
+              className="fixed inset-0 top-[80px] bg-[#0E0E0E]/95 backdrop-blur-2xl z-[80] md:hidden overflow-y-auto"
             >
-              <div className="flex flex-col p-8 pt-32 space-y-8">
+              <div className="flex flex-col p-8 space-y-8">
                 {navLinks.map((link) => (
                   <a
                     key={link.name}

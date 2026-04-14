@@ -478,7 +478,7 @@ export default function App() {
                 <img 
                   src={img} 
                   alt={`Pexels Featured Work 0${idx + 1}`} 
-                  className="w-full h-full object-cover opacity-70 group-hover/image:scale-105 group-hover/image:opacity-100 transition-all duration-700 blur-[2px] group-hover/image:blur-none"
+                  className="w-full h-full object-cover opacity-70 group-hover/image:scale-105 group-hover/image:opacity-100 transition-all duration-700 md:blur-[2px] group-hover/image:blur-none"
                 />
                 <div className="absolute inset-0 border border-outline/10 group-hover/image:border-white/20 transition-colors pointer-events-none z-10" />
                 <div className="absolute top-4 left-4 z-20 flex items-center gap-2 opacity-0 group-hover/image:opacity-100 transition-opacity duration-500">

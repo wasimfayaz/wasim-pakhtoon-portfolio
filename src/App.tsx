@@ -4,7 +4,7 @@
  */
 
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowDown, ArrowRight, X, CheckCircle2, ChevronDown, Menu } from "lucide-react";
+import { ArrowDown, ArrowRight, X, CheckCircle2, ChevronDown, Menu, ArrowUp } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const navLinks = [
@@ -17,7 +17,6 @@ const navLinks = [
 const socials = [
   { name: "INSTAGRAM", href: "#" },
   { name: "BEHANCE", href: "#" },
-  { name: "DRIBBBLE", href: "#" },
   { name: "VIMEO", href: "#" },
   { name: "LINKEDIN", href: "#" },
 ];
@@ -178,7 +177,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-surface selection:bg-white selection:text-black">
+    <div className="min-h-screen bg-background text-on-surface selection:bg-white selection:text-black scroll-smooth">
       {/* Navigation */}
       <nav 
         className={`fixed top-0 w-full z-50 transition-all duration-300 ${
@@ -215,10 +214,20 @@ export default function App() {
             
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden text-white p-2 hover:bg-white/5 transition-colors"
+              className="md:hidden text-white p-2 hover:bg-white/5 transition-colors z-50 rounded-full"
               aria-label="Toggle Menu"
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={isMenuOpen ? "close" : "open"}
+                  initial={{ opacity: 0, rotate: -90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: 90 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                </motion.div>
+              </AnimatePresence>
             </button>
           </div>
         </div>
@@ -291,12 +300,18 @@ export default function App() {
           <div className="md:col-span-4">
             <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">YOU'LL LIKE IT:</span>
           </div>
-          <div className="md:col-span-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="md:col-span-6"
+          >
             <p className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-md">
               I HELP BRANDS GROW WITH HIGH-IMPACT VIDEO EDITING, BRANDING, AND CINEMATIC SHOOTS.
             </p>
             <div className="mt-4 md:mt-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-green"></span>
               <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">AVAILABLE</span>
             </div>
             <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-center gap-4">
@@ -465,46 +480,112 @@ export default function App() {
 
       {/* Contact Section */}
       <section className="px-8 pb-32 max-w-screen-2xl mx-auto" id="contact">
-        <div className="border-t border-outline/30 pt-8">
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="border-t border-outline/30 pt-8"
+        >
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             <div className="md:col-span-4">
-              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">START A PROJECT:</span>
+              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">INQUIRY:</span>
+              <h2 className="text-3xl font-black uppercase tracking-tighter leading-none mt-4">START A PROJECT</h2>
+              <p className="text-[0.625rem] uppercase tracking-widest text-secondary-text mt-4 max-w-[150px]">Currently accepting a limited number of high-impact projects.</p>
             </div>
             <div className="md:col-span-8">
-              <form className="space-y-12" onSubmit={(e) => e.preventDefault()}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                  <div className="relative group">
-                    <input
-                      type="text"
-                      placeholder="YOUR NAME"
-                      className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-4 px-0 placeholder:text-outline text-sm uppercase tracking-widest transition-colors"
-                    />
-                  </div>
-                  <div className="relative group">
-                    <input
-                      type="email"
-                      placeholder="EMAIL ADDRESS"
-                      className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-4 px-0 placeholder:text-outline text-sm uppercase tracking-widest transition-colors"
-                    />
-                  </div>
+              {formStatus === "success" ? (
+                <div className="py-20 bg-[#0E0E0E] border border-outline/20 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/10 mb-8"
+                  >
+                    <CheckCircle2 className="w-8 h-8 text-green-500" />
+                  </motion.div>
+                  <h3 className="text-2xl font-bold uppercase tracking-tighter mb-4">REQUEST RECEIVED</h3>
+                  <p className="text-[0.6875rem] uppercase tracking-widest text-secondary-text leading-relaxed max-w-xs mx-auto">
+                    Your request has been received. I’ll review everything personally and get back to you shortly.
+                  </p>
+                  <button 
+                    onClick={() => setFormStatus("idle")}
+                    className="mt-12 bg-white text-black px-12 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all"
+                  >
+                    SEND ANOTHER
+                  </button>
                 </div>
-                <input
-                  type="text"
-                  placeholder="PROJECT TYPE (VIDEO / BRANDING / SHOOT)"
-                  className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-4 px-0 placeholder:text-outline text-sm uppercase tracking-widest transition-colors"
-                />
-                <textarea
-                  placeholder="YOUR VISION"
-                  rows={3}
-                  className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-4 px-0 placeholder:text-outline text-sm uppercase tracking-widest resize-none transition-colors"
-                ></textarea>
-                <button className="bg-white text-black px-12 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all flex items-center gap-4 group">
-                  SEND MESSAGE <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-              </form>
+              ) : (
+                <form className="space-y-12" onSubmit={handleQuoteSubmit}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div className="space-y-2">
+                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">YOUR NAME *</label>
+                      <input name="name" required type="text" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="ENTER NAME" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">EMAIL ADDRESS *</label>
+                      <input name="email" required type="email" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="EMAIL@EXAMPLE.COM" />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div className="space-y-2">
+                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">PHONE / WHATSAPP</label>
+                        <input name="phone" type="text" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="+00 000 000 000" />
+                    </div>
+                    <CustomSelect 
+                        name="project_type" 
+                        label="SELECT TYPE" 
+                        required 
+                        options={[
+                          { value: "editing", label: "VIDEO EDITING" },
+                          { value: "branding", label: "BRANDING" },
+                          { value: "shoot", label: "CINEMATIC SHOOT" },
+                          { value: "social", label: "SOCIAL CONTENT" },
+                          { value: "other", label: "OTHER" },
+                        ]} 
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <CustomSelect 
+                        name="budget" 
+                        label="SELECT BUDGET" 
+                        required 
+                        options={[
+                          { value: "under500", label: "UNDER $500" },
+                          { value: "500-1000", label: "$500 – $1,000" },
+                          { value: "1000-3000", label: "$1,000 – $3,000" },
+                          { value: "3000-5000", label: "$3,000 – $5,000" },
+                          { value: "5000+", label: "$5,000+" },
+                        ]} 
+                    />
+                    <CustomSelect 
+                        name="timeline" 
+                        label="TIMELINE" 
+                        defaultValue="standard"
+                        options={[
+                          { value: "standard", label: "STANDARD (1-2 WEEKS)" },
+                          { value: "urgent", label: "URGENT (1-3 DAYS)" },
+                          { value: "flexible", label: "FLEXIBLE" },
+                        ]} 
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">PROJECT VISION *</label>
+                    <textarea name="vision" required rows={3} className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors resize-none" placeholder="TELL ME ABOUT YOUR GOALS AND VISION"></textarea>
+                  </div>
+
+                  <button 
+                    disabled={formStatus === "submitting"}
+                    className="bg-white text-black px-12 py-5 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all flex items-center gap-4 group disabled:opacity-50"
+                  >
+                    {formStatus === "submitting" ? "SENDING..." : "SEND REQUEST"} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  </button>
+                </form>
+              )}
             </div>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* Footer */}
@@ -663,6 +744,22 @@ export default function App() {
               )}
             </motion.div>
           </div>
+        )}
+      </AnimatePresence>
+
+      {/* Back to Top Button */}
+      <AnimatePresence>
+        {scrolled && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="fixed bottom-8 right-8 z-[60] bg-[#131313]/80 backdrop-blur-md border border-outline/30 text-white p-4 hover:bg-white hover:text-black transition-all duration-300"
+            aria-label="Back to Top"
+          >
+            <ArrowUp className="w-5 h-5" />
+          </motion.button>
         )}
       </AnimatePresence>
     </div>

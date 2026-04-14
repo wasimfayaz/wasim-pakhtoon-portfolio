@@ -73,9 +73,9 @@ const editingProjects = [
 ];
 
 const expertiseLines = [
-  "From concept to final delivery, we provide one complete solution for brands and hotels.",
-  "Cinematic video production, precision drone work, high-end editing, and strategic branding.",
-  "We handle every detail of the process to ensure your visuals drive real business growth.",
+  "Integrating cinematic production, drone cinematography, and specialized editing into one seamless workflow.",
+  "From initial conceptualization to the final export, we manage every technical and creative detail.",
+  "A dedicated approach to visual storytelling designed to elevate luxury hotels and properties.",
 ];
 
 const skillCategories = [
@@ -325,9 +325,9 @@ export default function App() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[clamp(2.5rem,10vw,10rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24"
+          className="text-[clamp(2.5rem,12vw,12rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24"
         >
-          WE DELIVER<br />CINEMATIC EXCELLENCE
+          Delivering cinematic<br />excellence
         </motion.h1>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 border-t border-outline/30 pt-6 md:pt-8 mb-8 md:mb-20">
@@ -504,7 +504,7 @@ export default function App() {
 
         <div className="max-w-5xl">
           <h3 className="text-[clamp(2rem,6vw,5rem)] font-black uppercase tracking-tighter leading-[0.9] mb-16">
-            WE HANDLE EVERYTHING<br />FROM START TO FINISH.
+            Complete visual production.<br />From start to finish.
           </h3>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -538,7 +538,7 @@ export default function App() {
                   viewport={{ once: true }}
                   className="text-3xl md:text-5xl font-bold tracking-tighter uppercase leading-[0.9] mb-8"
                 >
-                  WE BELIEVE IN THE POWER OF DETAIL AND THE IMPACT OF STORY.
+                  Creating with vision. Executing with precision.
                 </motion.h2>
 
                 <motion.p
@@ -548,7 +548,7 @@ export default function App() {
                   transition={{ delay: 0.1 }}
                   className="text-[0.6875rem] md:text-xs uppercase tracking-[0.12em] leading-relaxed text-secondary-text mb-20 max-w-2xl font-normal"
                 >
-                  WASIM PAKHTOON BRINGS A HANDS-ON APPROACH TO EVERY PROJECT, ENSURING EVERY FRAME AND EVERY PIXEL SERVES A PURPOSE. WITH EXTENSIVE EXPERIENCE WORKING WITH LUXURY HOTELS, PREMIUM PROPERTIES, AND GLOBAL BRANDS, WE SPECIALIZE IN END-TO-END VISUAL STORYTELLING THAT DELIVERS RESULTS. WE DON'T JUST SHOOT VIDEO—WE CRAFT IDENTITIES.
+                  Based in Kashmir, Wasim Pakhtoon leads high-end cinematic productions for properties and global brands. We manage every phase—from the initial shoot to final delivery—ensuring world-class standards through a refined hands-on approach and specialized support behind the scenes. Our focus is on seamless execution and uncompromising quality.
                 </motion.p>
 
                 {/* Skills Grid */}

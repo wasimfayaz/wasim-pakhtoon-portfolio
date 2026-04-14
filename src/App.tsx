@@ -32,7 +32,6 @@ const projects = [
     title: "ECO BREW BUSINESS CARD",
     category: "PRINT // BRANDING",
     image: EcoBrewCardImg,
-    large: true,
   },
   {
     id: 1,
@@ -40,7 +39,6 @@ const projects = [
     title: "MUTATE TECH IDENTITY",
     category: "BRANDING / STRATEGY",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuChMoA0l5Zw1yXCauYAFPoWeYOVWjA3tjztcuVOi_kdjAJGLS6At-It-CP61QsW1z9_c0b4g7Uctx1NisEDppR8T2h5hQOzV_QcbWX-ikv88mHjSB44jOykWnsFTr93yuusnUKx1wiyZ_C_qehchIBFm68GNcgdfRByhUG4ZzRAAmEA2IvzdromgSWJetLnkkzsRznJeum1GqomErYW5u9VIa_MIXzjqONiaC6tTg6G3yj-BqS9aSxJ-I9P1LLvT_bKOq5DpWWCCi0",
-    large: false,
   },
   {
     id: 2,
@@ -48,7 +46,6 @@ const projects = [
     title: "MIDNIGHT SESSIONS",
     category: "PRODUCTION",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts",
-    large: false,
   },
 ];
 
@@ -391,7 +388,7 @@ export default function App() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className={`${project.large ? "lg:col-span-8" : "lg:col-span-4"} group cursor-pointer`}
+              className="lg:col-span-4 group cursor-pointer"
             >
               <div className="aspect-video lg:aspect-auto bg-[#1a1a1a] overflow-hidden mb-4 relative flex items-center justify-center">
                 <img

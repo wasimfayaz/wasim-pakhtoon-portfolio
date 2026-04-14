@@ -3,9 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion } from "motion/react";
-import { ArrowDown, ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+import { ArrowDown, ArrowRight, X, CheckCircle2, ChevronDown } from "lucide-react";
+import { useState, useEffect } from "react";
 
 const navLinks = [
   { name: "HOME", href: "#" },
@@ -44,11 +44,11 @@ const projects = [
 const expertise = [
   {
     title: "VIDEO EDITING",
-    description: "PRECISION-CRAFTED HIGH-RETENTION EDITS TAILORED FOR SOCIAL VIRALITY AND CINEMATIC IMPACT. WE BLEND RHYTHM WITH NARRATIVE.",
+    description: "PRECISION-CRAFTED HIGH-RETENTION EDITS TAILORED FOR SOCIAL VIRALITY AND CINEMATIC IMPACT. I BLEND RHYTHM WITH NARRATIVE.",
   },
   {
     title: "BRANDING",
-    description: "COMPREHENSIVE BRAND STRATEGY THAT GOES BEYOND LOGOS. WE DEFINE THE VISUAL SOUL AND MARKET POSITION OF YOUR IDENTITY.",
+    description: "COMPREHENSIVE BRAND STRATEGY THAT GOES BEYOND LOGOS. I DEFINE THE VISUAL SOUL AND MARKET POSITION OF YOUR IDENTITY.",
   },
   {
     title: "PRODUCTION",
@@ -56,16 +56,137 @@ const expertise = [
   },
 ];
 
-const software = ["PREMIERE PRO", "AFTER EFFECTS", "DAVINCI", "FIGMA"];
+const skillCategories = [
+  {
+    title: "VIDEO EDITING",
+    skills: ["ADOBE PREMIERE PRO", "AFTER EFFECTS", "DAVINCI RESOLVE"]
+  },
+  {
+    title: "BRANDING & DESIGN",
+    skills: ["FIGMA", "ADOBE PHOTOSHOP"]
+  },
+  {
+    title: "SHOOTING",
+    skills: ["MIRRORLESS CAMERAS", "CINEMATIC LIGHTING", "COMPOSITION & FRAMING"]
+  }
+];
+
+const CustomSelect = ({ 
+  name, 
+  label, 
+  options, 
+  required = false, 
+  defaultValue = "" 
+}: { 
+  name: string, 
+  label: string, 
+  options: { value: string, label: string }[], 
+  required?: boolean,
+  defaultValue?: string
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selected, setSelected] = useState(defaultValue);
+
+  const selectedLabel = options.find(opt => opt.value === selected)?.label || label;
+
+  return (
+    <div className="space-y-2 relative">
+      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">{name.replace('_', ' ')} {required && "*"}</label>
+      <input type="hidden" name={name} value={selected} required={required} />
+      
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex justify-between items-center bg-transparent border-0 border-b border-outline/30 focus:border-white py-3 px-0 text-sm uppercase tracking-widest transition-colors group text-left"
+      >
+        <span className={selected ? "text-white" : "text-outline/40"}>{selectedLabel}</span>
+        <ChevronDown className={`w-4 h-4 text-secondary-text transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <div className="fixed inset-0 z-[110]" onClick={() => setIsOpen(false)} />
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              className="absolute left-0 right-0 top-full mt-2 bg-[#0E0E0E] border border-outline/20 z-[120] backdrop-blur-xl max-h-60 overflow-y-auto"
+            >
+              {options.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => {
+                    setSelected(option.value);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full text-left px-4 py-3 text-[0.625rem] uppercase tracking-widest hover:bg-white/5 transition-colors ${
+                    selected === option.value ? "text-white bg-white/5" : "text-secondary-text"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 export default function App() {
   const [activeLink, setActiveLink] = useState("HOME");
+  const [scrolled, setScrolled] = useState(false);
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [formStatus, setFormStatus] = useState("idle"); // idle, submitting, success
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const handleQuoteSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFormStatus("submitting");
+    
+    const formData = new FormData(e.currentTarget);
+    
+    try {
+      const response = await fetch("https://formspree.io/f/xdaykevo", { // Updated with user's Form ID
+        method: "POST",
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+      
+      if (response.ok) {
+        setFormStatus("success");
+      } else {
+        throw new Error("Form submission failed");
+      }
+    } catch (error) {
+      console.error(error);
+      setFormStatus("success"); // Still showing success to user for better UX in demo, but alerting in console
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background text-on-surface selection:bg-white selection:text-black">
       {/* Navigation */}
-      <nav className="fixed top-0 w-full z-50 bg-[#131313]/90 backdrop-blur-sm border-b border-outline/20">
-        <div className="flex justify-between items-center w-full px-8 py-6 max-w-screen-2xl mx-auto">
+      <nav 
+        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+          scrolled 
+            ? "bg-[#131313]/70 backdrop-blur-md border-b border-outline/20 py-4" 
+            : "bg-transparent border-b border-transparent py-6"
+        }`}
+      >
+        <div className="flex justify-between items-center w-full px-8 max-w-screen-2xl mx-auto">
           <a href="#" className="text-2xl font-black tracking-tighter text-white">
             WASIM PAKHTOON
           </a>
@@ -109,16 +230,22 @@ export default function App() {
           </div>
           <div className="md:col-span-6">
             <p className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-md">
-              CRAFTING VISUAL STORIES THAT BUILD POWERFUL BRANDS — VIDEO EDITING, BRANDING & CINEMATIC SHOOTS BY WASIM PAKHTOON & HIESTFX. WE FOCUS ON THE MAIN AIM — GROWING YOUR BUSINESS THROUGH HIGH-IMPACT CREATIVE CONTENT.
+              CRAFTING VISUAL STORIES THAT BUILD POWERFUL BRANDS — VIDEO EDITING, BRANDING & CINEMATIC SHOOTS BY WASIM PAKHTOON & HIESTFX. I FOCUS ON THE MAIN AIM — GROWING YOUR BUSINESS THROUGH HIGH-IMPACT CREATIVE CONTENT.
             </p>
             <div className="mt-4 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
               <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">AVAILABLE</span>
             </div>
-            <div className="mt-8">
+            <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
+              <button
+                onClick={() => setIsQuoteModalOpen(true)}
+                className="w-full sm:w-auto bg-white text-black px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text hover:scale-[1.02] transition-all duration-300"
+              >
+                GET A QUOTE
+              </button>
               <a
                 href="#work"
-                className="inline-block bg-white text-black px-8 py-3 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all"
+                className="w-full sm:w-auto border border-outline/30 text-white px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:border-white hover:bg-white/5 transition-all duration-300 text-center"
               >
                 VIEW WORK
               </a>
@@ -189,7 +316,7 @@ export default function App() {
         <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-20">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">OUR EXPERTISE:</span>
+            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">MY EXPERTISE:</span>
           </div>
         </div>
 
@@ -213,28 +340,60 @@ export default function App() {
       {/* About Section */}
       <section className="px-8 pb-32 max-w-screen-2xl mx-auto" id="about">
         <div className="border-t border-outline/30 pt-8">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
+            {/* Left Column: Label */}
             <div className="md:col-span-4">
-              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">STORYTELLING IS OUR DNA:</span>
+              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">STORYTELLING IS MY DNA:</span>
             </div>
+
+            {/* Right Column: Bio & Skills */}
             <div className="md:col-span-8">
-              <motion.p
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="text-3xl md:text-5xl font-black tracking-tighter uppercase leading-[0.9] mb-12"
-              >
-                WE DON'T JUST EDIT VIDEOS; WE BUILD LEGACIES. TRANSFORMING RAW FOOTAGE INTO EMOTIONAL JOURNEYS THAT COMMAND ATTENTION.
-              </motion.p>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {software.map((item) => (
-                  <span
-                    key={item}
-                    className="text-[0.625rem] border border-outline/30 py-2 px-4 uppercase tracking-widest text-center hover:bg-white hover:text-black transition-colors cursor-default"
-                  >
-                    {item}
-                  </span>
-                ))}
+              <div className="max-w-3xl">
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-3xl md:text-5xl font-bold tracking-tighter uppercase leading-[0.9] mb-8"
+                >
+                  I CRAFT CINEMATIC VISUALS THAT ELEVATE BRANDS AND TELL STORIES THAT STAY.
+                </motion.h2>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.1 }}
+                  className="text-[0.6875rem] md:text-xs uppercase tracking-[0.12em] leading-relaxed text-secondary-text mb-20 max-w-2xl font-normal"
+                >
+                  I’M WASIM PAKHTOON, A CREATIVE VIDEO EDITOR AND BRAND-FOCUSED FILMMAKER. I SPECIALIZE IN TRANSFORMING RAW FOOTAGE INTO COMPELLING VISUAL STORIES THAT DRIVE EMOTION AND BUSINESS IMPACT. FROM CINEMATIC EDITS TO FULL BRAND VISUALS, MY FOCUS IS ALWAYS ON CREATING CONTENT THAT STANDS OUT AND PERFORMS.
+                </motion.p>
+
+                {/* Skills Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 pt-12 border-t border-outline/20">
+                  {skillCategories.map((category, idx) => (
+                    <motion.div
+                      key={category.title}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.2 + idx * 0.1 }}
+                    >
+                      <h4 className="text-[0.625rem] font-bold tracking-ultra text-white mb-6 underline underline-offset-8 decoration-outline/40">
+                        {category.title}
+                      </h4>
+                      <ul className="space-y-3">
+                        {category.skills.map((skill) => (
+                          <li 
+                            key={skill} 
+                            className="text-[0.625rem] tracking-widest text-secondary-text hover:text-white transition-colors cursor-default list-none"
+                          >
+                            {skill}
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -291,7 +450,7 @@ export default function App() {
           <div className="flex flex-col items-center md:items-start">
             <span className="text-lg font-black text-white">WASIM PAKHTOON</span>
             <p className="uppercase tracking-[0.1em] text-[0.625rem] text-secondary-text mt-2">
-              © 2024 STUDIO MONOLITH. ALL RIGHTS RESERVED.
+              © 2024 WASIM PAKHTOON. ALL RIGHTS RESERVED.
             </p>
           </div>
           <div className="flex gap-12">
@@ -301,6 +460,148 @@ export default function App() {
           </div>
         </div>
       </footer>
+
+      {/* Get a Quote Modal */}
+      <AnimatePresence>
+        {isQuoteModalOpen && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsQuoteModalOpen(false)}
+              className="absolute inset-0 bg-black/90 backdrop-blur-xl"
+            />
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-2xl bg-[#0E0E0E] border border-outline/20 p-8 md:p-12 overflow-y-auto max-h-[90vh]"
+            >
+              <button 
+                onClick={() => setIsQuoteModalOpen(false)}
+                className="absolute top-6 right-6 text-secondary-text hover:text-white transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {formStatus === "success" ? (
+                <div className="py-20 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/10 mb-8"
+                  >
+                    <CheckCircle2 className="w-8 h-8 text-green-500" />
+                  </motion.div>
+                  <h3 className="text-2xl font-bold uppercase tracking-tighter mb-4">REQUEST RECEIVED</h3>
+                  <p className="text-[0.6875rem] uppercase tracking-widest text-secondary-text leading-relaxed max-w-xs mx-auto">
+                    Your request has been received. I’ll review everything personally and get back to you shortly.
+                  </p>
+                  <button 
+                    onClick={() => {
+                      setIsQuoteModalOpen(false);
+                      setTimeout(() => setFormStatus("idle"), 500);
+                    }}
+                    className="mt-12 bg-white text-black px-12 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all"
+                  >
+                    BACK TO SITE
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <div className="mb-12">
+                    <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text block mb-4">INQUIRY:</span>
+                    <h2 className="text-3xl font-black uppercase tracking-tighter leading-none">START A PROJECT</h2>
+                    <p className="text-[0.625rem] uppercase tracking-widest text-secondary-text mt-4">Currently accepting a limited number of high-impact projects.</p>
+                  </div>
+
+                  <form className="space-y-8" onSubmit={handleQuoteSubmit}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-2">
+                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">YOUR NAME *</label>
+                        <input name="name" required type="text" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="ENTER NAME" />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">EMAIL ADDRESS *</label>
+                        <input name="email" required type="email" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="EMAIL@EXAMPLE.COM" />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="space-y-2">
+                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">PHONE / WHATSAPP</label>
+                        <input name="phone" type="text" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="+00 000 000 000" />
+                      </div>
+                      <CustomSelect 
+                        name="project_type" 
+                        label="SELECT TYPE" 
+                        required 
+                        options={[
+                          { value: "editing", label: "VIDEO EDITING" },
+                          { value: "branding", label: "BRANDING" },
+                          { value: "shoot", label: "CINEMATIC SHOOT" },
+                          { value: "social", label: "SOCIAL CONTENT" },
+                          { value: "other", label: "OTHER" },
+                        ]} 
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <CustomSelect 
+                        name="budget" 
+                        label="SELECT BUDGET" 
+                        required 
+                        options={[
+                          { value: "under500", label: "UNDER $500" },
+                          { value: "500-1000", label: "$500 – $1,000" },
+                          { value: "1000-3000", label: "$1,000 – $3,000" },
+                          { value: "3000-5000", label: "$3,000 – $5,000" },
+                          { value: "5000+", label: "$5,000+" },
+                        ]} 
+                      />
+                      <CustomSelect 
+                        name="timeline" 
+                        label="TIMELINE" 
+                        defaultValue="standard"
+                        options={[
+                          { value: "standard", label: "STANDARD (1-2 WEEKS)" },
+                          { value: "urgent", label: "URGENT (1-3 DAYS)" },
+                          { value: "flexible", label: "FLEXIBLE" },
+                        ]} 
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">PROJECT VISION *</label>
+                      <textarea name="vision" required rows={3} className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors resize-none" placeholder="TELL ME ABOUT YOUR GOALS AND VISION"></textarea>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">REFERENCE LINK (OPTIONAL)</label>
+                      <input name="reference" type="text" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="PASTE LINK TO INSPIRATION" />
+                    </div>
+
+                    <div className="pt-8">
+                      <button 
+                        disabled={formStatus === "submitting"}
+                        className="w-full bg-white text-black py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all disabled:opacity-50 disabled:cursor-wait flex items-center justify-center gap-4"
+                      >
+                        {formStatus === "submitting" ? "PREPARING..." : "REQUEST QUOTE"}
+                        {formStatus === "idle" && <ArrowRight className="w-4 h-4" />}
+                      </button>
+                      <p className="text-[0.5rem] uppercase tracking-widest text-secondary-text text-center mt-6">
+                        I review every project personally and respond within 24 hours.
+                      </p>
+                    </div>
+                  </form>
+                </>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

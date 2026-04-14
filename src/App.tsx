@@ -210,6 +210,7 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState("idle"); // idle, submitting, success
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [activeCategory, setActiveCategory] = useState<number | null>(0);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -431,12 +432,7 @@ export default function App() {
 
       {/* Selected Work */}
       <section className="px-8 pb-32 max-w-screen-2xl mx-auto" id="work">
-        <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-20">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">SELECTED WORK:</span>
-          </div>
-        </div>
+        {/* Pexels Block At Top Level */}
 
         {/* Pexels Global Reach Section */}
         <div className="mb-32">
@@ -490,13 +486,37 @@ export default function App() {
           </div>
         </div>
 
-        {/* Cinematic Shoots */}
-        <div className="mb-32">
-          <div className="flex justify-between items-center mb-8">
-            <h3 className="text-xl font-black uppercase tracking-tighter">01 // CINEMATIC SHOOTS</h3>
-            <ArrowDown className="w-5 h-5 text-secondary-text" />
+        {/* Selected Work Details */}
+        <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-16">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
+            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">SELECTED WORK:</span>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 md:gap-32">
+        </div>
+
+        <div className="flex flex-col border-t border-outline/20 mb-32">
+          {/* 01 // Cinematic Shoots */}
+          <div className="border-b border-outline/20">
+            <button 
+              onClick={() => setActiveCategory(activeCategory === 0 ? null : 0)}
+              className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
+            >
+              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors ${activeCategory === 0 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
+                <span className="text-sm font-bold opacity-40 mr-4">01.</span> CINEMATIC SHOOTS
+              </h3>
+              <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 0 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
+                +
+              </span>
+            </button>
+            <AnimatePresence>
+              {activeCategory === 0 && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 md:gap-32 pt-8 pb-16">
             {cinematicProjects.map((project) => (
               <motion.div
                 key={project.id}
@@ -550,17 +570,34 @@ export default function App() {
                 </div>
               </motion.div>
             ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        </div>
 
-        {/* Drone & Editing Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 mb-32">
-          {/* Drone */}
-          <div>
-            <div className="flex justify-between items-center mb-8 border-b border-outline/10 pb-4">
-              <h3 className="text-sm font-black uppercase tracking-tighter">02 // DRONE</h3>
-            </div>
-            <div className="space-y-12">
+          {/* 02 // Drone */}
+          <div className="border-b border-outline/20">
+            <button 
+              onClick={() => setActiveCategory(activeCategory === 1 ? null : 1)}
+              className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
+            >
+              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors ${activeCategory === 1 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
+                <span className="text-sm font-bold opacity-40 mr-4">02.</span> DRONE
+              </h3>
+              <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 1 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
+                +
+              </span>
+            </button>
+            <AnimatePresence>
+              {activeCategory === 1 && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
               {droneProjects.map((project) => (
                 <motion.div key={project.id} className="group cursor-pointer">
                   <div className="aspect-video bg-[#1a1a1a] overflow-hidden mb-4">
@@ -569,15 +606,34 @@ export default function App() {
                   <h4 className="text-xs font-bold uppercase tracking-widest">{project.title}</h4>
                 </motion.div>
               ))}
-            </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          {/* Editing */}
-          <div>
-            <div className="flex justify-between items-center mb-8 border-b border-outline/10 pb-4">
-              <h3 className="text-sm font-black uppercase tracking-tighter">03 // EDITING</h3>
-            </div>
-            <div className="space-y-12">
+          {/* 03 // Editing */}
+          <div className="border-b border-outline/20">
+            <button 
+              onClick={() => setActiveCategory(activeCategory === 2 ? null : 2)}
+              className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
+            >
+              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors ${activeCategory === 2 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
+                <span className="text-sm font-bold opacity-40 mr-4">03.</span> EDITING
+              </h3>
+              <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 2 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
+                +
+              </span>
+            </button>
+            <AnimatePresence>
+              {activeCategory === 2 && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
               {editingProjects.map((project) => (
                 <motion.div key={project.id} className="group cursor-pointer">
                   <div className="aspect-video bg-[#1a1a1a] overflow-hidden mb-4">
@@ -586,16 +642,34 @@ export default function App() {
                   <h4 className="text-xs font-bold uppercase tracking-widest">{project.title}</h4>
                 </motion.div>
               ))}
-            </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        </div>
 
-        {/* Branding */}
-        <div>
-          <div className="flex justify-between items-center mb-8 border-b border-outline/10 pb-4">
-            <h3 className="text-sm font-black uppercase tracking-tighter">04 // BRANDING</h3>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* 04 // Branding */}
+          <div className="border-b border-outline/20">
+            <button 
+              onClick={() => setActiveCategory(activeCategory === 3 ? null : 3)}
+              className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
+            >
+              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors ${activeCategory === 3 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
+                <span className="text-sm font-bold opacity-40 mr-4">04.</span> BRANDING
+              </h3>
+              <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 3 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
+                +
+              </span>
+            </button>
+            <AnimatePresence>
+              {activeCategory === 3 && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  className="overflow-hidden"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
             {brandingProjects.map((project) => (
               <motion.div
                 key={project.id}
@@ -611,6 +685,10 @@ export default function App() {
                 <h4 className="text-xs font-bold uppercase tracking-widest">{project.title}</h4>
               </motion.div>
             ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </section>

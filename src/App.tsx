@@ -4,7 +4,7 @@
  */
 
 import { motion, AnimatePresence } from "motion/react";
-import { ArrowDown, ArrowRight, X, CheckCircle2, ChevronDown } from "lucide-react";
+import { ArrowDown, ArrowRight, X, CheckCircle2, ChevronDown, Menu } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const navLinks = [
@@ -140,6 +140,7 @@ export default function App() {
   const [activeLink, setActiveLink] = useState("HOME");
   const [scrolled, setScrolled] = useState(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState("idle"); // idle, submitting, success
 
   useEffect(() => {
@@ -204,13 +205,75 @@ export default function App() {
               </a>
             ))}
           </div>
-          <a
-            href="#contact"
-            className="font-label uppercase tracking-[0.1em] text-[0.625rem] font-bold text-white border border-white/20 px-5 py-2.5 hover:bg-white hover:text-black transition-all duration-300"
-          >
-            CONTACT
-          </a>
+          <div className="flex items-center gap-4">
+            <a
+              href="#contact"
+              className="hidden md:block font-label uppercase tracking-[0.1em] text-[0.625rem] font-bold text-white border border-white/20 px-5 py-2.5 hover:bg-white hover:text-black transition-all duration-300"
+            >
+              CONTACT
+            </a>
+            
+            <button 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden text-white p-2 hover:bg-white/5 transition-colors"
+              aria-label="Toggle Menu"
+            >
+              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        <AnimatePresence>
+          {isMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="fixed inset-0 top-[73px] bg-[#0E0E0E]/95 backdrop-blur-2xl z-40 md:hidden overflow-y-auto"
+            >
+              <div className="flex flex-col p-8 space-y-8">
+                {navLinks.map((link) => (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => {
+                      setActiveLink(link.name);
+                      setIsMenuOpen(false);
+                    }}
+                    className={`text-4xl font-black uppercase tracking-tighter transition-colors ${
+                      activeLink === link.name ? "text-white" : "text-secondary-text"
+                    }`}
+                  >
+                    {link.name}
+                  </a>
+                ))}
+                
+                <div className="pt-8 border-t border-outline/20">
+                  <a
+                    href="#contact"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="inline-block w-full text-center bg-white text-black px-10 py-5 text-sm font-bold uppercase tracking-ultra"
+                  >
+                    CONTACT ME
+                  </a>
+                  
+                  <div className="flex gap-6 mt-12">
+                    {socials.map((social) => (
+                      <a
+                        key={social.name}
+                        href={social.href}
+                        className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text hover:text-white"
+                      >
+                        {social.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* Hero Section */}

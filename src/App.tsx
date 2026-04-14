@@ -11,6 +11,10 @@ import { useState, useEffect } from "react";
 import LogoImg from "../images/logo.png";
 import EcoBrewCardImg from "../images/project-img/brew/design-1 1.png";
 
+// Video Imports
+import HeavenViewVilla from "@/video/hotels/Heaven-View-Villa.mp4";
+import LeeHeritage from "@/video/hotels/lee heritage.mp4";
+
 const navLinks = [
   { name: "HOME", href: "#" },
   { name: "WORK", href: "#work" },
@@ -43,6 +47,20 @@ const brandingProjects = [
 ];
 
 const cinematicProjects = [
+  {
+    id: 6,
+    year: "2024",
+    title: "HEAVEN VIEW VILLA",
+    category: "CINEMATIC SHOOT",
+    video: HeavenViewVilla,
+  },
+  {
+    id: 7,
+    year: "2024",
+    title: "LEE HERITAGE",
+    category: "CINEMATIC SHOOT",
+    video: LeeHeritage,
+  },
   {
     id: 2,
     year: "2024",
@@ -408,11 +426,22 @@ export default function App() {
                 className="lg:col-span-12 group cursor-pointer"
               >
                 <div className="aspect-video bg-[#1a1a1a] overflow-hidden mb-4 relative">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
-                  />
+                  {(project as any).video ? (
+                    <video
+                      src={(project as any).video}
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
+                    />
+                  ) : (
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
+                    />
+                  )}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm">
                       <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[15px] border-l-white border-b-[10px] border-b-transparent ml-1" />

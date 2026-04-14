@@ -116,6 +116,10 @@ const skillCategories = [
   {
     title: "SHOOTING",
     skills: ["MIRRORLESS CAMERAS", "CINEMATIC LIGHTING", "GIMBAL STABILIZATION"]
+  },
+  {
+    title: "BRAND IDENTITY",
+    skills: ["FIGMA", "ADOBE PHOTOSHOP", "ADOBE ILLUSTRATOR", "AFTER EFFECTS"]
   }
 ];
 
@@ -210,7 +214,7 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState("idle"); // idle, submitting, success
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-  const [activeCategory, setActiveCategory] = useState<number | null>(0);
+  const [activeCategory, setActiveCategory] = useState<number | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -218,6 +222,38 @@ export default function App() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Scroll Spy logic using IntersectionObserver
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '-30% 0px -60% 0px', // Slightly snappier detection
+      threshold: 0
+    };
+
+    const handleIntersection = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const id = entry.target.id;
+          const link = navLinks.find(l => l.href === `#${id}` || (id === 'home' && l.href === '#'));
+          if (link) {
+            setActiveLink(link.name);
+          }
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, observerOptions);
+    
+    // Observe all sections
+    const sectionIds = ['home', 'work', 'services', 'about', 'contact'];
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
   }, []);
 
   // Lock body scroll when mobile menu is open
@@ -277,12 +313,18 @@ export default function App() {
               <a
                 key={link.name}
                 href={link.href}
-                onClick={() => setActiveLink(link.name)}
-                className={`font-label uppercase tracking-[0.1em] text-[0.6875rem] font-medium transition-colors duration-200 ${
-                  activeLink === link.name ? "text-white border-b border-white pb-1" : "text-secondary-text hover:text-white"
+                className={`font-label uppercase tracking-[0.1em] text-[0.6875rem] font-medium transition-colors duration-200 relative py-1 ${
+                  activeLink === link.name ? "text-white" : "text-secondary-text hover:text-white"
                 }`}
               >
                 {link.name}
+                {activeLink === link.name && (
+                  <motion.div
+                    layoutId="nav-underline"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-white origin-left"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
               </a>
             ))}
           </div>
@@ -367,14 +409,16 @@ export default function App() {
           )}
         </AnimatePresence>
 
-      <header className="min-h-screen flex flex-col justify-center pt-32 md:pt-48 pb-12 md:pb-24 px-8 max-w-screen-2xl mx-auto">
+      <header id="home" className="min-h-screen flex flex-col justify-center pt-32 md:pt-48 pb-12 md:pb-24 px-8 max-w-screen-2xl mx-auto">
+
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[clamp(2.5rem,12vw,12rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24"
+          className="text-[clamp(2.5rem,8vw,8rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24"
         >
-          Delivering cinematic<br />excellence
+          Wasim Pakhtoon<br />
+          <span className="text-[clamp(1.5rem,5vw,5rem)] block mt-4 text-secondary-text">Video Editor & Cinematographer in Kashmir</span>
         </motion.h1>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 border-t border-outline/30 pt-6 md:pt-8 mb-8 md:mb-20">
@@ -389,7 +433,7 @@ export default function App() {
             className="md:col-span-6 relative z-10"
           >
             <p className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-md">
-              FROM CONCEPT TO FINAL DELIVERY, WE PROVIDE END-TO-END CINEMATIC SOLUTIONS FOR LUXURY HOTELS AND GLOBAL BRANDS.
+              FROM CONCEPT TO FINAL DELIVERY, WE PROVIDE END-TO-END CINEMATIC SOLUTIONS FOR LUXURY HOTELS AND GLOBAL BRANDS. BASED IN SRINAGAR, WASIM PAKHTOON OFFERS PROFESSIONAL VIDEO EDITING, CINEMATOGRAPHY, AND BRANDING SERVICES ACROSS KASHMIR AND INDIA.
             </p>
             <div className="mt-4 md:mt-4 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-green"></span>
@@ -473,7 +517,7 @@ export default function App() {
               >
                 <img 
                   src={img} 
-                  alt={`Pexels Featured Work 0${idx + 1}`} 
+                  alt={`Cinematic video editing and hotel photography in Kashmir - Featured Work 0${idx + 1}`} 
                   className="w-full h-full object-cover opacity-70 group-hover/image:scale-105 group-hover/image:opacity-100 transition-all duration-700 md:blur-[2px] group-hover/image:blur-none"
                 />
                 <div className="absolute inset-0 border border-outline/10 group-hover/image:border-white/20 transition-colors pointer-events-none z-10" />
@@ -490,7 +534,7 @@ export default function App() {
         <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-16">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">SELECTED WORK:</span>
+            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-on-surface">VIEW MY WORK:</h2>
           </div>
         </div>
 
@@ -501,12 +545,33 @@ export default function App() {
               onClick={() => setActiveCategory(activeCategory === 0 ? null : 0)}
               className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
             >
-              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors ${activeCategory === 0 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
-                <span className="text-sm font-bold opacity-40 mr-4">01.</span> CINEMATIC SHOOTS
+              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 0 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
+                {/* No redundant dot here */}
+                VISUAL STORYTELLING
               </h3>
-              <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 0 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
-                +
-              </span>
+              <div className="flex items-center gap-6">
+                <div className="relative w-8 h-8 flex items-center justify-center">
+                  <AnimatePresence>
+                    {activeCategory !== 0 && (
+                      <motion.div
+                        animate={{ 
+                          scale: [0.8, 2.2],
+                          opacity: [0.6, 0]
+                        }}
+                        transition={{ 
+                          duration: 2, 
+                          repeat: Infinity, 
+                          ease: [0.4, 0, 0.2, 1] 
+                        }}
+                        className="absolute w-full h-full rounded-full border border-white/60 pointer-events-none"
+                      />
+                    )}
+                  </AnimatePresence>
+                  <span className={`text-3xl font-light transition-transform duration-300 relative z-10 ${activeCategory === 0 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
+                    +
+                  </span>
+                </div>
+              </div>
             </button>
             <AnimatePresence>
               {activeCategory === 0 && (
@@ -516,21 +581,21 @@ export default function App() {
                   exit={{ height: 0, opacity: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 md:gap-32 pt-8 pb-16">
-            {cinematicProjects.map((project) => (
-              <motion.div
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 pb-16">
+                    {cinematicProjects.map((project) => (
+                      <motion.div
                 key={project.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="lg:col-span-12 group cursor-pointer"
+                className="group cursor-pointer"
               >
-                <div className="aspect-video bg-[#1a1a1a] overflow-hidden mb-4 relative">
+                <div className="aspect-video bg-[#1a1a1a] overflow-hidden relative">
                   {(project as any).vimeoId ? (
                     <div className="w-full h-full pointer-events-none">
                       <iframe
                         src={`https://player.vimeo.com/video/${(project as any).vimeoId}?background=1&autoplay=1&muted=1&loop=1&badge=0&autopause=0&player_id=0&app_id=58479`}
-                        className="w-full h-full scale-[1.35]"
+                        className="w-full h-full object-cover scale-[1.05]"
                         frameBorder="0"
                         allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
                         title={project.title}
@@ -552,21 +617,26 @@ export default function App() {
                       className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
                     />
                   )}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm">
-                      <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[15px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                  
+                  {/* Overlay Info - Always visible for better context */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-between p-6">
+                    <div className="flex justify-between items-start">
+                      <span className="text-[0.625rem] text-white/70 uppercase tracking-ultra">{project.year}</span>
+                      <span className="text-[0.625rem] text-white/70 uppercase tracking-ultra">{project.category}</span>
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-black uppercase tracking-tighter text-white mb-1">{project.title}</h4>
+                      {(project as any).description && (
+                        <p className="text-[0.75rem] text-white/80 font-medium max-w-xs">{project.description}</p>
+                      )}
                     </div>
                   </div>
-                </div>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.year}</span>
-                    <h4 className="text-xl font-black uppercase tracking-tighter mt-1">{project.title}</h4>
-                    {(project as any).description && (
-                      <p className="text-[0.875rem] text-secondary-text mt-2 font-medium">{project.description}</p>
-                    )}
+
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <div className="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm">
+                      <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[12px] border-l-white border-b-[8px] border-b-transparent ml-1" />
+                    </div>
                   </div>
-                  <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.category}</span>
                 </div>
               </motion.div>
             ))}
@@ -582,12 +652,17 @@ export default function App() {
               onClick={() => setActiveCategory(activeCategory === 1 ? null : 1)}
               className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
             >
-              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors ${activeCategory === 1 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
-                <span className="text-sm font-bold opacity-40 mr-4">02.</span> DRONE
+              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 1 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
+                {/* No redundant dot here */}
+                AERIAL PERSPECTIVE
               </h3>
-              <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 1 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
-                +
-              </span>
+              <div className="flex items-center gap-6">
+                <div className="w-8 h-8 flex items-center justify-center">
+                  <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 1 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
+                    +
+                  </span>
+                </div>
+              </div>
             </button>
             <AnimatePresence>
               {activeCategory === 1 && (
@@ -618,12 +693,17 @@ export default function App() {
               onClick={() => setActiveCategory(activeCategory === 2 ? null : 2)}
               className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
             >
-              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors ${activeCategory === 2 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
-                <span className="text-sm font-bold opacity-40 mr-4">03.</span> EDITING
+              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 2 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
+                {/* No redundant dot here */}
+                POST-PRODUCTION
               </h3>
-              <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 2 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
-                +
-              </span>
+              <div className="flex items-center gap-6">
+                <div className="w-8 h-8 flex items-center justify-center">
+                  <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 2 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
+                    +
+                  </span>
+                </div>
+              </div>
             </button>
             <AnimatePresence>
               {activeCategory === 2 && (
@@ -654,12 +734,17 @@ export default function App() {
               onClick={() => setActiveCategory(activeCategory === 3 ? null : 3)}
               className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
             >
-              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors ${activeCategory === 3 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
-                <span className="text-sm font-bold opacity-40 mr-4">04.</span> BRANDING
+              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 3 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
+                {/* No redundant dot here */}
+                BRAND IDENTITY
               </h3>
-              <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 3 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
-                +
-              </span>
+              <div className="flex items-center gap-6">
+                <div className="w-8 h-8 flex items-center justify-center">
+                  <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 3 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
+                    +
+                  </span>
+                </div>
+              </div>
             </button>
             <AnimatePresence>
               {activeCategory === 3 && (
@@ -678,7 +763,7 @@ export default function App() {
                 <div className="aspect-square bg-[#1a1a1a] overflow-hidden mb-4 flex items-center justify-center p-12">
                   <img
                     src={project.image}
-                    alt={project.title}
+                    alt={`${project.title} - Branding and identity design project by Wasim Pakhtoon in Kashmir`}
                     className="w-full h-auto object-contain opacity-80 group-hover:scale-110 transition-all duration-700"
                   />
                 </div>
@@ -698,7 +783,7 @@ export default function App() {
         <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-20">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">THE WORKFLOW:</span>
+            <h2 className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">SERVICES & WORKFLOW:</h2>
           </div>
         </div>
 
@@ -732,8 +817,9 @@ export default function App() {
         <div className="border-t border-outline/30 pt-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
             {/* Left Column: Label */}
-            <div className="md:col-span-4">
-              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">THE HANDS-ON APPROACH:</span>
+            <div className="md:col-span-4 flex items-center gap-2 self-start">
+              <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
+              <h2 className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">THE HANDS-ON APPROACH:</h2>
             </div>
 
             {/* Right Column: Bio & Skills */}
@@ -755,11 +841,11 @@ export default function App() {
                   transition={{ delay: 0.1 }}
                   className="text-[0.6875rem] md:text-xs uppercase tracking-[0.12em] leading-relaxed text-secondary-text mb-20 max-w-2xl font-normal"
                 >
-                  Based in Kashmir, Wasim Pakhtoon leads high-end cinematic productions for properties and global brands. We manage every phase—from the initial shoot to final delivery—ensuring world-class standards through a refined hands-on approach and specialized support behind the scenes. Our focus is on seamless execution and uncompromising quality.
+                  Based in Srinagar, Wasim Pakhtoon leads high-end cinematic productions for properties and global brands as a freelance video editor and cinematographer. We handle every phase of the video shoot in Kashmir—from the initial storyboard to final post-production—ensuring world-class standards for hotel shoots and commercial projects. Our focus is on seamless execution and uncompromising quality.
                 </motion.p>
 
                 {/* Skills Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 pt-12 border-t border-outline/20">
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 pt-12 border-t border-outline/20">
                   {skillCategories.map((category, idx) => (
                     <motion.div
                       key={category.title}
@@ -795,8 +881,11 @@ export default function App() {
         <div className="border-t border-outline/30 pt-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
             <div className="md:col-span-4">
-              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">CLARITY:</span>
-              <h2 className="text-3xl font-black uppercase tracking-tighter leading-none mt-4">FREQUENTLY ASKED.</h2>
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
+                <h2 className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">CLARITY:</h2>
+              </div>
+              <h2 className="text-3xl font-black uppercase tracking-tighter leading-none">FREQUENTLY ASKED.</h2>
             </div>
             
             <div className="md:col-span-8">
@@ -846,7 +935,7 @@ export default function App() {
         >
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             <div className="md:col-span-4">
-              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">THE NEXT STEP:</span>
+              <h2 className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">THE NEXT STEP:</h2>
               <h2 className="text-3xl font-black uppercase tracking-tighter leading-none mt-4">LET’S CREATE VISUALS THAT GROW YOUR BUSINESS.</h2>
               <p className="text-[0.625rem] uppercase tracking-widest text-secondary-text mt-4 max-w-[150px]">Currently accepting a limited number of high-impact projects.</p>
             </div>

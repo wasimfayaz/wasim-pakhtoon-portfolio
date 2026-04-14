@@ -17,6 +17,9 @@
 }
 
 @layer base {
+  html, body {
+    overflow-x: hidden;
+  }
   body {
     @apply bg-background text-on-surface font-sans;
   }

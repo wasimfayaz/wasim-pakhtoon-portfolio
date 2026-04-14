@@ -11,6 +11,13 @@ import { useState, useEffect } from "react";
 import LogoImg from "../images/logo.png";
 import EcoBrewCardImg from "../images/project-img/brew/design-1 1.png";
 
+const pexelsGrid = [
+  "https://images.pexels.com/photos/35066424/pexels-photo-35066424.jpeg?auto=compress&cs=tinysrgb&w=600",
+  "https://images.pexels.com/photos/35028172/pexels-photo-35028172.jpeg?auto=compress&cs=tinysrgb&w=600",
+  "https://images.pexels.com/photos/21908308/pexels-photo-21908308.jpeg?auto=compress&cs=tinysrgb&w=600",
+  "https://images.pexels.com/photos/35296645/pexels-photo-35296645.jpeg?auto=compress&cs=tinysrgb&w=600",
+];
+
 const navLinks = [
   { name: "HOME", href: "#" },
   { name: "WORK", href: "#work" },
@@ -82,24 +89,52 @@ const editingProjects = [
   },
 ];
 
-const expertiseLines = [
-  "Integrating cinematic production, drone cinematography, and specialized editing into one seamless workflow.",
-  "From initial conceptualization to the final export, we manage every technical and creative detail.",
-  "A dedicated approach to visual storytelling designed to elevate luxury hotels and properties.",
+const processSteps = [
+  {
+    title: "GEAR & CAPTURE",
+    description: "Utilizing professional mirrorless cameras and advanced drone systems (from DJI Mini 4K to DJI 3 Pro) for high-end cinematic and aerial footage."
+  },
+  {
+    title: "POST-PRODUCTION",
+    description: "Industry-standard editing, motion graphics, and color grading using the complete Adobe Creative Suite to craft a seamless narrative."
+  },
+  {
+    title: "FINAL DELIVERY",
+    description: "Providing fully optimized, premium visual assets that elevate your brand's presence across all digital platforms."
+  }
 ];
 
 const skillCategories = [
   {
     title: "VIDEO EDITING",
-    skills: ["ADOBE PREMIERE PRO", "AFTER EFFECTS", "DAVINCI RESOLVE"]
+    skills: ["ADOBE SUITE", "DAVINCI RESOLVE", "MOTION GRAPHICS"]
   },
   {
-    title: "BRANDING & DESIGN",
-    skills: ["FIGMA", "ADOBE PHOTOSHOP"]
+    title: "DRONE & AERIAL",
+    skills: ["DJI 3 PRO", "DJI MINI 4K", "AERIAL CINEMATOGRAPHY"]
   },
   {
     title: "SHOOTING",
-    skills: ["MIRRORLESS CAMERAS", "CINEMATIC LIGHTING", "COMPOSITION & FRAMING"]
+    skills: ["MIRRORLESS CAMERAS", "CINEMATIC LIGHTING", "GIMBAL STABILIZATION"]
+  }
+];
+
+const faqs = [
+  {
+    question: "Do you travel for shoots, or are you only based in Kashmir?",
+    answer: "While we are based in Kashmir, we frequently travel for high-end hotel, real-estate, and brand shoots across the globe. Travel and logistics can be factored into a custom quote."
+  },
+  {
+    question: "How long does a typical cinematic project take from start to delivery?",
+    answer: "A standard brand or property shoot typically takes 1-3 days on location. Post-production, including color grading and sound design, takes 1-2 weeks depending on the project scope."
+  },
+  {
+    question: "Do you handle the complete production process?",
+    answer: "Yes. From pre-production planning and storyboarding to shooting, drone operation, editing, and final color correction, we manage every phase in-house to ensure uncompromising quality."
+  },
+  {
+    question: "What equipment do you use for high-end property shoots?",
+    answer: "We utilize professional mirrorless cinema cameras, gimbal stabilization systems, and advanced DJI Drones (Mavic 3 Pro & Mini 4K) to capture world-class ground and aerial visuals."
   }
 ];
 
@@ -174,6 +209,7 @@ export default function App() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState("idle"); // idle, submitting, success
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -402,6 +438,58 @@ export default function App() {
           </div>
         </div>
 
+        {/* Pexels Global Reach Section */}
+        <div className="mb-32">
+          <div className="bg-background border border-outline/20 p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-10 group hover:border-outline/40 transition-colors duration-500 mb-8 border-l-4 border-l-secondary-text/30 hover:border-l-white">
+            <div className="max-w-xl">
+              <h3 className="text-sm md:text-base font-black uppercase tracking-tighter text-white mb-3">Global Reach & Authority</h3>
+              <p className="text-[0.6875rem] text-secondary-text uppercase tracking-[0.1em] leading-relaxed">
+                Featured photography reaching hundreds of thousands of viewers worldwide on Pexels. Establishing visual authority through compelling, high-quality imagery.
+              </p>
+            </div>
+            
+            <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 items-start sm:items-center w-full md:w-auto">
+              <div>
+                <h4 className="text-5xl md:text-6xl font-black text-white tracking-tighter">125.2K<span className="text-secondary-text text-3xl">+</span></h4>
+                <div className="text-[0.625rem] text-secondary-text uppercase tracking-ultra font-bold mt-2">TOTAL VIEWS</div>
+              </div>
+              
+              <a 
+                href="https://www.pexels.com/@wxeim-768574136/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-full sm:w-auto border border-outline/30 text-white px-8 py-5 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-white hover:text-black transition-all duration-300 text-center flex items-center justify-center group-hover:border-white/50"
+              >
+                VIEW ACCOUNT <span className="ml-2 font-normal text-base leading-none transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {pexelsGrid.map((img, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="aspect-[3/4] bg-[#1a1a1a] overflow-hidden group/image relative cursor-pointer"
+              >
+                <img 
+                  src={img} 
+                  alt={`Pexels Featured Work 0${idx + 1}`} 
+                  className="w-full h-full object-cover opacity-70 group-hover/image:scale-105 group-hover/image:opacity-100 transition-all duration-700 blur-[2px] group-hover/image:blur-none"
+                />
+                <div className="absolute inset-0 border border-outline/10 group-hover/image:border-white/20 transition-colors pointer-events-none z-10" />
+                <div className="absolute top-4 left-4 z-20 flex items-center gap-2 opacity-0 group-hover/image:opacity-100 transition-opacity duration-500">
+                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+                  <span className="text-[0.5rem] tracking-ultra text-white font-bold uppercase">PEXELS</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
         {/* Cinematic Shoots */}
         <div className="mb-32">
           <div className="flex justify-between items-center mb-8">
@@ -527,27 +615,34 @@ export default function App() {
         </div>
       </section>
 
-      {/* Expertise Section */}
+      {/* Workflow Section */}
       <section className="px-8 pb-32 max-w-screen-2xl mx-auto" id="services">
         <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-20">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">ONE SOLUTION:</span>
+            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">THE WORKFLOW:</span>
           </div>
         </div>
 
-        <div className="max-w-5xl">
-          <h3 className="text-[clamp(2rem,6vw,5rem)] font-black uppercase tracking-tighter leading-[0.9] mb-16">
-            Complete visual production.<br />From start to finish.
+        <div className="max-w-6xl">
+          <h3 className="text-[clamp(2rem,6vw,5rem)] font-black uppercase tracking-tighter leading-[0.9] mb-16 md:mb-24">
+            Complete visual production.<br />Powered by industry tools.
           </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            {expertiseLines.map((line, index) => (
-              <div key={index} className="space-y-4">
-                <span className="text-[0.625rem] font-bold text-secondary-text">0{index + 1} //</span>
-                <p className="text-[0.6875rem] md:text-xs uppercase tracking-widest leading-relaxed text-secondary-text font-medium">
-                  {line}
-                </p>
+          <div className="flex flex-col border-t border-outline/20">
+            {processSteps.map((step, index) => (
+              <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 py-10 md:py-16 border-b border-outline/20 items-start group hover:bg-white/5 transition-colors duration-500 -mx-8 px-8">
+                <div className="md:col-span-2">
+                  <span className="text-[0.625rem] font-bold text-secondary-text tracking-ultra">STEP 0{index + 1}</span>
+                </div>
+                <div className="md:col-span-4">
+                  <h4 className="text-xl md:text-2xl font-black uppercase tracking-tighter text-white group-hover:text-secondary-text transition-colors">{step.title}</h4>
+                </div>
+                <div className="md:col-span-6">
+                  <p className="text-[0.6875rem] md:text-sm uppercase tracking-widest leading-relaxed text-secondary-text font-medium group-hover:text-white transition-colors">
+                    {step.description}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -611,6 +706,52 @@ export default function App() {
                     </motion.div>
                   ))}
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="px-8 pb-32 max-w-screen-2xl mx-auto">
+        <div className="border-t border-outline/30 pt-8">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
+            <div className="md:col-span-4">
+              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">CLARITY:</span>
+              <h2 className="text-3xl font-black uppercase tracking-tighter leading-none mt-4">FREQUENTLY ASKED.</h2>
+            </div>
+            
+            <div className="md:col-span-8">
+              <div className="flex flex-col border-t border-outline/20">
+                {faqs.map((faq, index) => (
+                  <div key={index} className="border-b border-outline/20">
+                    <button 
+                      onClick={() => setActiveFaq(activeFaq === index ? null : index)}
+                      className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
+                    >
+                      <h4 className={`text-sm md:text-base font-bold uppercase tracking-widest transition-colors ${activeFaq === index ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
+                        {faq.question}
+                      </h4>
+                      <span className={`text-2xl font-bold transition-transform duration-300 ${activeFaq === index ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
+                        +
+                      </span>
+                    </button>
+                    <AnimatePresence>
+                      {activeFaq === index && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <p className="text-[0.6875rem] md:text-xs uppercase tracking-[0.12em] leading-relaxed text-secondary-text pb-8 font-medium max-w-2xl">
+                            {faq.answer}
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

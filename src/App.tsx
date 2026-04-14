@@ -145,6 +145,10 @@ export default function App() {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
+      // Auto-close mobile menu if user scrolls significantly
+      if (isMenuOpen && window.scrollY > 100) {
+        setIsMenuOpen(false);
+      }
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -180,7 +184,7 @@ export default function App() {
     <div className="min-h-screen bg-background text-on-surface selection:bg-white selection:text-black scroll-smooth">
       {/* Navigation */}
       <nav 
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        className={`fixed top-0 w-full z-[70] transition-all duration-300 ${
           scrolled 
             ? "bg-[#131313]/70 backdrop-blur-md border-b border-outline/20 py-4" 
             : "bg-transparent border-b border-transparent py-6"
@@ -239,9 +243,9 @@ export default function App() {
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="fixed inset-0 top-[73px] bg-[#0E0E0E]/95 backdrop-blur-2xl z-40 md:hidden overflow-y-auto"
+              className="fixed inset-0 top-0 bg-[#0E0E0E]/95 backdrop-blur-2xl z-[65] md:hidden overflow-y-auto"
             >
-              <div className="flex flex-col p-8 space-y-8">
+              <div className="flex flex-col p-8 pt-32 space-y-8">
                 {navLinks.map((link) => (
                   <a
                     key={link.name}
@@ -305,7 +309,7 @@ export default function App() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="md:col-span-6"
+            className="md:col-span-6 relative z-10"
           >
             <p className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-md">
               I HELP BRANDS GROW WITH HIGH-IMPACT VIDEO EDITING, BRANDING, AND CINEMATIC SHOOTS.

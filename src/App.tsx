@@ -214,29 +214,29 @@ export default function App() {
       </nav>
 
       {/* Hero Section */}
-      <header className="pt-48 pb-24 px-8 max-w-screen-2xl mx-auto">
+      <header className="min-h-screen flex flex-col justify-center pt-32 md:pt-48 pb-12 md:pb-24 px-8 max-w-screen-2xl mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[clamp(3rem,15vw,12rem)] font-black tracking-tighter uppercase leading-[0.85] mb-24"
+          className="text-[clamp(2.5rem,12vw,12rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24"
         >
           WASIM<br />PAKHTOON
         </motion.h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-outline/30 pt-8 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 border-t border-outline/30 pt-6 md:pt-8 mb-8 md:mb-20">
           <div className="md:col-span-4">
             <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">YOU'LL LIKE IT:</span>
           </div>
           <div className="md:col-span-6">
             <p className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-md">
-              CRAFTING VISUAL STORIES THAT BUILD POWERFUL BRANDS — VIDEO EDITING, BRANDING & CINEMATIC SHOOTS BY WASIM PAKHTOON & HIESTFX. I FOCUS ON THE MAIN AIM — GROWING YOUR BUSINESS THROUGH HIGH-IMPACT CREATIVE CONTENT.
+              I HELP BRANDS GROW WITH HIGH-IMPACT VIDEO EDITING, BRANDING, AND CINEMATIC SHOOTS.
             </p>
-            <div className="mt-4 flex items-center gap-2">
+            <div className="mt-4 md:mt-4 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
               <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">AVAILABLE</span>
             </div>
-            <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
+            <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-center gap-4">
               <button
                 onClick={() => setIsQuoteModalOpen(true)}
                 className="w-full sm:w-auto bg-white text-black px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text hover:scale-[1.02] transition-all duration-300"

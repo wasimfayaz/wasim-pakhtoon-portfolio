@@ -332,7 +332,7 @@ export default function App() {
             className="md:col-span-6 relative z-10"
           >
             <p className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-md">
-              I HELP BRANDS GROW WITH HIGH-IMPACT VIDEO EDITING, BRANDING, AND CINEMATIC SHOOTS.
+              CRAFTING HIGH-CONVERSION CINEMATIC PRODUCTION AND BRAND IDENTITIES FOR LUXURY HOTELS, PROPERTIES, AND GLOBAL BRANDS.
             </p>
             <div className="mt-4 md:mt-4 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-green"></span>

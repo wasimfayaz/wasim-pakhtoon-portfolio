@@ -44,27 +44,23 @@ const brandingProjects = [
 
 const cinematicProjects = [
   {
-    id: 6,
-    year: "2024",
-    title: "HEAVEN VIEW VILLA",
-    category: "CINEMATIC SHOOT",
-    vimeoId: "1183128507",
-  },
-  {
     id: 7,
-    year: "2024",
+    year: "2025",
     title: "LEE HERITAGE",
     category: "CINEMATIC SHOOT",
     vimeoId: "1183128960",
+    description: "Boutique hotel in Lalchowk, Srinagar.",
   },
   {
-    id: 2,
-    year: "2024",
-    title: "LUXURY HOTEL SHOWCASE",
+    id: 6,
+    year: "2025",
+    title: "HEAVEN VIEW VILLA",
     category: "CINEMATIC SHOOT",
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts",
+    vimeoId: "1183128507",
+    description: "Luxury property in Manasbal, Kashmir.",
   },
 ];
+
 
 const droneProjects = [
   {
@@ -412,7 +408,7 @@ export default function App() {
             <h3 className="text-xl font-black uppercase tracking-tighter">01 // CINEMATIC SHOOTS</h3>
             <ArrowDown className="w-5 h-5 text-secondary-text" />
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-24 md:gap-32">
             {cinematicProjects.map((project) => (
               <motion.div
                 key={project.id}
@@ -458,6 +454,9 @@ export default function App() {
                   <div>
                     <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.year}</span>
                     <h4 className="text-xl font-black uppercase tracking-tighter mt-1">{project.title}</h4>
+                    {(project as any).description && (
+                      <p className="text-[0.875rem] text-secondary-text mt-2 font-medium">{project.description}</p>
+                    )}
                   </div>
                   <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.category}</span>
                 </div>

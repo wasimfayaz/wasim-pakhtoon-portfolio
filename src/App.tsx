@@ -25,7 +25,7 @@ const socials = [
   { name: "LINKEDIN", href: "#" },
 ];
 
-const projects = [
+const brandingProjects = [
   {
     id: 3,
     year: "2024",
@@ -40,11 +40,14 @@ const projects = [
     category: "BRANDING / STRATEGY",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuChMoA0l5Zw1yXCauYAFPoWeYOVWjA3tjztcuVOi_kdjAJGLS6At-It-CP61QsW1z9_c0b4g7Uctx1NisEDppR8T2h5hQOzV_QcbWX-ikv88mHjSB44jOykWnsFTr93yuusnUKx1wiyZ_C_qehchIBFm68GNcgdfRByhUG4ZzRAAmEA2IvzdromgSWJetLnkkzsRznJeum1GqomErYW5u9VIa_MIXzjqONiaC6tTg6G3yj-BqS9aSxJ-I9P1LLvT_bKOq5DpWWCCi0",
   },
+];
+
+const videoProjects = [
   {
     id: 2,
     year: "2023",
     title: "MIDNIGHT SESSIONS",
-    category: "PRODUCTION",
+    category: "PRODUCTION // MOTION",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts",
   },
 ];
@@ -370,43 +373,90 @@ export default function App() {
         </div>
       </header>
 
-      {/* Featured Projects Section */}
+      {/* Featured Projects Sections */}
       <section className="px-8 pb-32 max-w-screen-2xl mx-auto" id="work">
-        <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-8">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">FEATURED PROJECT:</span>
+        {/* Branding Section */}
+        <div className="mb-32">
+          <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-8">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
+              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">IDENTITY // BRANDING:</span>
+            </div>
+            <ArrowDown className="w-5 h-5 text-on-surface" />
           </div>
-          <ArrowDown className="w-5 h-5 text-on-surface" />
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {brandingProjects.map((project) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="lg:col-span-4 group cursor-pointer"
+              >
+                <div className="aspect-video lg:aspect-auto bg-[#1a1a1a] overflow-hidden mb-4 relative flex items-center justify-center">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-auto object-contain opacity-80 group-hover:scale-[1.02] group-hover:opacity-100 transition-all duration-700"
+                  />
+                </div>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.year}</span>
+                    <h3 className="text-xs font-bold uppercase tracking-widest mt-1">{project.title}</h3>
+                  </div>
+                  <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.category}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          {projects.map((project) => (
-            <motion.div
-              key={project.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="lg:col-span-4 group cursor-pointer"
-            >
-              <div className="aspect-video lg:aspect-auto bg-[#1a1a1a] overflow-hidden mb-4 relative flex items-center justify-center">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  referrerPolicy="no-referrer"
-                  className="w-full h-auto object-contain opacity-80 group-hover:scale-[1.02] group-hover:opacity-100 transition-all duration-700"
-                />
-              </div>
-              <div className="flex justify-between items-start">
-                <div>
-                  <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.year}</span>
-                  <h3 className="text-xs font-bold uppercase tracking-widest mt-1">{project.title}</h3>
+        {/* Motion Section */}
+        <div>
+          <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-8">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
+              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">MOTION // REELS:</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            {videoProjects.map((project) => (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="lg:col-span-12 group cursor-pointer"
+              >
+                <div className="aspect-video lg:h-[600px] bg-[#1a1a1a] overflow-hidden mb-4 relative flex items-center justify-center">
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform duration-500">
+                      <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[15px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                    </div>
+                  </div>
                 </div>
-                <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.category}</span>
-              </div>
-            </motion.div>
-          ))}
+                <div className="flex justify-between items-start">
+                  <div>
+                    <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.year}</span>
+                    <h3 className="text-xl font-black uppercase tracking-tighter mt-1">{project.title}</h3>
+                  </div>
+                  <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.category}</span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

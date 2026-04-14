@@ -7,6 +7,10 @@ import { motion, AnimatePresence } from "motion/react";
 import { ArrowDown, ArrowRight, X, CheckCircle2, ChevronDown, Menu, ArrowUp } from "lucide-react";
 import { useState, useEffect } from "react";
 
+// Image Imports
+import LogoImg from "../images/logo.png";
+import EcoBrewCardImg from "../images/project-img/brew/design-1 1.png";
+
 const navLinks = [
   { name: "HOME", href: "#" },
   { name: "WORK", href: "#work" },
@@ -36,6 +40,14 @@ const projects = [
     title: "MIDNIGHT SESSIONS",
     category: "PRODUCTION",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts",
+    large: false,
+  },
+  {
+    id: 3,
+    year: "2024",
+    title: "ECO BREW BUSINESS CARD",
+    category: "PRINT // BRANDING",
+    image: EcoBrewCardImg,
     large: false,
   },
 ];
@@ -199,8 +211,8 @@ export default function App() {
         }`}
       >
         <div className="flex justify-between items-center w-full px-8 max-w-screen-2xl mx-auto">
-          <a href="#" className="text-xl md:text-2xl font-black tracking-tighter text-white shrink-0">
-            WASIM PAKHTOON
+          <a href="#" className="shrink-0 flex items-center">
+            <img src={LogoImg} alt="Wasim Pakhtoon Logo" className="h-8 object-contain w-auto hover:opacity-80 transition-opacity" />
           </a>
           <div className="hidden md:flex gap-12">
             {navLinks.map((link) => (

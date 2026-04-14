@@ -29,42 +29,53 @@ const brandingProjects = [
   {
     id: 3,
     year: "2024",
-    title: "ECO BREW BUSINESS CARD",
-    category: "PRINT // BRANDING",
+    title: "ECO BREW IDENTITY",
+    category: "BRANDING",
     image: EcoBrewCardImg,
   },
   {
     id: 1,
     year: "2024",
     title: "MUTATE TECH IDENTITY",
-    category: "BRANDING / STRATEGY",
+    category: "BRANDING",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuChMoA0l5Zw1yXCauYAFPoWeYOVWjA3tjztcuVOi_kdjAJGLS6At-It-CP61QsW1z9_c0b4g7Uctx1NisEDppR8T2h5hQOzV_QcbWX-ikv88mHjSB44jOykWnsFTr93yuusnUKx1wiyZ_C_qehchIBFm68GNcgdfRByhUG4ZzRAAmEA2IvzdromgSWJetLnkkzsRznJeum1GqomErYW5u9VIa_MIXzjqONiaC6tTg6G3yj-BqS9aSxJ-I9P1LLvT_bKOq5DpWWCCi0",
   },
 ];
 
-const videoProjects = [
+const cinematicProjects = [
   {
     id: 2,
-    year: "2023",
-    title: "MIDNIGHT SESSIONS",
-    category: "PRODUCTION // MOTION",
+    year: "2024",
+    title: "LUXURY HOTEL SHOWCASE",
+    category: "CINEMATIC SHOOT",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts",
   },
 ];
 
-const expertise = [
+const droneProjects = [
   {
-    title: "VIDEO EDITING",
-    description: "PRECISION-CRAFTED HIGH-RETENTION EDITS TAILORED FOR SOCIAL VIRALITY AND CINEMATIC IMPACT. I BLEND RHYTHM WITH NARRATIVE.",
+    id: 4,
+    year: "2024",
+    title: "COASTAL PROPERTY REEL",
+    category: "DRONE",
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts",
   },
+];
+
+const editingProjects = [
   {
-    title: "BRANDING",
-    description: "COMPREHENSIVE BRAND STRATEGY THAT GOES BEYOND LOGOS. I DEFINE THE VISUAL SOUL AND MARKET POSITION OF YOUR IDENTITY.",
+    id: 5,
+    year: "2024",
+    title: "MIDNIGHT SESSIONS",
+    category: "EDITING",
+    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts",
   },
-  {
-    title: "PRODUCTION",
-    description: "HIGH-END CINEMATIC PRODUCTION FOR COMMERCIALS, MUSIC VIDEOS, AND BRAND FILMS. RAW EMOTION CAPTURED WITH ELITE HARDWARE.",
-  },
+];
+
+const expertiseLines = [
+  "From concept to final delivery, we provide one complete solution for brands and hotels.",
+  "Cinematic video production, precision drone work, high-end editing, and strategic branding.",
+  "We handle every detail of the process to ensure your visuals drive real business growth.",
 ];
 
 const skillCategories = [
@@ -289,7 +300,7 @@ export default function App() {
                     onClick={() => setIsMenuOpen(false)}
                     className="inline-block w-full text-center bg-white text-black px-10 py-5 text-sm font-bold uppercase tracking-ultra"
                   >
-                    CONTACT ME
+                    START A PROJECT
                   </a>
                   
                   <div className="flex gap-6 mt-12">
@@ -309,20 +320,19 @@ export default function App() {
           )}
         </AnimatePresence>
 
-      {/* Hero Section */}
       <header className="min-h-screen flex flex-col justify-center pt-32 md:pt-48 pb-12 md:pb-24 px-8 max-w-screen-2xl mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[clamp(2.5rem,12vw,12rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24"
+          className="text-[clamp(2.5rem,10vw,10rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24"
         >
-          WASIM<br />PAKHTOON
+          WE DELIVER<br />CINEMATIC EXCELLENCE
         </motion.h1>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 border-t border-outline/30 pt-6 md:pt-8 mb-8 md:mb-20">
           <div className="md:col-span-4">
-            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">YOU'LL LIKE IT:</span>
+            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">OUR MISSION:</span>
           </div>
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
@@ -332,24 +342,24 @@ export default function App() {
             className="md:col-span-6 relative z-10"
           >
             <p className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-md">
-              CRAFTING HIGH-CONVERSION CINEMATIC PRODUCTION AND BRAND IDENTITIES FOR LUXURY HOTELS, PROPERTIES, AND GLOBAL BRANDS.
+              FROM CONCEPT TO FINAL DELIVERY, WE PROVIDE END-TO-END CINEMATIC SOLUTIONS FOR LUXURY HOTELS AND GLOBAL BRANDS.
             </p>
             <div className="mt-4 md:mt-4 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-green"></span>
-              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">AVAILABLE</span>
+              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">AVAILABLE FOR PROJECTS</span>
             </div>
             <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-center gap-4">
               <button
                 onClick={() => setIsQuoteModalOpen(true)}
                 className="w-full sm:w-auto bg-white text-black px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text hover:scale-[1.02] transition-all duration-300"
               >
-                GET A QUOTE
+                START A PROJECT
               </button>
               <a
                 href="#work"
                 className="w-full sm:w-auto border border-outline/30 text-white px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:border-white hover:bg-white/5 transition-all duration-300 text-center"
               >
-                VIEW WORK
+                SELECTED WORK
               </a>
             </div>
           </motion.div>
@@ -373,40 +383,46 @@ export default function App() {
         </div>
       </header>
 
-      {/* Featured Projects Sections */}
+      {/* Selected Work */}
       <section className="px-8 pb-32 max-w-screen-2xl mx-auto" id="work">
-        {/* Branding Section */}
-        <div className="mb-32">
-          <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-8">
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">IDENTITY // BRANDING:</span>
-            </div>
-            <ArrowDown className="w-5 h-5 text-on-surface" />
+        <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-20">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
+            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">SELECTED WORK:</span>
           </div>
+        </div>
 
+        {/* Cinematic Shoots */}
+        <div className="mb-32">
+          <div className="flex justify-between items-center mb-8">
+            <h3 className="text-xl font-black uppercase tracking-tighter">01 // CINEMATIC SHOOTS</h3>
+            <ArrowDown className="w-5 h-5 text-secondary-text" />
+          </div>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {brandingProjects.map((project) => (
+            {cinematicProjects.map((project) => (
               <motion.div
                 key={project.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="lg:col-span-4 group cursor-pointer"
+                className="lg:col-span-12 group cursor-pointer"
               >
-                <div className="aspect-video lg:aspect-auto bg-[#1a1a1a] overflow-hidden mb-4 relative flex items-center justify-center">
+                <div className="aspect-video bg-[#1a1a1a] overflow-hidden mb-4 relative">
                   <img
                     src={project.image}
                     alt={project.title}
-                    referrerPolicy="no-referrer"
-                    className="w-full h-auto object-contain opacity-80 group-hover:scale-[1.02] group-hover:opacity-100 transition-all duration-700"
+                    className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
                   />
+                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm">
+                      <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[15px] border-l-white border-b-[10px] border-b-transparent ml-1" />
+                    </div>
+                  </div>
                 </div>
                 <div className="flex justify-between items-start">
                   <div>
                     <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.year}</span>
-                    <h3 className="text-xs font-bold uppercase tracking-widest mt-1">{project.title}</h3>
+                    <h4 className="text-xl font-black uppercase tracking-tighter mt-1">{project.title}</h4>
                   </div>
                   <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.category}</span>
                 </div>
@@ -415,45 +431,62 @@ export default function App() {
           </div>
         </div>
 
-        {/* Motion Section */}
-        <div>
-          <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-8">
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">MOTION // REELS:</span>
+        {/* Drone & Editing Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-32 mb-32">
+          {/* Drone */}
+          <div>
+            <div className="flex justify-between items-center mb-8 border-b border-outline/10 pb-4">
+              <h3 className="text-sm font-black uppercase tracking-tighter">02 // DRONE</h3>
+            </div>
+            <div className="space-y-12">
+              {droneProjects.map((project) => (
+                <motion.div key={project.id} className="group cursor-pointer">
+                  <div className="aspect-video bg-[#1a1a1a] overflow-hidden mb-4">
+                    <img src={project.image} alt={project.title} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700" />
+                  </div>
+                  <h4 className="text-xs font-bold uppercase tracking-widest">{project.title}</h4>
+                </motion.div>
+              ))}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {videoProjects.map((project) => (
+          {/* Editing */}
+          <div>
+            <div className="flex justify-between items-center mb-8 border-b border-outline/10 pb-4">
+              <h3 className="text-sm font-black uppercase tracking-tighter">03 // EDITING</h3>
+            </div>
+            <div className="space-y-12">
+              {editingProjects.map((project) => (
+                <motion.div key={project.id} className="group cursor-pointer">
+                  <div className="aspect-video bg-[#1a1a1a] overflow-hidden mb-4">
+                    <img src={project.image} alt={project.title} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700" />
+                  </div>
+                  <h4 className="text-xs font-bold uppercase tracking-widest">{project.title}</h4>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Branding */}
+        <div>
+          <div className="flex justify-between items-center mb-8 border-b border-outline/10 pb-4">
+            <h3 className="text-sm font-black uppercase tracking-tighter">04 // BRANDING</h3>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {brandingProjects.map((project) => (
               <motion.div
                 key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="lg:col-span-12 group cursor-pointer"
+                className="group cursor-pointer"
               >
-                <div className="aspect-video lg:h-[600px] bg-[#1a1a1a] overflow-hidden mb-4 relative flex items-center justify-center">
+                <div className="aspect-square bg-[#1a1a1a] overflow-hidden mb-4 flex items-center justify-center p-12">
                   <img
                     src={project.image}
                     alt={project.title}
-                    referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
+                    className="w-full h-auto object-contain opacity-80 group-hover:scale-110 transition-all duration-700"
                   />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-20 h-20 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform duration-500">
-                      <div className="w-0 h-0 border-t-[10px] border-t-transparent border-l-[15px] border-l-white border-b-[10px] border-b-transparent ml-1" />
-                    </div>
-                  </div>
                 </div>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.year}</span>
-                    <h3 className="text-xl font-black uppercase tracking-tighter mt-1">{project.title}</h3>
-                  </div>
-                  <span className="text-[0.625rem] text-secondary-text uppercase tracking-ultra">{project.category}</span>
-                </div>
+                <h4 className="text-xs font-bold uppercase tracking-widest">{project.title}</h4>
               </motion.div>
             ))}
           </div>
@@ -465,24 +498,25 @@ export default function App() {
         <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-20">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">MY EXPERTISE:</span>
+            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">ONE SOLUTION:</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-outline/20">
-          {expertise.map((item, index) => (
-            <div
-              key={item.title}
-              className={`bg-background py-16 ${
-                index === 0 ? "pr-12" : index === 1 ? "px-12" : "pl-12"
-              } border-b md:border-b-0 ${index !== 2 ? "md:border-r border-outline/20" : ""}`}
-            >
-              <h3 className="text-xl font-black uppercase tracking-tighter mb-6">{item.title}</h3>
-              <p className="text-[0.6875rem] uppercase tracking-widest leading-relaxed text-secondary-text">
-                {item.description}
-              </p>
-            </div>
-          ))}
+        <div className="max-w-5xl">
+          <h3 className="text-[clamp(2rem,6vw,5rem)] font-black uppercase tracking-tighter leading-[0.9] mb-16">
+            WE HANDLE EVERYTHING<br />FROM START TO FINISH.
+          </h3>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            {expertiseLines.map((line, index) => (
+              <div key={index} className="space-y-4">
+                <span className="text-[0.625rem] font-bold text-secondary-text">0{index + 1} //</span>
+                <p className="text-[0.6875rem] md:text-xs uppercase tracking-widest leading-relaxed text-secondary-text font-medium">
+                  {line}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -492,7 +526,7 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
             {/* Left Column: Label */}
             <div className="md:col-span-4">
-              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">STORYTELLING IS MY DNA:</span>
+              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">THE HANDS-ON APPROACH:</span>
             </div>
 
             {/* Right Column: Bio & Skills */}
@@ -504,7 +538,7 @@ export default function App() {
                   viewport={{ once: true }}
                   className="text-3xl md:text-5xl font-bold tracking-tighter uppercase leading-[0.9] mb-8"
                 >
-                  I CRAFT CINEMATIC VISUALS THAT ELEVATE BRANDS AND TELL STORIES THAT STAY.
+                  WE BELIEVE IN THE POWER OF DETAIL AND THE IMPACT OF STORY.
                 </motion.h2>
 
                 <motion.p
@@ -514,7 +548,7 @@ export default function App() {
                   transition={{ delay: 0.1 }}
                   className="text-[0.6875rem] md:text-xs uppercase tracking-[0.12em] leading-relaxed text-secondary-text mb-20 max-w-2xl font-normal"
                 >
-                  I’M WASIM PAKHTOON, A CREATIVE VIDEO EDITOR AND BRAND-FOCUSED FILMMAKER. I SPECIALIZE IN TRANSFORMING RAW FOOTAGE INTO COMPELLING VISUAL STORIES THAT DRIVE EMOTION AND BUSINESS IMPACT. FROM CINEMATIC EDITS TO FULL BRAND VISUALS, MY FOCUS IS ALWAYS ON CREATING CONTENT THAT STANDS OUT AND PERFORMS.
+                  WASIM PAKHTOON BRINGS A HANDS-ON APPROACH TO EVERY PROJECT, ENSURING EVERY FRAME AND EVERY PIXEL SERVES A PURPOSE. WITH EXTENSIVE EXPERIENCE WORKING WITH LUXURY HOTELS, PREMIUM PROPERTIES, AND GLOBAL BRANDS, WE SPECIALIZE IN END-TO-END VISUAL STORYTELLING THAT DELIVERS RESULTS. WE DON'T JUST SHOOT VIDEO—WE CRAFT IDENTITIES.
                 </motion.p>
 
                 {/* Skills Grid */}
@@ -559,8 +593,8 @@ export default function App() {
         >
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
             <div className="md:col-span-4">
-              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">INQUIRY:</span>
-              <h2 className="text-3xl font-black uppercase tracking-tighter leading-none mt-4">START A PROJECT</h2>
+              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">THE NEXT STEP:</span>
+              <h2 className="text-3xl font-black uppercase tracking-tighter leading-none mt-4">LET’S CREATE VISUALS THAT GROW YOUR BUSINESS.</h2>
               <p className="text-[0.625rem] uppercase tracking-widest text-secondary-text mt-4 max-w-[150px]">Currently accepting a limited number of high-impact projects.</p>
             </div>
             <div className="md:col-span-8">
@@ -575,7 +609,7 @@ export default function App() {
                   </motion.div>
                   <h3 className="text-2xl font-bold uppercase tracking-tighter mb-4">REQUEST RECEIVED</h3>
                   <p className="text-[0.6875rem] uppercase tracking-widest text-secondary-text leading-relaxed max-w-xs mx-auto">
-                    Your request has been received. I’ll review everything personally and get back to you shortly.
+                    YOUR REQUEST HAS BEEN RECEIVED. WE’LL REVIEW EVERYTHING PERSONALLY AND GET BACK TO YOU SHORTLY.
                   </p>
                   <button 
                     onClick={() => setFormStatus("idle")}
@@ -712,7 +746,7 @@ export default function App() {
                   </motion.div>
                   <h3 className="text-2xl font-bold uppercase tracking-tighter mb-4">REQUEST RECEIVED</h3>
                   <p className="text-[0.6875rem] uppercase tracking-widest text-secondary-text leading-relaxed max-w-xs mx-auto">
-                    Your request has been received. I’ll review everything personally and get back to you shortly.
+                    YOUR REQUEST HAS BEEN RECEIVED. WE’LL REVIEW EVERYTHING PERSONALLY AND GET BACK TO YOU SHORTLY.
                   </p>
                   <button 
                     onClick={() => {
@@ -727,8 +761,8 @@ export default function App() {
               ) : (
                 <>
                   <div className="mb-12">
-                    <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text block mb-4">INQUIRY:</span>
-                    <h2 className="text-3xl font-black uppercase tracking-tighter leading-none">START A PROJECT</h2>
+                    <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text block mb-4">THE NEXT STEP:</span>
+                    <h2 className="text-3xl font-black uppercase tracking-tighter leading-none">LET’S CREATE VISUALS THAT GROW YOUR BUSINESS.</h2>
                     <p className="text-[0.625rem] uppercase tracking-widest text-secondary-text mt-4">Currently accepting a limited number of high-impact projects.</p>
                   </div>
 

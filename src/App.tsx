@@ -11,10 +11,6 @@ import { useState, useEffect } from "react";
 import LogoImg from "../images/logo.png";
 import EcoBrewCardImg from "../images/project-img/brew/design-1 1.png";
 
-// Video Imports
-import HeavenViewVilla from "@/video/hotels/Heaven-View-Villa.mp4";
-import LeeHeritage from "@/video/hotels/lee heritage.mp4";
-
 const navLinks = [
   { name: "HOME", href: "#" },
   { name: "WORK", href: "#work" },
@@ -52,14 +48,14 @@ const cinematicProjects = [
     year: "2024",
     title: "HEAVEN VIEW VILLA",
     category: "CINEMATIC SHOOT",
-    video: HeavenViewVilla,
+    vimeoId: "1183128507",
   },
   {
     id: 7,
     year: "2024",
     title: "LEE HERITAGE",
     category: "CINEMATIC SHOOT",
-    video: LeeHeritage,
+    vimeoId: "1183128960",
   },
   {
     id: 2,
@@ -426,7 +422,17 @@ export default function App() {
                 className="lg:col-span-12 group cursor-pointer"
               >
                 <div className="aspect-video bg-[#1a1a1a] overflow-hidden mb-4 relative">
-                  {(project as any).video ? (
+                  {(project as any).vimeoId ? (
+                    <div className="w-full h-full pointer-events-none">
+                      <iframe
+                        src={`https://player.vimeo.com/video/${(project as any).vimeoId}?background=1&autoplay=1&muted=1&loop=1&badge=0&autopause=0&player_id=0&app_id=58479`}
+                        className="w-full h-full scale-[1.35]"
+                        frameBorder="0"
+                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+                        title={project.title}
+                      />
+                    </div>
+                  ) : (project as any).video ? (
                     <video
                       src={(project as any).video}
                       autoPlay

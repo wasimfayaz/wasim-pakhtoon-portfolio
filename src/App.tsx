@@ -27,12 +27,20 @@ const socials = [
 
 const projects = [
   {
+    id: 3,
+    year: "2024",
+    title: "ECO BREW BUSINESS CARD",
+    category: "PRINT // BRANDING",
+    image: EcoBrewCardImg,
+    large: true,
+  },
+  {
     id: 1,
     year: "2024",
     title: "MUTATE TECH IDENTITY",
     category: "BRANDING / STRATEGY",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuChMoA0l5Zw1yXCauYAFPoWeYOVWjA3tjztcuVOi_kdjAJGLS6At-It-CP61QsW1z9_c0b4g7Uctx1NisEDppR8T2h5hQOzV_QcbWX-ikv88mHjSB44jOykWnsFTr93yuusnUKx1wiyZ_C_qehchIBFm68GNcgdfRByhUG4ZzRAAmEA2IvzdromgSWJetLnkkzsRznJeum1GqomErYW5u9VIa_MIXzjqONiaC6tTg6G3yj-BqS9aSxJ-I9P1LLvT_bKOq5DpWWCCi0",
-    large: true,
+    large: false,
   },
   {
     id: 2,
@@ -40,14 +48,6 @@ const projects = [
     title: "MIDNIGHT SESSIONS",
     category: "PRODUCTION",
     image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts",
-    large: false,
-  },
-  {
-    id: 3,
-    year: "2024",
-    title: "ECO BREW BUSINESS CARD",
-    category: "PRINT // BRANDING",
-    image: EcoBrewCardImg,
     large: false,
   },
 ];
@@ -393,12 +393,12 @@ export default function App() {
               transition={{ duration: 0.6 }}
               className={`${project.large ? "lg:col-span-8" : "lg:col-span-4"} group cursor-pointer`}
             >
-              <div className="aspect-video lg:aspect-auto lg:h-[500px] bg-[#1a1a1a] overflow-hidden mb-4 relative">
+              <div className="aspect-video lg:aspect-auto bg-[#1a1a1a] overflow-hidden mb-4 relative flex items-center justify-center">
                 <img
                   src={project.image}
                   alt={project.title}
                   referrerPolicy="no-referrer"
-                  className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
+                  className="w-full h-auto object-contain opacity-80 group-hover:scale-[1.02] group-hover:opacity-100 transition-all duration-700"
                 />
               </div>
               <div className="flex justify-between items-start">

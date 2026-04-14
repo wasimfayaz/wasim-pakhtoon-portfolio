@@ -1,13 +1,348 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wasim Pakhtoon — Creative Video Editor & Brand Designer</title>
+    <meta name="description" content="I help brands, real estate companies, startups and creators produce cinematic videos, brand visuals and high quality digital content that increases engagement and trust.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="custom-cursor"></div>
 
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="#" class="logo">WP.</a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#portfolio">Work</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="hero-bg">
+                <img src="assets/hero_bg.png" alt="Cinematic dark background">
+                <div class="overlay"></div>
+            </div>
+            <div class="container hero-content">
+                <div class="hero-text-wrapper reveal-up">
+                    <h1 class="hero-title">WASIM PAKHTOON</h1>
+                </div>
+                <div class="hero-text-wrapper reveal-up delay-1">
+                    <h2 class="hero-subtitle">Creative Video Editor | Brand Designer | Visual Storyteller</h2>
+                </div>
+                <div class="hero-text-wrapper reveal-up delay-2">
+                    <p class="hero-tagline">"I create cinematic edits and brand visuals that make businesses look premium."</p>
+                </div>
+                <div class="hero-actions reveal-up delay-3">
+                    <a href="#portfolio" class="btn btn-primary">View Portfolio</a>
+                    <a href="#contact" class="btn btn-outline">Contact Me</a>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <div class="mouse"></div>
+                <p>Scroll</p>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about section-padding" id="about">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-text section-reveal">
+                        <span class="section-label">01 // About</span>
+                        <h2 class="section-title">Elevating Brands Through Visual Storytelling.</h2>
+                        <p class="lead">Hi, I'm Wasim Pakhtoon, a video editor and brand creative specialist. I work with businesses and personal brands to create cinematic video content and strong visual identities.</p>
+                        
+                        <div class="expertise-list">
+                            <h3>My Expertise Includes:</h3>
+                            <ul>
+                                <li>Video Editing</li>
+                                <li>Motion Graphics</li>
+                                <li>Brand Visual Design</li>
+                                <li>Real Estate Video Editing</li>
+                                <li>YouTube Talking Head Editing</li>
+                                <li>Instagram Reels Editing</li>
+                                <li>Drone Footage Editing</li>
+                                <li>Commercial Brand Videos</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Portfolio Section -->
+        <section class="portfolio section-padding dark-bg" id="portfolio">
+            <div class="container">
+                <div class="section-header section-reveal">
+                    <span class="section-label">02 // Selected Work</span>
+                    <h2 class="section-title">Cinematic Showcase.</h2>
+                </div>
+                
+                <div class="portfolio-grid">
+                    <!-- Project 1 -->
+                    <div class="portfolio-item section-reveal">
+                        <div class="portfolio-img-wrapper">
+                            <img src="assets/portfolio_1.png" alt="Commercial Projects">
+                            <div class="portfolio-overlay">
+                                <span>View Project</span>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>Commercial Projects</h3>
+                            <p>Brand Storytelling</p>
+                        </div>
+                    </div>
+
+                    <!-- Project 2 -->
+                    <div class="portfolio-item section-reveal delay-1">
+                        <div class="portfolio-img-wrapper">
+                            <img src="assets/portfolio_2.png" alt="Real Estate Projects">
+                            <div class="portfolio-overlay">
+                                <span>View Project</span>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>Real Estate Projects</h3>
+                            <p>Cinematic Property Tours</p>
+                        </div>
+                    </div>
+
+                    <!-- Project 3 -->
+                    <div class="portfolio-item section-reveal delay-2">
+                        <div class="portfolio-img-wrapper">
+                            <img src="assets/portfolio_3.png" alt="Social Media Edits">
+                            <div class="portfolio-overlay">
+                                <span>View Project</span>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>Social Media Edits</h3>
+                            <p>High-Retention Content</p>
+                        </div>
+                    </div>
+
+                    <!-- Project 4 -->
+                    <div class="portfolio-item section-reveal">
+                        <div class="portfolio-img-wrapper">
+                            <img src="assets/portfolio_4.png" alt="Motion Graphics">
+                            <div class="portfolio-overlay">
+                                <span>View Project</span>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>Motion Graphics</h3>
+                            <p>Dynamic Visual Effects</p>
+                        </div>
+                    </div>
+
+                    <!-- Project 5 -->
+                    <div class="portfolio-item section-reveal delay-1">
+                        <div class="portfolio-img-wrapper">
+                            <img src="assets/portfolio_5.png" alt="Brand Projects">
+                            <div class="portfolio-overlay">
+                                <span>View Project</span>
+                            </div>
+                        </div>
+                        <div class="portfolio-info">
+                            <h3>Brand Projects</h3>
+                            <p>Identity & Design</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Services & Tools Section -->
+        <section class="services section-padding" id="services">
+            <div class="container">
+                <div class="services-wrapper">
+                    <!-- Services -->
+                    <div class="services-column section-reveal">
+                        <span class="section-label">03 // Offerings</span>
+                        <h2 class="section-title">Specialized Services.</h2>
+                        <ul class="accordion-list">
+                            <li class="accordion-item">
+                                <div class="accordion-header">
+                                    <h3>Video Editing</h3>
+                                    <span class="icon">+</span>
+                                </div>
+                                <div class="accordion-content">
+                                    <p>Crafting compelling narratives through high-end cuts, color grading, and sound design.</p>
+                                </div>
+                            </li>
+                            <li class="accordion-item">
+                                <div class="accordion-header">
+                                    <h3>Motion Graphics</h3>
+                                    <span class="icon">+</span>
+                                </div>
+                                <div class="accordion-content">
+                                    <p>Adding life to your visuals with custom animations and dynamic text elements.</p>
+                                </div>
+                            </li>
+                            <li class="accordion-item">
+                                <div class="accordion-header">
+                                    <h3>Brand Identity</h3>
+                                    <span class="icon">+</span>
+                                </div>
+                                <div class="accordion-content">
+                                    <p>Developing cohesive visual systems that position your brand as a premium authority.</p>
+                                </div>
+                            </li>
+                            <li class="accordion-item">
+                                <div class="accordion-header">
+                                    <h3>Real Estate Video Editing</h3>
+                                    <span class="icon">+</span>
+                                </div>
+                                <div class="accordion-content">
+                                    <p>Transforming property tours into cinematic experiences that sell lifestyles.</p>
+                                </div>
+                            </li>
+                            <li class="accordion-item">
+                                <div class="accordion-header">
+                                    <h3>Content Editing</h3>
+                                    <span class="icon">+</span>
+                                </div>
+                                <div class="accordion-content">
+                                    <p>Optimizing content for various social platforms to maximize reach and retention.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Tools -->
+                    <div class="tools-column section-reveal delay-1">
+                        <span class="section-label">04 // Technology</span>
+                        <h2 class="section-title">Industry Tools.</h2>
+                        <div class="tools-grid">
+                            <div class="tool-card">
+                                <h3>Adobe Premiere Pro</h3>
+                                <div class="progress-bar"><div class="fill" style="width: 95%;"></div></div>
+                            </div>
+                            <div class="tool-card">
+                                <h3>After Effects</h3>
+                                <div class="progress-bar"><div class="fill" style="width: 85%;"></div></div>
+                            </div>
+                            <div class="tool-card">
+                                <h3>DaVinci Resolve</h3>
+                                <div class="progress-bar"><div class="fill" style="width: 90%;"></div></div>
+                            </div>
+                            <div class="tool-card">
+                                <h3>Photoshop</h3>
+                                <div class="progress-bar"><div class="fill" style="width: 88%;"></div></div>
+                            </div>
+                            <div class="tool-card">
+                                <h3>Illustrator</h3>
+                                <div class="progress-bar"><div class="fill" style="width: 80%;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials section-padding dark-bg">
+            <div class="container">
+                <div class="section-header center section-reveal">
+                    <span class="section-label">05 // Praise</span>
+                    <h2 class="section-title">Client Success.</h2>
+                </div>
+                
+                <div class="testimonial-slider section-reveal delay-1">
+                    <div class="testimonial-track">
+                        <div class="testimonial-card">
+                            <div class="quote-icon">"</div>
+                            <p class="quote">Wasim took our raw footage and turned it into a masterclass in brand storytelling. The retention on our latest campaign doubled thanks to his cinematic editing style.</p>
+                            <div class="client-info">
+                                <h4>Sarah Jenkins</h4>
+                                <span>Creative Director, Studio X</span>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="quote-icon">"</div>
+                            <p class="quote">The real estate videos he produces are simply on another level. The color grading and drone transitions make every property look like a multi-million dollar estate.</p>
+                            <div class="client-info">
+                                <h4>Marcus Reed</h4>
+                                <span>Luxury Broker</span>
+                            </div>
+                        </div>
+                        <div class="testimonial-card">
+                            <div class="quote-icon">"</div>
+                            <p class="quote">An absolute professional. His motion graphics work integrated seamlessly with our talking head videos, elevating our YouTube channel's production value immensely.</p>
+                            <div class="client-info">
+                                <h4>Elena Rostova</h4>
+                                <span>Tech Creator</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact section-padding" id="contact">
+            <div class="container">
+                <div class="contact-wrapper">
+                    <div class="contact-info section-reveal">
+                        <span class="section-label">06 // Connect</span>
+                        <h2 class="section-title">Let's work together.</h2>
+                        <p class="contact-desc">Ready to elevate your visual content? Reach out via the form or email me directly to discuss your next project.</p>
+                        <a href="mailto:hello@wasimpakhtoon.com" class="email-link">hello@wasimpakhtoon.com</a>
+                    </div>
+                    
+                    <div class="contact-form-wrapper section-reveal delay-1">
+                        <form class="contact-form">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" required placeholder="John Doe">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" required placeholder="john@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="details">Project Details</label>
+                                <textarea id="details" rows="5" required placeholder="Tell me about your project..."></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">WP.</div>
+                <div class="footer-links">
+                    <a href="#">Instagram</a>
+                    <a href="#">YouTube</a>
+                    <a href="#">LinkedIn</a>
+                    <a href="#">Vimeo</a>
+                </div>
+                <div class="footer-copy">
+                    <p>&copy; 2026 Wasim Pakhtoon Portfolio. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

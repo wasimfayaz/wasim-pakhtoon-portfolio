@@ -1,6 +1,6 @@
 /**
  * Client Portal — Wasim Pakhtoon Creative Agency
- * Prepared for Supabase Integration.
+ * Connected to Supabase.
  */
 
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -9,54 +9,67 @@ import {
   LayoutDashboard, Film, MessageSquare, FileText, Clock,
   Settings, Download, Play, X, ChevronRight, Send, Menu,
   LogOut, RefreshCcw, Sparkles, Lock, Eye, EyeOff,
-  ArrowDownToLine, CheckCircle2, Circle, Loader2, User,
+  ArrowDownToLine, CheckCircle2, Loader2, User, ExternalLink,
 } from "lucide-react";
 import LogoImg from "../images/logo.png";
 import { supabase } from "./lib/supabase";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ─── Types (matching Supabase schema) ─────────────────────────────────────────
 
-type Deliverable = { id: number; title: string; type: string; duration: string; status: string; thumb: string; vimeoId: string | null };
+/** Flat row from the `clients` table */
+type ClientData = {
+  id?: string;
+  username: string;
+  password?: string;
+  email?: string;
+  project_name?: string;
+  status?: string;
+};
+
+/** Row from the `deliverables` table */
+type Deliverable = {
+  id: string;
+  title: string;
+  file_url: string;
+  status: string;
+  client_username: string;
+  created_at?: string;
+};
+
 type Message = { id: number; sender: string; role: string; text: string; time: string; isMe: boolean };
 type Doc = { id: number; name: string; type: string; size: string; date: string };
 type TimelineStage = { label: string; done?: boolean; active?: boolean };
-type Project = { name: string; client: string; status: string; startDate: string; deliveryDate: string; progress: number };
 
-/** Unified structure for a client's project data after login */
-type ClientData = {
-  username: string;
-  project: Project;
-  deliverables?: Deliverable[];
-  messages?: Message[];
-  documents?: Doc[];
-  timeline?: TimelineStage[];
-};
+// ─── Supabase Data Hook ───────────────────────────────────────────────────────
 
-
-
-/**
- * Placeholder for future Supabase data fetch.
- */
 function useClientPortalData(username: string) {
   const [deliverables, setDeliverables] = useState<Deliverable[]>([]);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [documents, setDocuments] = useState<Doc[]>([]);
-  const [loading, setLoading] = useState(false); // Set to false for now as there's no backend
+  const [messages] = useState<Message[]>([]);
+  const [documents] = useState<Doc[]>([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const fetchPortalData = useCallback(async () => {
-    if (!username) return;
+    if (!username || !supabase) return;
     setLoading(true);
     try {
-      // Future Supabase fetch logic goes here.
-      // fetchDeliverables(username)...
-      
+      const { data, error } = await supabase
+        .from("deliverables")
+        .select("*")
+        .eq("client_username", username);
+
+      if (error) {
+        console.error("[Deliverables Fetch Error]:", error);
+        setError("Failed to load deliverables.");
+      } else {
+        setDeliverables(data || []);
+        setError(null);
+      }
       setLastUpdated(new Date());
-      setError(null);
     } catch (err) {
-      console.error('[Portal Fetch Error]:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load portal data');
+      console.error("[Portal Fetch Error]:", err);
+      setError(err instanceof Error ? err.message : "Failed to load portal data");
     } finally {
       setLoading(false);
     }
@@ -73,13 +86,13 @@ function useClientPortalData(username: string) {
 const PortalLoadingState = () => (
   <div className="flex flex-col items-center justify-center py-24 gap-4">
     <Loader2 className="w-6 h-6 text-white/20 animate-spin" />
-    <p className="text-[0.6rem] uppercase tracking-[0.15em] text-white/20">Initializing Portal...</p>
+    <p className="text-[0.6rem] uppercase tracking-[0.15em] text-white/20">Loading...</p>
   </div>
 );
 
 // ─── Status Badge ─────────────────────────────────────────────────────────────
 const StatusBadge = ({ status }: { status: string }) => {
-  const s = status.toLowerCase();
+  const s = (status || "").toLowerCase();
   const colors: Record<string, string> = {
     editing: "border-amber-400/40 text-amber-300 bg-amber-400/10",
     review: "border-blue-400/40 text-blue-300 bg-blue-400/10",
@@ -87,10 +100,12 @@ const StatusBadge = ({ status }: { status: string }) => {
     completed: "border-green-400/40 text-green-300 bg-green-400/10",
     delivered: "border-green-400/40 text-green-300 bg-green-400/10",
     pending: "border-white/20 text-white/40 bg-white/5",
+    soon: "border-white/20 text-white/40 bg-white/5",
+    active: "border-blue-400/40 text-blue-300 bg-blue-400/10",
   };
   return (
     <span className={`text-[0.55rem] uppercase tracking-[0.15em] font-bold border px-2.5 py-1 rounded-sm ${colors[s] ?? "border-white/20 text-white/50"}`}>
-      {status}
+      {status || "Active"}
     </span>
   );
 };
@@ -139,7 +154,6 @@ const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
         return;
       }
 
-      // LOGIN SUCCESS
       onLogin(data[0] as ClientData);
     } catch (err) {
       console.error("[Login Error]:", err);
@@ -203,32 +217,22 @@ const OverviewSection = ({ data, onRevision, onGoHome }: { data: ClientData; onR
       </p>
     </motion.div>
 
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {[
-        { label: "Project", value: data?.project?.name || "—", sub: "Active Campaign" },
-        { label: "Start Date", value: data?.project?.startDate || "—", sub: "Kick-off" },
-        { label: "Delivery", value: data?.project?.deliveryDate || "—", sub: "Final deadline" },
+        { label: "Project", value: data?.project_name || "—" },
+        { label: "Status", value: data?.status || "Active" },
       ].map((card, i) => (
         <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: i * 0.08 }}
-          className="border border-white/10 bg-white/[0.02] p-6 text-center md:text-left">
+          className="border border-white/10 bg-white/[0.02] p-6">
           <p className="text-[0.55rem] uppercase tracking-[0.15em] text-white/30 mb-2">{card.label}</p>
-          <p className="font-black text-white text-sm uppercase tracking-tight leading-snug mb-1">{card.value}</p>
-          <p className="text-[0.6rem] text-white/30 uppercase tracking-widest">{card.sub}</p>
+          <div className="flex items-center gap-2">
+            {card.label === "Status"
+              ? <StatusBadge status={card.value} />
+              : <p className="font-black text-white text-sm uppercase tracking-tight leading-snug">{card.value}</p>}
+          </div>
         </motion.div>
       ))}
     </div>
-
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.2 }}
-      className="border border-white/10 bg-white/[0.02] p-6">
-      <div className="flex justify-between items-center mb-4">
-        <span className="text-[0.6rem] uppercase tracking-[0.15em] text-white/40">Overall Progress</span>
-        <span className="text-lg font-black text-white">{data?.project?.progress ?? 0}%</span>
-      </div>
-      <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-        <motion.div initial={{ width: 0 }} animate={{ width: `${data?.project?.progress ?? 0}%` }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-          className="h-full bg-white" />
-      </div>
-    </motion.div>
 
     <div className="flex flex-wrap gap-4">
       <button onClick={onRevision} className="flex items-center gap-2 border border-white/20 text-white px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-white hover:text-black transition-colors">
@@ -257,46 +261,39 @@ const OverviewSection = ({ data, onRevision, onGoHome }: { data: ClientData; onR
 
 // ─── Deliverables ─────────────────────────────────────────────────────────────
 const DeliverablesSection = ({ deliverables }: { deliverables: Deliverable[] }) => {
-  const [activeVideo, setActiveVideo] = useState<Deliverable | null>(null);
   return (
-    <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        {deliverables.map((item, i) => (
-          <motion.div key={item.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: i * 0.07 }}
-            className="border border-white/10 bg-white/[0.02] group overflow-hidden">
-            <div className="relative aspect-video bg-[#111] overflow-hidden cursor-pointer" onClick={() => item.vimeoId && setActiveVideo(item)}>
-              <img src={item.thumb} alt={item.title} className="w-full h-full object-cover opacity-60 group-hover:opacity-80 transition-all duration-700" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <motion.div whileHover={{ scale: 1.1 }} className={`w-14 h-14 border border-white/30 rounded-full flex items-center justify-center backdrop-blur-sm ${item.vimeoId ? "bg-white/10" : "bg-white/5 opacity-30"}`}>
-                  <Play className="w-5 h-5 text-white fill-white ml-0.5" />
-                </motion.div>
-              </div>
-              <div className="absolute top-3 right-3"><StatusBadge status={item.status} /></div>
-              <div className="absolute bottom-3 left-3 text-[0.55rem] text-white/50 font-bold uppercase tracking-widest bg-black/60 px-2 py-1 backdrop-blur-sm">{item.duration}</div>
+    <div className="space-y-3">
+      {deliverables.map((item, i) => (
+        <motion.div key={item.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.07 }}
+          className="border border-white/10 bg-white/[0.02] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 hover:bg-white/[0.04] transition-colors group">
+          <div className="flex items-center gap-4">
+            <div className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/30 shrink-0 group-hover:border-white/20 transition-colors">
+              <Film className="w-4 h-4" />
             </div>
-            <div className="p-4 flex justify-between items-center">
-              <div>
-                <p className="text-[0.65rem] font-bold uppercase tracking-widest text-white">{item.title}</p>
-                <p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-0.5">{item.type}</p>
-              </div>
-              <button className="w-8 h-8 border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white/50">
-                <Download className="w-3.5 h-3.5" />
-              </button>
+            <div>
+              <p className="text-[0.7rem] font-bold uppercase tracking-widest text-white">{item.title}</p>
+              <p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-1">
+                {item.created_at ? new Date(item.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""}
+              </p>
             </div>
-          </motion.div>
-        ))}
-      </div>
-      <AnimatePresence>
-        {activeVideo && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 bg-black/95 z-[200] flex items-center justify-center p-6 backdrop-blur-xl" onClick={() => setActiveVideo(null)}>
-            <button className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors"><X className="w-6 h-6" /></button>
-            <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} transition={{ duration: 0.3 }} className="w-full max-w-4xl aspect-video" onClick={(e) => e.stopPropagation()}>
-              <iframe src={`https://player.vimeo.com/video/${activeVideo.vimeoId}?autoplay=1&badge=0&autopause=0`} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" title={activeVideo.title} />
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+          </div>
+          <div className="flex items-center gap-3 shrink-0">
+            <StatusBadge status={item.status} />
+            {item.file_url && (
+              <a
+                href={item.file_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-white text-black px-4 py-2 text-[0.6rem] font-bold uppercase tracking-widest hover:bg-white/90 transition-colors"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                View File
+              </a>
+            )}
+          </div>
+        </motion.div>
+      ))}
+    </div>
   );
 };
 
@@ -322,6 +319,12 @@ const FeedbackSection = ({ initialMessages, clientName }: { initialMessages: Mes
         <span className="text-[0.65rem] uppercase tracking-[0.15em] font-bold text-white/60">Project Feedback</span>
       </div>
       <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        {messages.length === 0 && (
+          <div className="h-full flex flex-col items-center justify-center gap-3">
+            <MessageSquare className="w-8 h-8 text-white/10" />
+            <p className="text-[0.6rem] uppercase tracking-widest text-white/20">No messages yet. Start the conversation below.</p>
+          </div>
+        )}
         {messages.map((msg) => (
           <motion.div key={msg.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className={`flex flex-col ${msg.isMe ? "items-end" : "items-start"}`}>
             <div className="flex items-center gap-2 mb-2">
@@ -375,31 +378,40 @@ const DocumentsSection = ({ documents }: { documents: Doc[] }) => (
 const TimelineSection = ({ stages }: { stages?: TimelineStage[] }) => (
   <div className="border border-white/10 bg-white/[0.02] p-8">
     <p className="text-[0.6rem] uppercase tracking-[0.15em] text-white/30 mb-10">Production Pipeline</p>
-    <div className="relative hidden md:block">
-      <div className="absolute top-4 left-0 right-0 h-px bg-white/10" />
-      <div className="flex justify-between relative">
-        {stages?.map((stage, i) => (
-          <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-            className="flex flex-col items-center gap-3 text-center">
-            <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center z-10 relative ${stage.active ? "border-white bg-white" : stage.done ? "border-white/60 bg-white/20" : "border-white/15 bg-transparent"}`}>
-              {stage.done && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
-              {stage.active && <div className="w-2.5 h-2.5 rounded-full bg-black" />}
-            </div>
-            <span className={`text-[0.6rem] uppercase tracking-widest font-bold ${stage.active ? "text-white" : stage.done ? "text-white/60" : "text-white/20"}`}>{stage.label}</span>
-          </motion.div>
-        ))}
+    {(!stages || stages.length === 0) ? (
+      <div className="py-12 text-center">
+        <Clock className="w-8 h-8 text-white/10 mx-auto mb-4" />
+        <p className="text-[0.6rem] uppercase tracking-widest text-white/20">Timeline coming soon</p>
       </div>
-    </div>
-    <div className="space-y-6 md:hidden">
-      {stages?.map((stage, i) => (
-        <div key={i} className="flex items-center gap-4">
-          <div className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 ${stage.active ? "border-white bg-white" : stage.done ? "border-white/50 bg-white/10" : "border-white/15"}`}>
-            {stage.active && <div className="w-2 h-2 rounded-full bg-black" />}
+    ) : (
+      <>
+        <div className="relative hidden md:block">
+          <div className="absolute top-4 left-0 right-0 h-px bg-white/10" />
+          <div className="flex justify-between relative">
+            {stages.map((stage, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
+                className="flex flex-col items-center gap-3 text-center">
+                <div className={`w-8 h-8 rounded-full border-2 flex items-center justify-center z-10 relative ${stage.active ? "border-white bg-white" : stage.done ? "border-white/60 bg-white/20" : "border-white/15 bg-transparent"}`}>
+                  {stage.done && <CheckCircle2 className="w-3.5 h-3.5 text-white" />}
+                  {stage.active && <div className="w-2.5 h-2.5 rounded-full bg-black" />}
+                </div>
+                <span className={`text-[0.6rem] uppercase tracking-widest font-bold ${stage.active ? "text-white" : stage.done ? "text-white/60" : "text-white/20"}`}>{stage.label}</span>
+              </motion.div>
+            ))}
           </div>
-          <span className={`text-[0.65rem] font-bold uppercase tracking-widest ${stage.active ? "text-white" : stage.done ? "text-white/50" : "text-white/20"}`}>{stage.label}</span>
         </div>
-      ))}
-    </div>
+        <div className="space-y-6 md:hidden">
+          {stages.map((stage, i) => (
+            <div key={i} className="flex items-center gap-4">
+              <div className={`w-6 h-6 rounded-full border flex items-center justify-center shrink-0 ${stage.active ? "border-white bg-white" : stage.done ? "border-white/50 bg-white/10" : "border-white/15"}`}>
+                {stage.active && <div className="w-2 h-2 rounded-full bg-black" />}
+              </div>
+              <span className={`text-[0.65rem] font-bold uppercase tracking-widest ${stage.active ? "text-white" : stage.done ? "text-white/50" : "text-white/20"}`}>{stage.label}</span>
+            </div>
+          ))}
+        </div>
+      </>
+    )}
   </div>
 );
 
@@ -407,8 +419,9 @@ const TimelineSection = ({ stages }: { stages?: TimelineStage[] }) => (
 const SettingsSection = ({ data, onLogout }: { data: ClientData; onLogout: () => void }) => (
   <div className="space-y-4">
     {[
-      { label: "Client Name", value: data?.username || "Client" },
-      { label: "Project", value: data?.project?.name || "—" },
+      { label: "Username", value: data?.username || "—" },
+      { label: "Email", value: data?.email || "—" },
+      { label: "Project", value: data?.project_name || "—" },
       { label: "Access Level", value: "Premium Partner" },
     ].map((field) => (
       <div key={field.label} className="border border-white/10 bg-white/[0.02] px-6 py-4">
@@ -473,13 +486,13 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
   const portal = useClientPortalData(data.username);
 
   const renderSection = () => {
-    if (portal.loading && active !== 'overview' && active !== 'settings') {
-      return <PortalLoadingState />;
-    }
     switch (active) {
-      case "overview": return <OverviewSection data={{ ...data, deliverables: portal.deliverables, messages: portal.messages }} onRevision={() => setShowRevision(true)} onGoHome={onGoHome} />;
+      case "overview": return <OverviewSection data={data} onRevision={() => setShowRevision(true)} onGoHome={onGoHome} />;
       case "deliverables":
-        return portal.deliverables.length > 0 ? <DeliverablesSection deliverables={portal.deliverables} /> : (
+        if (portal.loading) return <PortalLoadingState />;
+        return portal.deliverables.length > 0 ? (
+          <DeliverablesSection deliverables={portal.deliverables} />
+        ) : (
           <div className="py-24 text-center border border-white/5 bg-white/[0.02]">
             <Film className="w-8 h-8 text-white/10 mx-auto mb-4" />
             <p className="text-[0.6rem] uppercase tracking-widest text-white/20">No deliverables yet</p>
@@ -487,7 +500,7 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
         );
       case "feedback": return <FeedbackSection initialMessages={portal.messages} clientName={data?.username || "Client"} />;
       case "documents": return <DocumentsSection documents={portal.documents} />;
-      case "timeline": return <TimelineSection stages={data.timeline} />;
+      case "timeline": return <TimelineSection />;
       case "settings": return <SettingsSection data={data} onLogout={onLogout} />;
       default: return null;
     }
@@ -516,10 +529,9 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
         <div className="p-4 border-t border-white/5">
           <div className="bg-white/[0.03] border border-white/[0.08] p-3 rounded-sm">
             <p className="text-[0.5rem] uppercase tracking-widest text-white/20 mb-1">Active Project</p>
-            <p className="text-[0.6rem] font-bold uppercase tracking-tight text-white/60 leading-snug">{data?.project?.name || "—"}</p>
-            <div className="mt-2 flex items-center gap-2">
-              <div className="flex-1 h-0.5 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-white/40" style={{ width: `${data?.project?.progress ?? 0}%` }} /></div>
-              <span className="text-[0.5rem] text-white/30">{data?.project?.progress ?? 0}%</span>
+            <p className="text-[0.6rem] font-bold uppercase tracking-tight text-white/60 leading-snug">{data?.project_name || "—"}</p>
+            <div className="mt-2">
+              <StatusBadge status={data?.status || "active"} />
             </div>
           </div>
         </div>
@@ -534,24 +546,45 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <button onClick={() => setSidebarOpen(true)} className="md:hidden text-white/50 hover:text-white transition-colors"><Menu className="w-5 h-5" /></button>
-              <div><div className="flex items-center gap-3 flex-wrap"><h1 className="text-[0.7rem] font-black uppercase tracking-tight text-white">{data?.project?.name || "Project"}</h1><StatusBadge status={data?.project?.status || "active"} /></div><p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-0.5">Client: {data?.username || "Client"}</p></div>
+              <div>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <h1 className="text-[0.7rem] font-black uppercase tracking-tight text-white">{data?.project_name || "Your Project"}</h1>
+                  <StatusBadge status={data?.status || "active"} />
+                </div>
+                <p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-0.5">Client: {data?.username || "Client"}</p>
+              </div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-24 h-0.5 bg-white/10 rounded-full overflow-hidden"><motion.div className="h-full bg-white" style={{ width: `${data?.project?.progress ?? 0}%` }} /></div>
-              <span className="text-[0.55rem] text-white/40 font-bold">{data?.project?.progress ?? 0}%</span>
-              <button onClick={onGoHome} className="hidden sm:flex items-center gap-1.5 text-[0.55rem] uppercase tracking-widest font-bold text-white/20 hover:text-white transition-colors ml-2 border-l border-white/10 pl-4">
+              <button onClick={onGoHome} className="hidden sm:flex items-center gap-1.5 text-[0.55rem] uppercase tracking-widest font-bold text-white/20 hover:text-white transition-colors border-l border-white/10 pl-4">
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg> Back
               </button>
             </div>
           </div>
         </header>
         <main className="flex-1 px-6 md:px-10 py-8">
-          <div className="flex items-center gap-3 mb-8 pb-6 border-b border-white/5">{currentNav && <currentNav.icon className="w-4 h-4 text-white/30" />}<span className="text-[0.65rem] font-black uppercase tracking-[0.15em] text-white/50">{currentNav?.label}</span></div>
-          <AnimatePresence mode="wait"><motion.div key={active} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}>{renderSection()}</motion.div></AnimatePresence>
+          <div className="flex items-center gap-3 mb-8 pb-6 border-b border-white/5">
+            {currentNav && <currentNav.icon className="w-4 h-4 text-white/30" />}
+            <span className="text-[0.65rem] font-black uppercase tracking-[0.15em] text-white/50">{currentNav?.label}</span>
+          </div>
+          <AnimatePresence mode="wait">
+            <motion.div key={active} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}>
+              {renderSection()}
+            </motion.div>
+          </AnimatePresence>
         </main>
         <footer className="px-6 md:px-10 py-4 border-t border-white/5 flex items-center justify-between gap-4">
           <p className="text-[0.5rem] text-white/15 uppercase tracking-widest">© Wasim Pakhtoon Creative — Confidential Client Portal</p>
-          <div className="flex items-center gap-2 shrink-0">{portal.error ? <span className="text-[0.5rem] text-red-400/50 uppercase tracking-widest">Offline</span> : portal.lastUpdated ? <span className="text-[0.5rem] text-white/15 uppercase tracking-widest flex items-center gap-1.5"><span className="w-1 h-1 rounded-full bg-green-500/60 animate-pulse inline-block" />Live · {portal.lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span> : <span className="text-[0.5rem] text-white/10 uppercase tracking-widest flex items-center gap-1.5"><Loader2 className="w-2.5 h-2.5 animate-spin" /> Syncing...</span>}</div>
+          <div className="flex items-center gap-2 shrink-0">
+            {portal.error
+              ? <span className="text-[0.5rem] text-red-400/50 uppercase tracking-widest">Offline</span>
+              : portal.lastUpdated
+                ? <span className="text-[0.5rem] text-white/15 uppercase tracking-widest flex items-center gap-1.5">
+                    <span className="w-1 h-1 rounded-full bg-green-500/60 animate-pulse inline-block" />
+                    Live · {portal.lastUpdated.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  </span>
+                : <span className="text-[0.5rem] text-white/10 uppercase tracking-widest flex items-center gap-1.5"><Loader2 className="w-2.5 h-2.5 animate-spin" /> Syncing...</span>
+            }
+          </div>
         </footer>
       </div>
       <AnimatePresence>{showRevision && <RevisionModal onClose={() => setShowRevision(false)} />}</AnimatePresence>

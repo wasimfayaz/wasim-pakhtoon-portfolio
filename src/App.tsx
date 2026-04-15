@@ -331,8 +331,9 @@ export default function App() {
           <div className="flex items-center gap-4">
             <a
               href="/#portal"
-              className="hidden md:block font-label uppercase tracking-[0.1em] text-[0.625rem] font-bold text-white/50 hover:text-white px-4 py-2.5 transition-all duration-300"
+              className="hidden md:flex items-center gap-2 font-label uppercase tracking-[0.1em] text-[0.625rem] font-bold text-black bg-white px-5 py-2.5 hover:bg-secondary-text transition-all duration-300"
             >
+              <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
               CLIENT PORTAL
             </a>
             <a
@@ -470,6 +471,26 @@ export default function App() {
                 SELECTED WORK
               </a>
             </div>
+            {/* Client Portal CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.4 }}
+              className="mt-6 border-t border-outline/20 pt-6 flex items-center justify-between gap-4"
+            >
+              <div>
+                <p className="text-[0.55rem] uppercase tracking-ultra font-bold text-secondary-text mb-0.5">EXISTING CLIENTS</p>
+                <p className="text-[0.625rem] text-on-surface/60 uppercase tracking-widest">Access your private project dashboard</p>
+              </div>
+              <a
+                href="/#portal"
+                className="shrink-0 flex items-center gap-2 bg-white text-black px-5 py-2.5 text-[0.55rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all duration-300 whitespace-nowrap"
+              >
+                <span className="w-1 h-1 rounded-full bg-black"></span>
+                CLIENT PORTAL
+              </a>
+            </motion.div>
           </motion.div>
         </div>
 

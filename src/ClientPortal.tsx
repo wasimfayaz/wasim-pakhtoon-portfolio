@@ -573,6 +573,16 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
             </div>
           </div>
         </div>
+        {/* Back to Website */}
+        <div className="p-4 border-t border-white/5">
+          <button
+            onClick={onGoHome}
+            className="w-full flex items-center gap-2 px-3 py-2.5 text-[0.6rem] uppercase tracking-widest font-bold text-white/20 hover:text-white hover:bg-white/5 transition-all duration-200"
+          >
+            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+            Back to Website
+          </button>
+        </div>
       </aside>
 
       <div className="flex-1 md:ml-64 flex flex-col min-h-screen">
@@ -590,11 +600,18 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
                 <p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-0.5">Client: {data.project.client}</p>
               </div>
             </div>
-            <div className="hidden sm:flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <div className="w-24 h-0.5 bg-white/10 rounded-full overflow-hidden">
                 <motion.div className="h-full bg-white" style={{ width: `${data.project.progress}%` }} />
               </div>
               <span className="text-[0.55rem] text-white/40 font-bold">{data.project.progress}%</span>
+              <button
+                onClick={onGoHome}
+                className="hidden sm:flex items-center gap-1.5 text-[0.55rem] uppercase tracking-widest font-bold text-white/20 hover:text-white transition-colors ml-2 border-l border-white/10 pl-4"
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+                Back
+              </button>
             </div>
           </div>
         </header>

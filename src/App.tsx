@@ -209,12 +209,23 @@ const CustomSelect = ({
 
 export default function App() {
   const [activeLink, setActiveLink] = useState("HOME");
+  const [navTheme, setNavTheme] = useState<"dark" | "light">("dark");
   const [scrolled, setScrolled] = useState(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [formStatus, setFormStatus] = useState("idle"); // idle, submitting, success
+  const [formStatus, setFormStatus] = useState("idle"); 
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<number | null>(null);
+
+  // Define section themes
+  const sectionThemes: Record<string, "dark" | "light"> = {
+    home: "dark",
+    work: "light",
+    services: "dark",
+    about: "light",
+    faq: "dark",
+    contact: "light",
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -240,6 +251,11 @@ export default function App() {
           if (link) {
             setActiveLink(link.name);
           }
+          
+          // Update Nav Theme
+          if (sectionThemes[id]) {
+            setNavTheme(sectionThemes[id]);
+          }
         }
       });
     };
@@ -247,7 +263,7 @@ export default function App() {
     const observer = new IntersectionObserver(handleIntersection, observerOptions);
     
     // Observe all sections
-    const sectionIds = ['home', 'work', 'services', 'about', 'contact'];
+    const sectionIds = ['home', 'work', 'services', 'about', 'faq', 'contact'];
     sectionIds.forEach(id => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
@@ -298,15 +314,21 @@ export default function App() {
     <div className="min-h-screen bg-background text-on-surface selection:bg-white selection:text-black scroll-smooth">
       {/* Navigation */}
       <nav 
-        className={`fixed top-0 w-full z-[100] transition-all duration-300 ${
+        className={`fixed top-0 w-full z-[100] transition-all duration-500 ${
           scrolled 
-            ? "bg-[#131313]/80 backdrop-blur-md border-b border-outline/20 py-4" 
+            ? (navTheme === "dark" 
+                ? "bg-[#131313]/80 backdrop-blur-md border-b border-outline/20 py-4" 
+                : "bg-[#f8f8f8]/80 backdrop-blur-md border-b border-black/10 py-4") 
             : "bg-transparent border-b border-transparent py-6"
         }`}
       >
         <div className="flex justify-between items-center w-full px-8 max-w-screen-2xl mx-auto">
           <a href="#" className="shrink-0 flex items-center">
-            <img src={LogoImg} alt="Wasim Pakhtoon Logo" className="h-8 object-contain w-auto hover:opacity-80 transition-opacity" />
+            <img 
+              src={LogoImg} 
+              alt="Wasim Pakhtoon Logo" 
+              className={`h-8 object-contain w-auto hover:opacity-80 transition-all duration-500 ${navTheme === 'light' ? 'invert brightness-0' : ''}`} 
+            />
           </a>
           <div className="hidden md:flex gap-12">
             {navLinks.map((link) => (
@@ -314,14 +336,16 @@ export default function App() {
                 key={link.name}
                 href={link.href}
                 className={`font-label uppercase tracking-[0.1em] text-[0.6875rem] font-medium transition-colors duration-200 relative py-1 ${
-                  activeLink === link.name ? "text-white" : "text-secondary-text hover:text-white"
+                  navTheme === "dark" 
+                    ? (activeLink === link.name ? "text-white" : "text-secondary-text hover:text-white")
+                    : (activeLink === link.name ? "text-black" : "text-black/60 hover:text-black")
                 }`}
               >
                 {link.name}
                 {activeLink === link.name && (
                   <motion.div
                     layoutId="nav-underline"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-white origin-left"
+                    className={`absolute bottom-0 left-0 right-0 h-0.5 origin-left ${navTheme === 'dark' ? 'bg-white' : 'bg-black'}`}
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -331,21 +355,29 @@ export default function App() {
           <div className="flex items-center gap-4">
             <a
               href="/#portal"
-              className="hidden md:flex items-center gap-2 font-label uppercase tracking-[0.1em] text-[0.625rem] font-bold text-black bg-white px-5 py-2.5 hover:bg-secondary-text transition-all duration-300"
+              className={`hidden md:flex items-center gap-2 font-label uppercase tracking-[0.1em] text-[0.625rem] font-bold px-5 py-2.5 transition-all duration-300 ${
+                navTheme === "dark" 
+                  ? "text-black bg-white hover:bg-secondary-text" 
+                  : "text-white bg-black hover:bg-black/80"
+              }`}
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
+              <span className={`w-1.5 h-1.5 rounded-full ${navTheme === 'dark' ? 'bg-black' : 'bg-white'}`}></span>
               CLIENT PORTAL
             </a>
             <a
               href="#contact"
-              className="hidden md:block font-label uppercase tracking-[0.1em] text-[0.625rem] font-bold text-white border border-white/20 px-5 py-2.5 hover:bg-white hover:text-black transition-all duration-300"
+              className={`hidden md:block font-label uppercase tracking-[0.1em] text-[0.625rem] font-bold border px-5 py-2.5 transition-all duration-300 ${
+                navTheme === "dark"
+                  ? "text-white border-white/20 hover:bg-white hover:text-black"
+                  : "text-black border-black/20 hover:bg-black hover:text-white"
+              }`}
             >
               CONTACT
             </a>
             
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden text-white p-2 hover:bg-white/5 transition-colors z-50 rounded-full"
+              className={`md:hidden p-2 hover:bg-white/5 transition-colors z-50 rounded-full ${navTheme === 'light' ? 'text-black' : 'text-white'}`}
               aria-label="Toggle Menu"
             >
               <AnimatePresence mode="wait">
@@ -513,311 +545,205 @@ export default function App() {
       </header>
 
       {/* Selected Work */}
-      <section className="px-8 pb-32 max-w-screen-2xl mx-auto" id="work">
-        {/* Pexels Block At Top Level */}
-
-        {/* Pexels Global Reach Section */}
-        <div className="mb-32">
-          <div className="bg-background border border-outline/20 p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-10 group hover:border-outline/40 transition-colors duration-500 mb-8 border-l-4 border-l-secondary-text/30 hover:border-l-white">
-            <div className="max-w-xl">
-              <h3 className="text-sm md:text-base font-black uppercase tracking-tighter text-white mb-3">Global Reach & Authority</h3>
-              <p className="text-[0.6875rem] text-secondary-text uppercase tracking-[0.1em] leading-relaxed">
-                Featured photography reaching hundreds of thousands of viewers worldwide on Pexels. Establishing visual authority through compelling, high-quality imagery.
-              </p>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 items-start sm:items-center w-full md:w-auto">
-              <div>
-                <h4 className="text-5xl md:text-6xl font-black text-white tracking-tighter">125.2K<span className="text-secondary-text text-3xl">+</span></h4>
-                <div className="text-[0.625rem] text-secondary-text uppercase tracking-ultra font-bold mt-2">TOTAL VIEWS</div>
+      <section className="bg-[#f8f8f8]" id="work">
+        <div className="px-8 py-32 max-w-screen-2xl mx-auto">
+          {/* Pexels Global Reach Section */}
+          <div className="mb-32">
+            <div className="bg-white border border-black/5 p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-10 group hover:border-black/10 transition-colors duration-500 mb-8 border-l-4 border-l-black/20 hover:border-l-black shadow-sm">
+              <div className="max-w-xl">
+                <h3 className="text-sm md:text-base font-black uppercase tracking-tighter text-black mb-3">Global Reach & Authority</h3>
+                <p className="text-[0.6875rem] text-black/40 uppercase tracking-[0.1em] leading-relaxed">
+                  Featured photography reaching hundreds of thousands of viewers worldwide on Pexels. Establishing visual authority through compelling, high-quality imagery.
+                </p>
               </div>
               
-              <a 
-                href="https://www.pexels.com/@wxeim-768574136/" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="w-full sm:w-auto border border-outline/30 text-white px-8 py-5 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-white hover:text-black transition-all duration-300 text-center flex items-center justify-center group-hover:border-white/50"
-              >
-                VIEW ACCOUNT <span className="ml-2 font-normal text-base leading-none transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
-              </a>
+              <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 items-start sm:items-center w-full md:w-auto">
+                <div>
+                  <h4 className="text-5xl md:text-6xl font-black text-black tracking-tighter">125.2K<span className="text-black/30 text-3xl">+</span></h4>
+                  <div className="text-[0.625rem] text-black/30 uppercase tracking-ultra font-bold mt-2">TOTAL VIEWS</div>
+                </div>
+                
+                <a 
+                  href="https://www.pexels.com/@wxeim-768574136/" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="w-full sm:w-auto border border-black/10 text-black px-8 py-5 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-black hover:text-white transition-all duration-300 text-center flex items-center justify-center group-hover:border-black/30"
+                >
+                  VIEW ACCOUNT <span className="ml-2 font-normal text-base leading-none transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
+                </a>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {pexelsGrid.map((img, idx) => (
+                <motion.div 
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="aspect-[3/4] bg-black/[0.03] overflow-hidden group/image relative cursor-pointer"
+                >
+                  <img 
+                    src={img} 
+                    alt={`Cinematic video editing and hotel photography in Kashmir - Featured Work 0${idx + 1}`} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
+                  />
+                  <div className="absolute inset-0 border border-black/5 group-hover/image:border-black/10 transition-colors pointer-events-none z-10" />
+                  <div className="absolute top-4 left-4 z-20 flex items-center gap-2 opacity-0 group-hover/image:opacity-100 transition-opacity duration-500">
+                    <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
+                    <span className="text-[0.5rem] tracking-ultra text-black font-bold uppercase">PEXELS</span>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {pexelsGrid.map((img, idx) => (
-              <motion.div 
-                key={idx}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="aspect-[3/4] bg-[#1a1a1a] overflow-hidden group/image relative cursor-pointer"
-              >
-                <img 
-                  src={img} 
-                  alt={`Cinematic video editing and hotel photography in Kashmir - Featured Work 0${idx + 1}`} 
-                  className="w-full h-full object-cover opacity-70 group-hover/image:scale-105 group-hover/image:opacity-100 transition-all duration-700 md:blur-[2px] group-hover/image:blur-none"
-                />
-                <div className="absolute inset-0 border border-outline/10 group-hover/image:border-white/20 transition-colors pointer-events-none z-10" />
-                <div className="absolute top-4 left-4 z-20 flex items-center gap-2 opacity-0 group-hover/image:opacity-100 transition-opacity duration-500">
-                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-                  <span className="text-[0.5rem] tracking-ultra text-white font-bold uppercase">PEXELS</span>
-                </div>
-              </motion.div>
-            ))}
+          {/* Selected Work Details */}
+          <div className="flex justify-between items-center border-t border-black/10 pt-8 mb-16">
+            <div className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
+              <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-black">VIEW MY WORK:</h2>
+            </div>
           </div>
-        </div>
 
-        {/* Selected Work Details */}
-        <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-16">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-            <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-on-surface">VIEW MY WORK:</h2>
-          </div>
-        </div>
-
-        <div className="flex flex-col border-t border-outline/20 mb-32">
-          {/* 01 // Cinematic Shoots */}
-          <div className="border-b border-outline/20">
-            <button 
-              onClick={() => setActiveCategory(activeCategory === 0 ? null : 0)}
-              className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
-            >
-              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 0 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
-                {/* No redundant dot here */}
-                VISUAL STORYTELLING
-              </h3>
-              <div className="flex items-center gap-6">
-                <div className="relative w-8 h-8 flex items-center justify-center">
-                  <AnimatePresence>
-                    {activeCategory !== 0 && (
-                      <motion.div
-                        animate={{ 
-                          scale: [0.8, 2.2],
-                          opacity: [0.6, 0]
-                        }}
-                        transition={{ 
-                          duration: 2, 
-                          repeat: Infinity, 
-                          ease: [0.4, 0, 0.2, 1] 
-                        }}
-                        className="absolute w-full h-full rounded-full border border-white/60 pointer-events-none"
-                      />
-                    )}
-                  </AnimatePresence>
-                  <span className={`text-3xl font-light transition-transform duration-300 relative z-10 ${activeCategory === 0 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
-                    +
-                  </span>
-                </div>
-              </div>
-            </button>
-            <AnimatePresence>
-              {activeCategory === 0 && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="overflow-hidden"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 pb-16">
-                    {cinematicProjects.map((project) => (
-                      <motion.div
-                key={project.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="group cursor-pointer"
+          <div className="flex flex-col border-t border-black/10">
+            {/* 01 // Cinematic Shoots */}
+            <div className="border-b border-black/10">
+              <button 
+                onClick={() => setActiveCategory(activeCategory === 0 ? null : 0)}
+                className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
               >
-                <div className="aspect-video bg-[#1a1a1a] overflow-hidden relative">
-                  {(project as any).vimeoId ? (
-                    <div className="w-full h-full pointer-events-none">
-                      <iframe
-                        src={`https://player.vimeo.com/video/${(project as any).vimeoId}?background=1&autoplay=1&muted=1&loop=1&badge=0&autopause=0&player_id=0&app_id=58479`}
-                        className="w-full h-full object-cover scale-[1.05]"
-                        frameBorder="0"
-                        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
-                        title={project.title}
-                      />
-                    </div>
-                  ) : (project as any).video ? (
-                    <video
-                      src={(project as any).video}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
-                    />
-                  ) : (
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover opacity-80 group-hover:scale-105 group-hover:opacity-100 transition-all duration-700"
-                    />
-                  )}
-                  
-                  {/* Overlay Info - Always visible for better context */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-between p-6">
-                    <div className="flex justify-between items-start">
-                      <span className="text-[0.625rem] text-white/70 uppercase tracking-ultra">{project.year}</span>
-                      <span className="text-[0.625rem] text-white/70 uppercase tracking-ultra">{project.category}</span>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-black uppercase tracking-tighter text-white mb-1">{project.title}</h4>
-                      {(project as any).description && (
-                        <p className="text-[0.75rem] text-white/80 font-medium max-w-xs">{project.description}</p>
+                <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 0 ? 'text-black' : 'text-black/30 group-hover:text-black'}`}>
+                  VISUAL STORYTELLING
+                </h3>
+                <div className="flex items-center gap-6">
+                  <div className="relative w-8 h-8 flex items-center justify-center">
+                    <AnimatePresence>
+                      {activeCategory !== 0 && (
+                        <motion.div
+                          animate={{ scale: [0.8, 2.2], opacity: [0.6, 0] }}
+                          transition={{ duration: 2, repeat: Infinity, ease: [0.4, 0, 0.2, 1] }}
+                          className="absolute w-full h-full rounded-full border border-black/20 pointer-events-none"
+                        />
                       )}
+                    </AnimatePresence>
+                    <span className={`text-3xl font-light transition-transform duration-300 relative z-10 ${activeCategory === 0 ? 'rotate-45 text-black/30' : 'text-black group-hover:text-black/30'}`}>
+                      +
+                    </span>
+                  </div>
+                </div>
+              </button>
+              <AnimatePresence>
+                {activeCategory === 0 && (
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 pb-16">
+                      {cinematicProjects.map((project) => (
+                        <motion.div key={project.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="group cursor-pointer">
+                          <div className="aspect-video bg-black/[0.03] overflow-hidden relative border border-black/5">
+                            {(project as any).vimeoId ? (
+                              <div className="w-full h-full pointer-events-none">
+                                <iframe src={`https://player.vimeo.com/video/${(project as any).vimeoId}?background=1&autoplay=1&muted=1&loop=1&badge=0&autopause=0&player_id=0&app_id=58479`} className="w-full h-full object-cover scale-[1.05]" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" title={project.title} />
+                              </div>
+                            ) : (
+                              <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" />
+                            )}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-end p-6">
+                              <span className="text-[0.55rem] text-white/50 uppercase tracking-ultra mb-1">{project.year}</span>
+                              <h4 className="text-lg font-black uppercase tracking-tighter text-white">{project.title}</h4>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
                     </div>
-                  </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    <div className="w-16 h-16 rounded-full border border-white/20 flex items-center justify-center backdrop-blur-sm">
-                      <div className="w-0 h-0 border-t-[8px] border-t-transparent border-l-[12px] border-l-white border-b-[8px] border-b-transparent ml-1" />
+            {/* 02 // Drone */}
+            <div className="border-b border-black/10">
+              <button onClick={() => setActiveCategory(activeCategory === 1 ? null : 1)} className="w-full flex justify-between items-center py-6 text-left focus:outline-none group">
+                <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 1 ? 'text-black' : 'text-black/30 group-hover:text-black'}`}>
+                  AERIAL PERSPECTIVE
+                </h3>
+                <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 1 ? 'rotate-45 text-black/30' : 'text-black group-hover:text-black/30'}`}>+</span>
+              </button>
+              <AnimatePresence>
+                {activeCategory === 1 && (
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
+                      {droneProjects.map((project) => (
+                        <div key={project.id} className="group cursor-pointer">
+                          <div className="aspect-video bg-black/[0.03] overflow-hidden mb-4 border border-black/5">
+                            <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" />
+                          </div>
+                          <h4 className="text-xs font-black uppercase tracking-widest text-black">{project.title}</h4>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
-          {/* 02 // Drone */}
-          <div className="border-b border-outline/20">
-            <button 
-              onClick={() => setActiveCategory(activeCategory === 1 ? null : 1)}
-              className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
-            >
-              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 1 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
-                {/* No redundant dot here */}
-                AERIAL PERSPECTIVE
-              </h3>
-              <div className="flex items-center gap-6">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 1 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
-                    +
-                  </span>
-                </div>
-              </div>
-            </button>
-            <AnimatePresence>
-              {activeCategory === 1 && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="overflow-hidden"
-                >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
-              {droneProjects.map((project) => (
-                <motion.div key={project.id} className="group cursor-pointer">
-                  <div className="aspect-video bg-[#1a1a1a] overflow-hidden mb-4">
-                    <img src={project.image} alt={project.title} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700" />
-                  </div>
-                  <h4 className="text-xs font-bold uppercase tracking-widest">{project.title}</h4>
-                </motion.div>
-              ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+            {/* 03 // Editing */}
+            <div className="border-b border-black/10">
+              <button onClick={() => setActiveCategory(activeCategory === 2 ? null : 2)} className="w-full flex justify-between items-center py-6 text-left focus:outline-none group">
+                <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 2 ? 'text-black' : 'text-black/30 group-hover:text-black'}`}>
+                  POST-PRODUCTION
+                </h3>
+                <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 2 ? 'rotate-45 text-black/30' : 'text-black group-hover:text-black/30'}`}>+</span>
+              </button>
+              <AnimatePresence>
+                {activeCategory === 2 && (
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
+                      {editingProjects.map((project) => (
+                        <div key={project.id} className="group cursor-pointer">
+                          <div className="aspect-video bg-black/[0.03] overflow-hidden mb-4 border border-black/5">
+                            <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" />
+                          </div>
+                          <h4 className="text-xs font-black uppercase tracking-widest text-black">{project.title}</h4>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
-          {/* 03 // Editing */}
-          <div className="border-b border-outline/20">
-            <button 
-              onClick={() => setActiveCategory(activeCategory === 2 ? null : 2)}
-              className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
-            >
-              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 2 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
-                {/* No redundant dot here */}
-                POST-PRODUCTION
-              </h3>
-              <div className="flex items-center gap-6">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 2 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
-                    +
-                  </span>
-                </div>
-              </div>
-            </button>
-            <AnimatePresence>
-              {activeCategory === 2 && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="overflow-hidden"
-                >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
-              {editingProjects.map((project) => (
-                <motion.div key={project.id} className="group cursor-pointer">
-                  <div className="aspect-video bg-[#1a1a1a] overflow-hidden mb-4">
-                    <img src={project.image} alt={project.title} className="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-all duration-700" />
-                  </div>
-                  <h4 className="text-xs font-bold uppercase tracking-widest">{project.title}</h4>
-                </motion.div>
-              ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-
-          {/* 04 // Branding */}
-          <div className="border-b border-outline/20">
-            <button 
-              onClick={() => setActiveCategory(activeCategory === 3 ? null : 3)}
-              className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
-            >
-              <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 3 ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
-                {/* No redundant dot here */}
-                BRAND IDENTITY
-              </h3>
-              <div className="flex items-center gap-6">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 3 ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
-                    +
-                  </span>
-                </div>
-              </div>
-            </button>
-            <AnimatePresence>
-              {activeCategory === 3 && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  className="overflow-hidden"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
-            {brandingProjects.map((project) => (
-              <motion.div
-                key={project.id}
-                className="group cursor-pointer"
-              >
-                <div className="aspect-square bg-[#1a1a1a] overflow-hidden mb-4 flex items-center justify-center p-12">
-                  <img
-                    src={project.image}
-                    alt={`${project.title} - Branding and identity design project by Wasim Pakhtoon in Kashmir`}
-                    className="w-full h-auto object-contain opacity-80 group-hover:scale-110 transition-all duration-700"
-                  />
-                </div>
-                <h4 className="text-xs font-bold uppercase tracking-widest">{project.title}</h4>
-              </motion.div>
-            ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* 04 // Branding */}
+            <div className="border-b border-black/10">
+              <button onClick={() => setActiveCategory(activeCategory === 3 ? null : 3)} className="w-full flex justify-between items-center py-6 text-left focus:outline-none group">
+                <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 3 ? 'text-black' : 'text-black/30 group-hover:text-black'}`}>
+                  BRAND IDENTITY
+                </h3>
+                <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 3 ? 'rotate-45 text-black/30' : 'text-black group-hover:text-black/30'}`}>+</span>
+              </button>
+              <AnimatePresence>
+                {activeCategory === 3 && (
+                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
+                      {brandingProjects.map((project) => (
+                        <div key={project.id} className="group cursor-pointer">
+                          <div className="aspect-square bg-black/[0.02] overflow-hidden mb-4 flex items-center justify-center p-12 border border-black/5">
+                            <img src={project.image} alt={project.title} className="w-full h-auto object-contain group-hover:scale-110 transition-all duration-700" />
+                          </div>
+                          <h4 className="text-xs font-black uppercase tracking-widest text-black">{project.title}</h4>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Workflow Section */}
-      <section className="px-8 pb-32 max-w-screen-2xl mx-auto" id="services">
+      <section className="px-8 py-32 max-w-screen-2xl mx-auto" id="services">
         <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-20">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
@@ -851,62 +777,64 @@ export default function App() {
       </section>
 
       {/* About Section */}
-      <section className="px-8 pb-32 max-w-screen-2xl mx-auto" id="about">
-        <div className="border-t border-outline/30 pt-8">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
-            {/* Left Column: Label */}
-            <div className="md:col-span-4 flex items-center gap-2 self-start">
-              <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-              <h2 className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">THE HANDS-ON APPROACH:</h2>
-            </div>
+      <section className="bg-[#f8f8f8]" id="about">
+        <div className="px-8 py-32 max-w-screen-2xl mx-auto">
+          <div className="border-t border-black/10 pt-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
+              {/* Left Column: Label */}
+              <div className="md:col-span-4 flex items-center gap-2 self-start">
+                <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
+                <h2 className="text-[0.625rem] uppercase tracking-ultra font-black text-black/30">THE HANDS-ON APPROACH:</h2>
+              </div>
 
-            {/* Right Column: Bio & Skills */}
-            <div className="md:col-span-8">
-              <div className="max-w-3xl">
-                <motion.h2
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className="text-3xl md:text-5xl font-bold tracking-tighter uppercase leading-[0.9] mb-8"
-                >
-                  Creating with vision. Executing with precision.
-                </motion.h2>
+              {/* Right Column: Bio & Skills */}
+              <div className="md:col-span-8">
+                <div className="max-w-3xl">
+                  <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-[0.85] mb-12 text-black"
+                  >
+                    Creating with vision.<br />Executing with precision.
+                  </motion.h2>
 
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1 }}
-                  className="text-[0.6875rem] md:text-xs uppercase tracking-[0.12em] leading-relaxed text-secondary-text mb-20 max-w-2xl font-normal"
-                >
-                  Based in Srinagar, Wasim Pakhtoon leads high-end cinematic productions for properties and global brands as a freelance video editor and cinematographer. We handle every phase of the video shoot in Kashmir—from the initial storyboard to final post-production—ensuring world-class standards for hotel shoots and commercial projects. Our focus is on seamless execution and uncompromising quality.
-                </motion.p>
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.1 }}
+                    className="text-[0.6875rem] md:text-xs uppercase tracking-[0.2em] leading-relaxed text-black/60 mb-20 max-w-2xl font-bold"
+                  >
+                    Based in Srinagar, Wasim Pakhtoon leads high-end cinematic productions for properties and global brands as a freelance video editor and cinematographer. We handle every phase of the video shoot in Kashmir—from the initial storyboard to final post-production—ensuring world-class standards for hotel shoots and commercial projects. Our focus is on seamless execution and uncompromising quality.
+                  </motion.p>
 
-                {/* Skills Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 pt-12 border-t border-outline/20">
-                  {skillCategories.map((category, idx) => (
-                    <motion.div
-                      key={category.title}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.2 + idx * 0.1 }}
-                    >
-                      <h4 className="text-[0.625rem] font-bold tracking-ultra text-white mb-6 underline underline-offset-8 decoration-outline/40">
-                        {category.title}
-                      </h4>
-                      <ul className="space-y-3">
-                        {category.skills.map((skill) => (
-                          <li 
-                            key={skill} 
-                            className="text-[0.625rem] tracking-widest text-secondary-text hover:text-white transition-colors cursor-default list-none"
-                          >
-                            {skill}
-                          </li>
-                        ))}
-                      </ul>
-                    </motion.div>
-                  ))}
+                  {/* Skills Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 pt-12 border-t border-black/10">
+                    {skillCategories.map((category, idx) => (
+                      <motion.div
+                        key={category.title}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.2 + idx * 0.1 }}
+                      >
+                        <h4 className="text-[0.625rem] font-black tracking-ultra text-black mb-6 underline underline-offset-8 decoration-black/10">
+                          {category.title}
+                        </h4>
+                        <ul className="space-y-4">
+                          {category.skills.map((skill) => (
+                            <li 
+                              key={skill} 
+                              className="text-[0.55rem] tracking-[0.2em] text-black/40 hover:text-black transition-colors cursor-default list-none font-bold"
+                            >
+                              {skill}
+                            </li>
+                          ))}
+                        </ul>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -915,7 +843,7 @@ export default function App() {
       </section>
 
       {/* FAQ Section */}
-      <section className="px-8 pb-32 max-w-screen-2xl mx-auto">
+      <section className="px-8 py-32 max-w-screen-2xl mx-auto">
         <div className="border-t border-outline/30 pt-8">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
             <div className="md:col-span-4">
@@ -964,113 +892,49 @@ export default function App() {
       </section>
 
       {/* Contact Section */}
-      <section className="px-8 pb-32 max-w-screen-2xl mx-auto" id="contact">
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="border-t border-outline/30 pt-8"
-        >
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-            <div className="md:col-span-4">
-              <h2 className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">THE NEXT STEP:</h2>
-              <h2 className="text-3xl font-black uppercase tracking-tighter leading-none mt-4">LET’S CREATE VISUALS THAT GROW YOUR BUSINESS.</h2>
-              <p className="text-[0.625rem] uppercase tracking-widest text-secondary-text mt-4 max-w-[150px]">Currently accepting a limited number of high-impact projects.</p>
-            </div>
-            <div className="md:col-span-8">
-              {formStatus === "success" ? (
-                <div className="py-20 bg-[#0E0E0E] border border-outline/20 text-center">
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/10 mb-8"
+      <section className="bg-white" id="contact">
+        <div className="px-8 py-32 max-w-screen-2xl mx-auto">
+          <div className="border-t border-black/10 pt-16">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8">
+              <div className="md:col-span-8">
+                <span className="text-[0.625rem] uppercase tracking-ultra font-black text-black/30 block mb-6">NEXT PHASE:</span>
+                <h2 className="text-4xl md:text-8xl font-black tracking-tighter uppercase leading-[0.8] mb-12 text-black">
+                  READY TO BUILD<br />YOUR VISION?
+                </h2>
+                <div className="flex flex-col sm:flex-row gap-6">
+                  <button
+                    onClick={() => setIsQuoteModalOpen(true)}
+                    className="bg-black text-white px-12 py-6 text-[0.625rem] font-black uppercase tracking-ultra hover:bg-black/80 transition-all flex items-center justify-center gap-4 group"
                   >
-                    <CheckCircle2 className="w-8 h-8 text-green-500" />
-                  </motion.div>
-                  <h3 className="text-2xl font-bold uppercase tracking-tighter mb-4">REQUEST RECEIVED</h3>
-                  <p className="text-[0.6875rem] uppercase tracking-widest text-secondary-text leading-relaxed max-w-xs mx-auto">
-                    YOUR REQUEST HAS BEEN RECEIVED. WE’LL REVIEW EVERYTHING PERSONALLY AND GET BACK TO YOU SHORTLY.
-                  </p>
-                  <button 
-                    onClick={() => setFormStatus("idle")}
-                    className="mt-12 bg-white text-black px-12 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all"
-                  >
-                    SEND ANOTHER
+                    START A PROJECT <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
+                  <a
+                    href="mailto:contact@cinmach.com"
+                    className="border border-black/10 text-black px-12 py-6 text-[0.625rem] font-black uppercase tracking-ultra hover:bg-black hover:text-white transition-all text-center flex items-center justify-center"
+                  >
+                    DIRECT EMAIL
+                  </a>
                 </div>
-              ) : (
-                <form className="space-y-12" onSubmit={handleQuoteSubmit}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div className="space-y-2">
-                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">YOUR NAME *</label>
-                      <input name="name" required type="text" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="ENTER NAME" />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">EMAIL ADDRESS *</label>
-                      <input name="email" required type="email" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="EMAIL@EXAMPLE.COM" />
-                    </div>
+              </div>
+              
+              <div className="md:col-span-4 flex flex-col justify-end">
+                <div className="space-y-12">
+                  <div>
+                    <h4 className="text-[0.55rem] font-black tracking-ultra text-black/30 uppercase mb-4">LOCATION:</h4>
+                    <p className="text-lg font-black uppercase tracking-tighter text-black">SRINAGAR, KASHMIR</p>
+                    <p className="text-[0.625rem] uppercase tracking-widest text-black/40 mt-1">AVAILABLE WORLDWIDE</p>
                   </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <div className="space-y-2">
-                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">PHONE / WHATSAPP</label>
-                        <input name="phone" type="text" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="+00 000 000 000" />
-                    </div>
-                    <CustomSelect 
-                        name="project_type" 
-                        label="SELECT TYPE" 
-                        required 
-                        options={[
-                          { value: "editing", label: "VIDEO EDITING" },
-                          { value: "branding", label: "BRANDING" },
-                          { value: "shoot", label: "CINEMATIC SHOOT" },
-                          { value: "social", label: "SOCIAL CONTENT" },
-                          { value: "other", label: "OTHER" },
-                        ]} 
-                    />
+                  <div>
+                    <h4 className="text-[0.55rem] font-black tracking-ultra text-black/30 uppercase mb-4">LOCAL TIME:</h4>
+                    <p className="text-lg font-black uppercase tracking-tighter text-black">
+                      {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' })} IST
+                    </p>
                   </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    <CustomSelect 
-                        name="budget" 
-                        label="SELECT BUDGET" 
-                        required 
-                        options={[
-                          { value: "under500", label: "UNDER $500" },
-                          { value: "500-1000", label: "$500 – $1,000" },
-                          { value: "1000-3000", label: "$1,000 – $3,000" },
-                          { value: "3000-5000", label: "$3,000 – $5,000" },
-                          { value: "5000+", label: "$5,000+" },
-                        ]} 
-                    />
-                    <CustomSelect 
-                        name="timeline" 
-                        label="TIMELINE" 
-                        defaultValue="standard"
-                        options={[
-                          { value: "standard", label: "STANDARD (1-2 WEEKS)" },
-                          { value: "urgent", label: "URGENT (1-3 DAYS)" },
-                          { value: "flexible", label: "FLEXIBLE" },
-                        ]} 
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">PROJECT VISION *</label>
-                    <textarea name="vision" required rows={3} className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors resize-none" placeholder="TELL ME ABOUT YOUR GOALS AND VISION"></textarea>
-                  </div>
-
-                  <button 
-                    disabled={formStatus === "submitting"}
-                    className="bg-white text-black px-12 py-5 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all flex items-center gap-4 group disabled:opacity-50"
-                  >
-                    {formStatus === "submitting" ? "SENDING..." : "SEND REQUEST"} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </form>
-              )}
+                </div>
+              </div>
             </div>
           </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* Footer */}

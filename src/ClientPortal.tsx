@@ -254,17 +254,17 @@ const OverviewSection = ({ data, onRevision, onGoHome }: { data: ClientData; onR
 
 // ─── Deliverables ─────────────────────────────────────────────────────────────
 const DeliverablesSection = ({ deliverables }: { deliverables: Deliverable[] }) => (
-  <div className="divide-y divide-black/8 border border-black/10 overflow-hidden">
-    {deliverables.map((item, i) => (
+  <div className="divide-y divide-white/5 border border-white/10 overflow-hidden bg-white/[0.02]">
+    {deliverables.length > 0 ? deliverables.map((item, i) => (
       <motion.div key={item.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.07 }}
-        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-5 bg-white hover:bg-black/[0.02] transition-colors group">
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-5 hover:bg-white/[0.02] transition-colors group">
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-black/5 flex items-center justify-center text-black/30 shrink-0">
+          <div className="w-10 h-10 bg-white/5 flex items-center justify-center text-white/40 shrink-0">
             <Film className="w-4 h-4" />
           </div>
           <div>
-            <p className="text-[0.7rem] font-bold uppercase tracking-widest text-black">{item.title}</p>
-            <p className="text-[0.55rem] text-black/30 uppercase tracking-widest mt-1">
+            <p className="text-[0.7rem] font-bold uppercase tracking-widest text-white">{item.title}</p>
+            <p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-1">
               {item.created_at ? new Date(item.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""}
             </p>
           </div>
@@ -273,13 +273,18 @@ const DeliverablesSection = ({ deliverables }: { deliverables: Deliverable[] }) 
           <StatusBadge status={item.status} />
           {item.file_url && (
             <a href={item.file_url} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 bg-black text-white px-4 py-2 text-[0.6rem] font-bold uppercase tracking-widest hover:bg-black/80 transition-colors">
+              className="flex items-center gap-2 bg-white text-black px-4 py-2 text-[0.6rem] font-bold uppercase tracking-widest hover:bg-white/90 transition-colors">
               <ExternalLink className="w-3.5 h-3.5" /> View File
             </a>
           )}
         </div>
       </motion.div>
-    ))}
+    )) : (
+      <div className="py-24 text-center">
+        <Film className="w-10 h-10 text-white/10 mx-auto mb-4" />
+        <p className="text-[0.6rem] uppercase tracking-widest text-white/20">Awaiting your first deliverable</p>
+      </div>
+    )}
   </div>
 );
 
@@ -403,21 +408,21 @@ const TimelineSection = ({ stages }: { stages?: TimelineStage[] }) => (
 
 // ─── Settings ─────────────────────────────────────────────────────────────────
 const SettingsSection = ({ data, onLogout }: { data: ClientData; onLogout: () => void }) => (
-  <div className="border border-black/10 overflow-hidden">
+  <div className="border border-white/10 overflow-hidden bg-white/[0.02]">
     {[
       { label: "Username", value: data?.username || "—" },
       { label: "Email", value: data?.email || "—" },
       { label: "Project", value: data?.project_name || "—" },
       { label: "Access Level", value: "Premium Partner" },
     ].map((field) => (
-      <div key={field.label} className="border-b border-black/10 bg-white px-8 py-5 hover:bg-black/[0.02] transition-colors">
-        <p className="text-[0.5rem] uppercase tracking-[0.2em] text-black/30 mb-1.5">{field.label}</p>
-        <p className="text-[0.8rem] font-black tracking-widest uppercase text-black">{field.value}</p>
+      <div key={field.label} className="border-b border-white/5 px-8 py-5 hover:bg-white/[0.01] transition-colors">
+        <p className="text-[0.5rem] uppercase tracking-[0.2em] text-white/30 mb-1.5">{field.label}</p>
+        <p className="text-[0.8rem] font-black tracking-widest uppercase text-white">{field.value}</p>
       </div>
     ))}
-    <div className="bg-white px-8 py-6">
+    <div className="px-8 py-6">
       <button onClick={onLogout}
-        className="flex items-center gap-2 border border-red-500/30 text-red-500/70 px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-red-50 transition-all duration-300">
+        className="flex items-center gap-2 border border-red-500/30 text-red-500/70 px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-red-500/10 transition-all duration-300">
         <LogOut className="w-3.5 h-3.5" /> Sign Out
       </button>
     </div>
@@ -531,32 +536,28 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
           </button>
         </div>
       </aside>
-      <div className={`flex-1 md:ml-64 flex flex-col min-h-screen transition-colors duration-500 ${ isLight ? "bg-[#f8f8f8]" : "bg-[#080808]" }`}>
-        <header className={`sticky top-0 z-50 backdrop-blur-md border-b px-6 md:px-8 py-4 transition-colors duration-500 ${
-          isLight ? "bg-[#f8f8f8]/95 border-black/10" : "bg-[#080808]/95 border-white/5"
-        }`}>
+      <div className="flex-1 md:ml-64 flex flex-col min-h-screen bg-[#080808]">
+        <header className="sticky top-0 z-50 bg-[#080808]/95 backdrop-blur-md border-b border-white/5 px-6 md:px-8 py-4">
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <button onClick={() => setSidebarOpen(true)} className={`md:hidden transition-colors ${ isLight ? "text-black/50 hover:text-black" : "text-white/50 hover:text-white" }`}><Menu className="w-5 h-5" /></button>
+              <button onClick={() => setSidebarOpen(true)} className="md:hidden text-white/50 hover:text-white transition-colors"><Menu className="w-5 h-5" /></button>
               <div>
                 <div className="flex items-center gap-3 flex-wrap">
-                  <h1 className={`text-[0.7rem] font-black uppercase tracking-tight ${ isLight ? "text-black" : "text-white" }`}>{data?.project_name || "Your Project"}</h1>
+                  <h1 className="text-[0.7rem] font-black uppercase tracking-tight text-white">{data?.project_name || "Your Project"}</h1>
                   <StatusBadge status={data?.status || "active"} />
                 </div>
-                <p className={`text-[0.55rem] uppercase tracking-widest mt-0.5 ${ isLight ? "text-black/30" : "text-white/30" }`}>Client: {data?.username || "Client"}</p>
+                <p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-0.5">Partner: {data?.username || "Client"}</p>
               </div>
             </div>
-            <button onClick={onGoHome} className={`hidden sm:flex items-center gap-1.5 text-[0.55rem] uppercase tracking-widest font-bold transition-colors border-l pl-4 ${
-              isLight ? "text-black/20 hover:text-black border-black/10" : "text-white/20 hover:text-white border-white/10"
-            }`}>
-              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg> Back
+            <button onClick={onGoHome} className="hidden sm:flex items-center gap-2 text-[0.55rem] uppercase tracking-[0.2em] font-black text-white/20 hover:text-white transition-all border-l border-white/10 pl-4">
+              <ArrowLeft className="w-3 h-3" /> BACK
             </button>
           </div>
         </header>
         <main className="flex-1 px-6 md:px-10 py-8">
-          <div className={`flex items-center gap-3 mb-8 pb-6 border-b ${ isLight ? "border-black/10" : "border-white/5" }`}>
-            {currentNav && <currentNav.icon className={`w-4 h-4 ${ isLight ? "text-black/30" : "text-white/30" }`} />}
-            <span className={`text-[0.65rem] font-black uppercase tracking-[0.15em] ${ isLight ? "text-black/50" : "text-white/50" }`}>{currentNav?.label}</span>
+          <div className="flex items-center gap-3 mb-8 pb-6 border-b border-white/5">
+            {currentNav && <currentNav.icon className="w-4 h-4 text-white/20" />}
+            <span className="text-[0.6rem] font-black uppercase tracking-[0.25em] text-white/40">{currentNav?.label}</span>
           </div>
           <AnimatePresence mode="wait">
             <motion.div key={active} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}>

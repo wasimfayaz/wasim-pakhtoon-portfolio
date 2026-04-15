@@ -19,10 +19,9 @@ const pexelsGrid = [
 ];
 
 const navLinks = [
-  { name: "HOME", href: "#" },
   { name: "WORK", href: "#work" },
-  { name: "SERVICES", href: "#services" },
   { name: "ABOUT", href: "#about" },
+  { name: "CONTACT", href: "#contact" },
 ];
 
 const socials = [
@@ -311,7 +310,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-surface selection:bg-white selection:text-black scroll-smooth">
+    <div className="min-h-screen bg-background text-on-surface selection:bg-white selection:text-black">
       {/* Navigation */}
       <nav 
         className={`fixed top-0 w-full z-[100] transition-all duration-500 ${
@@ -323,76 +322,66 @@ export default function App() {
         }`}
       >
         <div className="flex justify-between items-center w-full px-8 max-w-screen-2xl mx-auto">
-          <a href="#" className="shrink-0 flex items-center">
+          <a href="#" className="shrink-0 flex items-center group">
             <img 
               src={LogoImg} 
               alt="Wasim Pakhtoon Logo" 
-              className={`h-8 object-contain w-auto hover:opacity-80 transition-all duration-500 ${navTheme === 'light' ? 'brightness-0' : ''}`} 
+              className={`h-8 object-contain w-auto transition-all duration-500 group-hover:opacity-70 ${navTheme === 'light' ? 'brightness-0' : ''}`} 
             />
           </a>
-          <div className="hidden md:flex gap-12">
-            {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className={`font-label uppercase tracking-[0.1em] text-[0.6875rem] font-medium transition-colors duration-200 relative py-1 ${
-                  navTheme === "dark" 
-                    ? (activeLink === link.name ? "text-white" : "text-secondary-text hover:text-white")
-                    : (activeLink === link.name ? "text-black" : "text-black/60 hover:text-black")
-                }`}
-              >
-                {link.name}
-                {activeLink === link.name && (
-                  <motion.div
-                    layoutId="nav-underline"
-                    className={`absolute bottom-0 left-0 right-0 h-0.5 origin-left ${navTheme === 'dark' ? 'bg-white' : 'bg-black'}`}
-                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                  />
-                )}
-              </a>
-            ))}
-          </div>
-          <div className="flex items-center gap-4">
-            <a
-              href="/#portal"
-              className={`hidden md:flex items-center gap-2 font-label uppercase tracking-[0.1em] text-[0.625rem] font-bold px-5 py-2.5 transition-all duration-300 ${
-                navTheme === "dark" 
-                  ? "text-black bg-white hover:bg-secondary-text" 
-                  : "text-white bg-black hover:bg-black/80"
-              }`}
-            >
-              <span className={`w-1.5 h-1.5 rounded-full ${navTheme === 'dark' ? 'bg-black' : 'bg-white'}`}></span>
-              CLIENT PORTAL
-            </a>
-            <a
-              href="#contact"
-              className={`hidden md:block font-label uppercase tracking-[0.1em] text-[0.625rem] font-bold border px-5 py-2.5 transition-all duration-300 ${
-                navTheme === "dark"
-                  ? "text-white border-white/20 hover:bg-white hover:text-black"
-                  : "text-black border-black/20 hover:bg-black hover:text-white"
-              }`}
-            >
-              CONTACT
-            </a>
-            
-            <button 
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={`md:hidden p-2 hover:bg-white/5 transition-colors z-50 rounded-full ${navTheme === 'light' ? 'text-black' : 'text-white'}`}
-              aria-label="Toggle Menu"
-            >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={isMenuOpen ? "close" : "open"}
-                  initial={{ opacity: 0, rotate: -90 }}
-                  animate={{ opacity: 1, rotate: 0 }}
-                  exit={{ opacity: 0, rotate: 90 }}
-                  transition={{ duration: 0.2 }}
+
+          <div className="hidden md:flex items-center gap-14">
+            <div className="flex gap-12 items-center">
+              {navLinks.map((link) => (
+                <motion.a
+                  key={link.name}
+                  href={link.href}
+                  whileHover={{ y: -2, opacity: 1 }}
+                  transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                  className={`font-label uppercase tracking-[0.15em] text-[0.6875rem] font-medium transition-colors ${
+                    navTheme === "dark" 
+                      ? (activeLink === link.name ? "text-white opacity-100" : "text-white opacity-60")
+                      : (activeLink === link.name ? "text-black opacity-100" : "text-black opacity-60")
+                  }`}
                 >
-                  {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-                </motion.div>
-              </AnimatePresence>
-            </button>
+                  {link.name}
+                </motion.a>
+              ))}
+            </div>
+            
+            <motion.a
+              href="https://wa.me/919541591652?text=Hi%20Wasim%2C%20I%20saw%20your%20website%20and%20I%E2%80%99m%20interested%20in%20working%20with%20you."
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ y: -2, opacity: 1 }}
+              transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+              className={`font-label uppercase tracking-[0.15em] text-[0.625rem] font-bold border-b py-1 transition-all duration-500 ${
+                navTheme === "dark"
+                  ? "text-white border-white/20 hover:border-white"
+                  : "text-black border-black/20 hover:border-black"
+              }`}
+            >
+              LET'S TALK
+            </motion.a>
           </div>
+            
+          <button 
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className={`md:hidden p-2 hover:bg-white/5 transition-colors z-50 rounded-full ${navTheme === 'light' ? 'text-black' : 'text-white'}`}
+            aria-label="Toggle Menu"
+          >
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={isMenuOpen ? "close" : "open"}
+                initial={{ opacity: 0, rotate: -90 }}
+                animate={{ opacity: 1, rotate: 0 }}
+                exit={{ opacity: 0, rotate: 90 }}
+                transition={{ duration: 0.2 }}
+              >
+                {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </motion.div>
+            </AnimatePresence>
+          </button>
         </div>
       </nav>
 
@@ -414,36 +403,39 @@ export default function App() {
                       setActiveLink(link.name);
                       setIsMenuOpen(false);
                     }}
-                    className={`text-4xl font-black uppercase tracking-tighter transition-colors ${
-                      activeLink === link.name ? "text-white" : "text-secondary-text"
+                    className={`text-5xl font-medium uppercase tracking-[0.1em] transition-colors ${
+                      activeLink === link.name ? "text-white" : "text-white/40"
                     }`}
                   >
                     {link.name}
                   </a>
                 ))}
                 
-                <div className="pt-8 border-t border-outline/20">
+                <div className="pt-12 border-t border-white/10 space-y-6">
                   <a
-                    href="#contact"
+                    href="https://wa.me/919541591652?text=Hi%20Wasim%2C%20I%20saw%20your%20website%20and%20I%E2%80%99m%20interested%20in%20working%20with%20you."
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={() => setIsMenuOpen(false)}
-                    className="inline-block w-full text-center bg-white text-black px-10 py-5 text-sm font-bold uppercase tracking-ultra"
+                    className="block text-2xl font-medium uppercase tracking-[0.1em] text-white hover:text-white/70 transition-colors"
                   >
-                    START A PROJECT
+                    LET'S TALK
                   </a>
                   
                   <a
                     href="/#portal"
-                    className="inline-block w-full text-center border border-white/20 text-white px-10 py-4 text-[0.65rem] font-bold uppercase tracking-ultra mt-4 hover:bg-white hover:text-black transition-all duration-300"
+                    onClick={() => setIsMenuOpen(false)}
+                    className="block text-sm font-medium uppercase tracking-[0.2em] text-white/40 hover:text-white transition-colors"
                   >
                     CLIENT PORTAL
                   </a>
                   
-                  <div className="flex gap-6 mt-12">
+                  <div className="flex gap-8 pt-6">
                     {socials.map((social) => (
                       <a
                         key={social.name}
                         href={social.href}
-                        className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text hover:text-white"
+                        className="text-[0.625rem] uppercase tracking-ultra font-bold text-white/30 hover:text-white"
                       >
                         {social.name}
                       </a>
@@ -582,17 +574,17 @@ export default function App() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className="aspect-[3/4] bg-black/[0.03] overflow-hidden group/image relative cursor-pointer"
+                  className="aspect-[3/4] bg-black/[0.03] overflow-hidden group relative cursor-zoom-in"
                 >
                   <img 
                     src={img} 
                     alt={`Cinematic video editing and hotel photography in Kashmir - Featured Work 0${idx + 1}`} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
                   />
-                  <div className="absolute inset-0 border border-black/5 group-hover/image:border-black/10 transition-colors pointer-events-none z-10" />
-                  <div className="absolute top-4 left-4 z-20 flex items-center gap-2 opacity-0 group-hover/image:opacity-100 transition-opacity duration-500">
-                    <div className="w-1.5 h-1.5 bg-black rounded-full animate-pulse" />
-                    <span className="text-[0.5rem] tracking-ultra text-black font-bold uppercase">PEXELS</span>
+                  <div className="absolute inset-0 border border-black/5 group-hover:border-black/10 transition-colors pointer-events-none z-10" />
+                  <div className="absolute top-4 left-4 z-20 flex items-center gap-2 transition-opacity duration-500">
+                    <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+                    <span className="text-[0.5rem] tracking-ultra text-white font-bold uppercase">PEXELS</span>
                   </div>
                 </motion.div>
               ))}
@@ -639,14 +631,14 @@ export default function App() {
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 pb-16">
                       {cinematicProjects.map((project) => (
-                        <motion.div key={project.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="group cursor-pointer">
+                        <motion.div key={project.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="group cursor-active md:cursor-zoom-in">
                           <div className="aspect-video bg-black/[0.03] overflow-hidden relative border border-black/5">
                             {(project as any).vimeoId ? (
                               <div className="w-full h-full pointer-events-none">
                                 <iframe src={`https://player.vimeo.com/video/${(project as any).vimeoId}?background=1&autoplay=1&muted=1&loop=1&badge=0&autopause=0&player_id=0&app_id=58479`} className="w-full h-full object-cover scale-[1.05]" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" title={project.title} />
                               </div>
                             ) : (
-                              <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" />
+                              <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" />
                             )}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-end p-6">
                               <span className="text-[0.55rem] text-white/50 uppercase tracking-ultra mb-1">{project.year}</span>
@@ -674,9 +666,9 @@ export default function App() {
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
                       {droneProjects.map((project) => (
-                        <div key={project.id} className="group cursor-pointer">
+                        <div key={project.id} className="group cursor-active md:cursor-zoom-in">
                           <div className="aspect-video bg-black/[0.03] overflow-hidden mb-4 border border-black/5">
-                            <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" />
+                            <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" />
                           </div>
                           <h4 className="text-xs font-black uppercase tracking-widest text-black">{project.title}</h4>
                         </div>
@@ -700,9 +692,9 @@ export default function App() {
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
                       {editingProjects.map((project) => (
-                        <div key={project.id} className="group cursor-pointer">
+                        <div key={project.id} className="group cursor-active md:cursor-zoom-in">
                           <div className="aspect-video bg-black/[0.03] overflow-hidden mb-4 border border-black/5">
-                            <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700" />
+                            <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" />
                           </div>
                           <h4 className="text-xs font-black uppercase tracking-widest text-black">{project.title}</h4>
                         </div>
@@ -726,9 +718,9 @@ export default function App() {
                   <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
                       {brandingProjects.map((project) => (
-                        <div key={project.id} className="group cursor-pointer">
+                        <div key={project.id} className="group cursor-active md:cursor-zoom-in">
                           <div className="aspect-square bg-black/[0.02] overflow-hidden mb-4 flex items-center justify-center p-12 border border-black/5">
-                            <img src={project.image} alt={project.title} className="w-full h-auto object-contain group-hover:scale-110 transition-all duration-700" />
+                            <img src={project.image} alt={project.title} className="w-full h-auto object-contain group-hover:scale-115 transition-all duration-700" />
                           </div>
                           <h4 className="text-xs font-black uppercase tracking-widest text-black">{project.title}</h4>
                         </div>
@@ -1106,10 +1098,10 @@ export default function App() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-8 right-8 z-[60] bg-[#131313]/80 backdrop-blur-md border border-outline/30 text-white p-4 hover:bg-white hover:text-black transition-all duration-300"
+            className="fixed bottom-8 right-8 z-[60] bg-white text-black p-4 rounded-full shadow-xl border border-black/5 hover:scale-110 active:scale-95 transition-all duration-300 group"
             aria-label="Back to Top"
           >
-            <ArrowUp className="w-5 h-5" />
+            <ArrowUp className="w-5 h-5 group-hover:-translate-y-1 transition-transform duration-300" />
           </motion.button>
         )}
       </AnimatePresence>

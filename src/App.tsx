@@ -417,8 +417,12 @@ export default function App() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-[clamp(2.5rem,8vw,8rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24"
         >
-          Wasim Pakhtoon<br />
-          <span className="text-[clamp(1.5rem,5vw,5rem)] block mt-4 text-secondary-text">Video Editor & Cinematographer in Kashmir</span>
+          {/* SEO: Full name + keywords hidden via sr-only — crawled by Google, invisible to users */}
+          <span className="sr-only">
+            Wasim Pakhtoon — Video Editor &amp; Cinematographer in Kashmir. Professional cinematic video production, drone footage, hotel videography, color grading, and brand identity design in Srinagar, Kashmir, India.
+          </span>
+          {/* Visually displayed: 3-word cinematic tagline */}
+          <span aria-hidden="true">DELIVERING<br />CINEMATIC<br />EXCELLENCE</span>
         </motion.h1>
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 border-t border-outline/30 pt-6 md:pt-8 mb-8 md:mb-20">

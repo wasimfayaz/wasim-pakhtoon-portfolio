@@ -205,9 +205,9 @@ const OverviewSection = ({ data, onRevision, onGoHome }: { data: ClientData; onR
 
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {[
-        { label: "Project", value: data.project.name, sub: "Active Campaign" },
-        { label: "Start Date", value: data.project.startDate, sub: "Kick-off" },
-        { label: "Delivery", value: data.project.deliveryDate, sub: "Final deadline" },
+        { label: "Project", value: data?.project?.name || "—", sub: "Active Campaign" },
+        { label: "Start Date", value: data?.project?.startDate || "—", sub: "Kick-off" },
+        { label: "Delivery", value: data?.project?.deliveryDate || "—", sub: "Final deadline" },
       ].map((card, i) => (
         <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: i * 0.08 }}
           className="border border-white/10 bg-white/[0.02] p-6 text-center md:text-left">
@@ -222,10 +222,10 @@ const OverviewSection = ({ data, onRevision, onGoHome }: { data: ClientData; onR
       className="border border-white/10 bg-white/[0.02] p-6">
       <div className="flex justify-between items-center mb-4">
         <span className="text-[0.6rem] uppercase tracking-[0.15em] text-white/40">Overall Progress</span>
-        <span className="text-lg font-black text-white">{data.project.progress}%</span>
+        <span className="text-lg font-black text-white">{data?.project?.progress ?? 0}%</span>
       </div>
       <div className="h-1 bg-white/10 rounded-full overflow-hidden">
-        <motion.div initial={{ width: 0 }} animate={{ width: `${data.project.progress}%` }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+        <motion.div initial={{ width: 0 }} animate={{ width: `${data?.project?.progress ?? 0}%` }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
           className="h-full bg-white" />
       </div>
     </motion.div>
@@ -408,7 +408,7 @@ const SettingsSection = ({ data, onLogout }: { data: ClientData; onLogout: () =>
   <div className="space-y-4">
     {[
       { label: "Client Name", value: data?.username || "Client" },
-      { label: "Project", value: data.project.name },
+      { label: "Project", value: data?.project?.name || "—" },
       { label: "Access Level", value: "Premium Partner" },
     ].map((field) => (
       <div key={field.label} className="border border-white/10 bg-white/[0.02] px-6 py-4">
@@ -516,10 +516,10 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
         <div className="p-4 border-t border-white/5">
           <div className="bg-white/[0.03] border border-white/[0.08] p-3 rounded-sm">
             <p className="text-[0.5rem] uppercase tracking-widest text-white/20 mb-1">Active Project</p>
-            <p className="text-[0.6rem] font-bold uppercase tracking-tight text-white/60 leading-snug">{data.project.name}</p>
+            <p className="text-[0.6rem] font-bold uppercase tracking-tight text-white/60 leading-snug">{data?.project?.name || "—"}</p>
             <div className="mt-2 flex items-center gap-2">
-              <div className="flex-1 h-0.5 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-white/40" style={{ width: `${data.project.progress}%` }} /></div>
-              <span className="text-[0.5rem] text-white/30">{data.project.progress}%</span>
+              <div className="flex-1 h-0.5 bg-white/10 rounded-full overflow-hidden"><div className="h-full bg-white/40" style={{ width: `${data?.project?.progress ?? 0}%` }} /></div>
+              <span className="text-[0.5rem] text-white/30">{data?.project?.progress ?? 0}%</span>
             </div>
           </div>
         </div>
@@ -534,11 +534,11 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <button onClick={() => setSidebarOpen(true)} className="md:hidden text-white/50 hover:text-white transition-colors"><Menu className="w-5 h-5" /></button>
-              <div><div className="flex items-center gap-3 flex-wrap"><h1 className="text-[0.7rem] font-black uppercase tracking-tight text-white">{data.project.name}</h1><StatusBadge status={data.project.status} /></div><p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-0.5">Client: {data?.username || "Client"}</p></div>
+              <div><div className="flex items-center gap-3 flex-wrap"><h1 className="text-[0.7rem] font-black uppercase tracking-tight text-white">{data?.project?.name || "Project"}</h1><StatusBadge status={data?.project?.status || "active"} /></div><p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-0.5">Client: {data?.username || "Client"}</p></div>
             </div>
             <div className="flex items-center gap-4">
-              <div className="w-24 h-0.5 bg-white/10 rounded-full overflow-hidden"><motion.div className="h-full bg-white" style={{ width: `${data.project.progress}%` }} /></div>
-              <span className="text-[0.55rem] text-white/40 font-bold">{data.project.progress}%</span>
+              <div className="w-24 h-0.5 bg-white/10 rounded-full overflow-hidden"><motion.div className="h-full bg-white" style={{ width: `${data?.project?.progress ?? 0}%` }} /></div>
+              <span className="text-[0.55rem] text-white/40 font-bold">{data?.project?.progress ?? 0}%</span>
               <button onClick={onGoHome} className="hidden sm:flex items-center gap-1.5 text-[0.55rem] uppercase tracking-widest font-bold text-white/20 hover:text-white transition-colors ml-2 border-l border-white/10 pl-4">
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg> Back
               </button>

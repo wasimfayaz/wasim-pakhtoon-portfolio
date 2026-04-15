@@ -239,7 +239,7 @@ export default function App() {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '-30% 0px -60% 0px', // Slightly snappier detection
+      rootMargin: '0px 0px -95% 0px', // Detect exactly what's at the top of the viewport
       threshold: 0
     };
 
@@ -327,7 +327,7 @@ export default function App() {
             <img 
               src={LogoImg} 
               alt="Wasim Pakhtoon Logo" 
-              className={`h-8 object-contain w-auto hover:opacity-80 transition-all duration-500 ${navTheme === 'light' ? 'invert brightness-0' : ''}`} 
+              className={`h-8 object-contain w-auto hover:opacity-80 transition-all duration-500 ${navTheme === 'light' ? 'brightness-0' : ''}`} 
             />
           </a>
           <div className="hidden md:flex gap-12">

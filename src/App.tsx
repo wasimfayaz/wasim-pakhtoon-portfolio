@@ -395,10 +395,13 @@ export default function App() {
         }`}
       >
         <div className="flex justify-between items-center w-full px-8 max-w-screen-2xl mx-auto">
-          <a href="#" className="shrink-0 flex items-center group">
+          <a href="#" aria-label="Wasim Pakhtoon — Home" className="shrink-0 flex items-center group">
             <img 
               src={LogoImg} 
-              alt="Wasim Pakhtoon Logo" 
+              alt="Wasim Pakhtoon — Cinematic Video Editor and Cinematographer in Kashmir" 
+              width="120"
+              height="32"
+              loading="eager"
               className={`h-8 object-contain w-auto transition-all duration-500 group-hover:opacity-70 ${navTheme === 'light' ? 'brightness-0' : ''}`} 
             />
           </a>
@@ -653,27 +656,37 @@ export default function App() {
             </div>
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {pexelsGrid.map((img, idx) => (
-                <motion.div 
-                  key={idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="aspect-[3/4] bg-black/[0.03] overflow-hidden group relative cursor-zoom-in"
-                >
-                  <img 
-                    src={img} 
-                    alt={`Cinematic video editing and hotel photography in Kashmir - Featured Work 0${idx + 1}`} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
-                  />
-                  <div className="absolute inset-0 border border-black/5 group-hover:border-black/10 transition-colors pointer-events-none z-10" />
-                  <div className="absolute top-4 left-4 z-20 flex items-center gap-2 transition-opacity duration-500">
-                    <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-                    <span className="text-[0.5rem] tracking-ultra text-white font-bold uppercase">PEXELS</span>
-                  </div>
-                </motion.div>
-              ))}
+              {pexelsGrid.map((img, idx) => {
+                const altTexts = [
+                  "Cinematic drone shot over Kashmir landscape — aerial videography by Wasim Pakhtoon",
+                  "Hotel photography and cinematic shoot in Kashmir — luxury property videography",
+                  "Brand content creation and visual storytelling in Kashmir by Wasim Pakhtoon",
+                  "Real estate and architectural photography in Srinagar, Kashmir",
+                ];
+                return (
+                  <motion.div 
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="aspect-[3/4] bg-black/[0.03] overflow-hidden group relative cursor-zoom-in"
+                  >
+                    <img 
+                      src={img} 
+                      alt={altTexts[idx]}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
+                    />
+                    <div className="absolute inset-0 border border-black/5 group-hover:border-black/10 transition-colors pointer-events-none z-10" />
+                    <div className="absolute top-4 left-4 z-20 flex items-center gap-2 transition-opacity duration-500">
+                      <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+                      <span className="text-[0.5rem] tracking-ultra text-white font-bold uppercase">PEXELS</span>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </div>
 
@@ -711,7 +724,13 @@ export default function App() {
                   <div className="mt-8 md:mt-0 flex items-center gap-4">
                     {cat.previews.map((img, i) => (
                       <div key={i} className="w-24 h-16 md:w-32 md:h-20 overflow-hidden border border-black/5 bg-black/[0.03] grayscale hover:grayscale-0 transition-all duration-700">
-                        <img src={img} alt="Work preview" className="w-full h-full object-cover scale-[1.05]" />
+                        <img
+                          src={img}
+                          alt={`${cat.title.toLowerCase()} work preview — video production by Wasim Pakhtoon in Kashmir`}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover scale-[1.05]"
+                        />
                       </div>
                     ))}
                     <div className="w-10 h-10 flex items-center justify-center rounded-full border border-black/10 group-hover:border-black/30 transition-colors">
@@ -741,10 +760,23 @@ export default function App() {
                             <div className={`${cat.title === "BRAND STORIES" ? "aspect-square p-12" : "aspect-video"} bg-black/[0.03] overflow-hidden relative border border-black/5`}>
                               {(project as any).vimeoId ? (
                                 <div className="w-full h-full pointer-events-none">
-                                  <iframe src={`https://player.vimeo.com/video/${(project as any).vimeoId}?background=1&autoplay=1&muted=1&loop=1&badge=0&autopause=0&player_id=0&app_id=58479`} className="w-full h-full object-cover scale-[1.05]" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" title={project.title} />
+                                  <iframe
+                                    src={`https://player.vimeo.com/video/${(project as any).vimeoId}?background=1&autoplay=1&muted=1&loop=1&badge=0&autopause=0&player_id=0&app_id=58479`}
+                                    className="w-full h-full object-cover scale-[1.05]"
+                                    frameBorder="0"
+                                    allow="autoplay; fullscreen; picture-in-picture"
+                                    title={`${project.title} — cinematic video production by Wasim Pakhtoon, Kashmir`}
+                                    loading="lazy"
+                                  />
                                 </div>
                               ) : (
-                                <img src={project.image} alt={project.title} className={`w-full h-full ${cat.title === "BRAND STORIES" ? "object-contain scale-90 group-hover:scale-100" : "object-cover group-hover:scale-110"} transition-all duration-700`} />
+                                <img
+                                  src={project.image}
+                                  alt={`${project.title} — ${cat.title.toLowerCase()} by Wasim Pakhtoon, video editor in Kashmir`}
+                                  loading="lazy"
+                                  decoding="async"
+                                  className={`w-full h-full ${cat.title === "BRAND STORIES" ? "object-contain scale-90 group-hover:scale-100" : "object-cover group-hover:scale-110"} transition-all duration-700`}
+                                />
                               )}
                               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-end p-6">
                                 <span className="text-[0.55rem] text-white/50 uppercase tracking-ultra mb-1">{project.year}</span>
@@ -959,6 +991,28 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      {/* Visually hidden SEO content — readable by search engines, invisible to users */}
+      <div aria-hidden="true" className="sr-only" role="note">
+        <h2>Video Editor in Kashmir — Wasim Pakhtoon</h2>
+        <p>
+          Wasim Pakhtoon is a professional video editor based in Kashmir, offering cinematic video production,
+          drone videography, hotel shoots, real estate visuals, and brand storytelling content for businesses and creators.
+          Specializing in high-quality cinematic visuals, aerial drone footage, and post-production editing services
+          across Kashmir and India. Services include cinematic video editing, hotel videography in Kashmir,
+          real estate drone shots, brand content creation, color grading, and motion graphics.
+          Based in Srinagar, Jammu &amp; Kashmir, and available for projects worldwide.
+        </p>
+        <ul>
+          <li>Cinematic videographer Kashmir</li>
+          <li>Hotel videography Kashmir</li>
+          <li>Drone video services India</li>
+          <li>Brand content creator Kashmir</li>
+          <li>Real estate videography Srinagar</li>
+          <li>Post production editor Kashmir</li>
+          <li>Video editing services Kashmir</li>
+        </ul>
+      </div>
 
       {/* Footer */}
       <footer className="bg-[#0E0E0E] border-t border-outline/20">

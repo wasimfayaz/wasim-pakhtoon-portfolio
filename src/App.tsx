@@ -223,7 +223,7 @@ export default function App() {
     work: "light",
     services: "dark",
     about: "light",
-    faq: "dark",
+    faq: "light",
     contact: "light",
   };
 
@@ -843,48 +843,50 @@ export default function App() {
       </section>
 
       {/* FAQ Section */}
-      <section className="px-8 py-32 max-w-screen-2xl mx-auto">
-        <div className="border-t border-outline/30 pt-8">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
-            <div className="md:col-span-4">
-              <div className="flex items-center gap-2 mb-4">
-                <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-                <h2 className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">CLARITY:</h2>
+      <section className="bg-white" id="faq">
+        <div className="px-8 py-32 max-w-screen-2xl mx-auto">
+          <div className="border-t border-black/10 pt-8">
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
+              <div className="md:col-span-4">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
+                  <h2 className="text-[0.625rem] uppercase tracking-ultra font-black text-black/30">CLARITY:</h2>
+                </div>
+                <h2 className="text-3xl font-black uppercase tracking-tighter leading-none text-black">FREQUENTLY ASKED.</h2>
               </div>
-              <h2 className="text-3xl font-black uppercase tracking-tighter leading-none">FREQUENTLY ASKED.</h2>
-            </div>
-            
-            <div className="md:col-span-8">
-              <div className="flex flex-col border-t border-outline/20">
-                {faqs.map((faq, index) => (
-                  <div key={index} className="border-b border-outline/20">
-                    <button 
-                      onClick={() => setActiveFaq(activeFaq === index ? null : index)}
-                      className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
-                    >
-                      <h4 className={`text-sm md:text-base font-bold uppercase tracking-widest transition-colors ${activeFaq === index ? 'text-white' : 'text-secondary-text group-hover:text-white'}`}>
-                        {faq.question}
-                      </h4>
-                      <span className={`text-2xl font-bold transition-transform duration-300 ${activeFaq === index ? 'rotate-45 text-secondary-text' : 'text-white group-hover:text-secondary-text'}`}>
-                        +
-                      </span>
-                    </button>
-                    <AnimatePresence>
-                      {activeFaq === index && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          className="overflow-hidden"
-                        >
-                          <p className="text-[0.6875rem] md:text-xs uppercase tracking-[0.12em] leading-relaxed text-secondary-text pb-8 font-medium max-w-2xl">
-                            {faq.answer}
-                          </p>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ))}
+              
+              <div className="md:col-span-8">
+                <div className="flex flex-col border-t border-black/10">
+                  {faqs.map((faq, index) => (
+                    <div key={index} className="border-b border-black/10">
+                      <button 
+                        onClick={() => setActiveFaq(activeFaq === index ? null : index)}
+                        className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
+                      >
+                        <h4 className={`text-sm md:text-base font-bold uppercase tracking-widest transition-colors ${activeFaq === index ? 'text-black' : 'text-black/60 group-hover:text-black'}`}>
+                          {faq.question}
+                        </h4>
+                        <span className={`text-2xl font-bold transition-transform duration-300 ${activeFaq === index ? 'rotate-45 text-black/40' : 'text-black group-hover:text-black/40'}`}>
+                          +
+                        </span>
+                      </button>
+                      <AnimatePresence>
+                        {activeFaq === index && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                          >
+                            <p className="text-[0.6875rem] md:text-xs uppercase tracking-[0.12em] leading-relaxed text-black/40 pb-8 font-medium max-w-2xl">
+                              {faq.answer}
+                            </p>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

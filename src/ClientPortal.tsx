@@ -225,10 +225,20 @@ const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
     setError("");
 
     try {
+      // Faster login: targeted query for the specific username instead of fetching the whole DB
+      const body = {
+        filter: {
+          property: 'Client Name',
+          title: {
+            equals: cleanUser
+          }
+        }
+      };
+
       const res = await fetch("/api/notion", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({}) 
+        body: JSON.stringify(body)
       });
 
       if (!res.ok) throw new Error("Could not reach the database.");

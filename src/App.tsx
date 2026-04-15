@@ -402,7 +402,7 @@ export default function App() {
               width="120"
               height="32"
               loading="eager"
-              className={`h-8 object-contain w-auto transition-all duration-500 group-hover:opacity-70 ${navTheme === 'light' ? 'invert' : ''}`} 
+              className={`h-8 w-[120px] object-contain transition-all duration-500 group-hover:opacity-70 ${navTheme === 'light' ? 'invert' : ''}`} 
             />
           </a>
 

@@ -286,6 +286,12 @@ export default function App() {
     };
 
     window.addEventListener('contextmenu', handleContextMenu);
+    
+    // Disable automatic browser scroll restoration to prevent layout jumps on refresh
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
     return () => window.removeEventListener('contextmenu', handleContextMenu);
   }, []);
 
@@ -301,8 +307,9 @@ export default function App() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 10);
     };
+    handleScroll(); // Check immediately on mount
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);

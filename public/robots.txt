@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://wasimpakhtoon.com/sitemap.xml
+Sitemap: https://wasim-pakhtoon-portfolio.vercel.app/sitemap.xml

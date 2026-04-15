@@ -207,49 +207,37 @@ const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
 
 // ─── Overview ─────────────────────────────────────────────────────────────────
 const OverviewSection = ({ data, onRevision, onGoHome }: { data: ClientData; onRevision: () => void; onGoHome: () => void }) => (
-  <div className="space-y-0">
-    {/* BLOCK 1 — WHITE: Welcome banner */}
+  <div className="space-y-6">
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-      className="bg-white p-8 md:p-10">
-      <p className="text-[0.65rem] uppercase tracking-[0.15em] text-black/40 mb-3">Welcome back, {data?.username || "Client"}</p>
-      <h2 className="text-2xl font-black uppercase tracking-tighter text-black mb-4">Your private project dashboard.</h2>
-      <p className="text-[0.75rem] text-black/50 leading-relaxed max-w-lg">
+      className="border border-white/10 bg-white/[0.03] p-8">
+      <p className="text-[0.65rem] uppercase tracking-[0.15em] text-white/40 mb-3">Welcome back, {data?.username || "Client"}</p>
+      <h2 className="text-2xl font-black uppercase tracking-tighter text-white mb-4">Your private project dashboard.</h2>
+      <p className="text-[0.75rem] text-white/50 leading-relaxed max-w-lg">
         Track progress, review content, submit feedback, and manage all project files in one place.
       </p>
     </motion.div>
-
-    {/* BLOCK 2 — BLACK: Project info cards */}
-    <div className="bg-[#080808] border-t border-b border-white/5 grid grid-cols-1 md:grid-cols-2">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {[
         { label: "Project", value: data?.project_name || "—" },
         { label: "Status", value: data?.status || "Active" },
       ].map((card, i) => (
         <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: i * 0.08 }}
-          className={`p-8 ${i === 0 ? "border-b md:border-b-0 md:border-r border-white/5" : ""}`}>
-          <p className="text-[0.55rem] uppercase tracking-[0.15em] text-white/30 mb-3">{card.label}</p>
-          <div className="flex items-center gap-2">
-            {card.label === "Status"
-              ? <StatusBadge status={card.value} />
-              : <p className="font-black text-white text-lg uppercase tracking-tight leading-snug">{card.value}</p>}
-          </div>
+          className="border border-white/10 bg-white/[0.03] p-6">
+          <p className="text-[0.55rem] uppercase tracking-[0.15em] text-white/30 mb-2">{card.label}</p>
+          {card.label === "Status" ? <StatusBadge status={card.value} /> : <p className="font-black text-white text-lg uppercase tracking-tight">{card.value}</p>}
         </motion.div>
       ))}
     </div>
-
-    {/* BLOCK 3 — WHITE: Actions */}
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }}
-      className="bg-[#f5f5f5] p-8 flex flex-wrap gap-4 border-b border-black/10">
-      <button onClick={onRevision} className="flex items-center gap-2 border border-black/20 text-black px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-black hover:text-white transition-colors">
+    <div className="flex flex-wrap gap-3">
+      <button onClick={onRevision} className="flex items-center gap-2 border border-white/20 text-white px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-white hover:text-black transition-colors">
         <RefreshCcw className="w-3.5 h-3.5" /> Request Revision
       </button>
-      <button className="flex items-center gap-2 bg-black text-white px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-black/80 transition-colors">
+      <button className="flex items-center gap-2 bg-white text-black px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-white/90 transition-colors">
         <ArrowDownToLine className="w-3.5 h-3.5" /> Download All Files
       </button>
-    </motion.div>
-
-    {/* BLOCK 4 — BLACK: More services CTA */}
+    </div>
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.25 }}
-      className="bg-[#080808] p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      className="border border-white/10 bg-white/[0.03] p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div className="flex items-start gap-3">
         <Sparkles className="w-4 h-4 text-white/40 mt-0.5 shrink-0" />
         <div>
@@ -265,53 +253,35 @@ const OverviewSection = ({ data, onRevision, onGoHome }: { data: ClientData; onR
 );
 
 // ─── Deliverables ─────────────────────────────────────────────────────────────
-const DeliverablesSection = ({ deliverables }: { deliverables: Deliverable[] }) => {
-  return (
-    <div className="divide-y divide-black/10 overflow-hidden">
-      {deliverables.map((item, i) => {
-        const isWhite = i % 2 === 0;
-        return (
-          <motion.div key={item.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.07 }}
-            className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-5 transition-opacity ${
-              isWhite ? "bg-white" : "bg-[#0a0a0a] border-white/5"
-            }`}>
-            <div className="flex items-center gap-4">
-              <div className={`w-10 h-10 flex items-center justify-center shrink-0 ${
-                isWhite ? "bg-black/5 text-black/40" : "bg-white/5 text-white/30 border border-white/10"
-              }`}>
-                <Film className="w-4 h-4" />
-              </div>
-              <div>
-                <p className={`text-[0.7rem] font-bold uppercase tracking-widest ${ isWhite ? "text-black" : "text-white" }`}>{item.title}</p>
-                <p className={`text-[0.55rem] uppercase tracking-widest mt-1 ${ isWhite ? "text-black/30" : "text-white/30" }`}>
-                  {item.created_at ? new Date(item.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 shrink-0">
-              <StatusBadge status={item.status} />
-              {item.file_url && (
-                <a
-                  href={item.file_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`flex items-center gap-2 px-4 py-2 text-[0.6rem] font-bold uppercase tracking-widest transition-colors ${
-                    isWhite
-                      ? "bg-black text-white hover:bg-black/80"
-                      : "bg-white text-black hover:bg-white/90"
-                  }`}
-                >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  View File
-                </a>
-              )}
-            </div>
-          </motion.div>
-        );
-      })}
-    </div>
-  );
-};
+const DeliverablesSection = ({ deliverables }: { deliverables: Deliverable[] }) => (
+  <div className="divide-y divide-black/8 border border-black/10 overflow-hidden">
+    {deliverables.map((item, i) => (
+      <motion.div key={item.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.07 }}
+        className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-5 bg-white hover:bg-black/[0.02] transition-colors group">
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 bg-black/5 flex items-center justify-center text-black/30 shrink-0">
+            <Film className="w-4 h-4" />
+          </div>
+          <div>
+            <p className="text-[0.7rem] font-bold uppercase tracking-widest text-black">{item.title}</p>
+            <p className="text-[0.55rem] text-black/30 uppercase tracking-widest mt-1">
+              {item.created_at ? new Date(item.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 shrink-0">
+          <StatusBadge status={item.status} />
+          {item.file_url && (
+            <a href={item.file_url} target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 bg-black text-white px-4 py-2 text-[0.6rem] font-bold uppercase tracking-widest hover:bg-black/80 transition-colors">
+              <ExternalLink className="w-3.5 h-3.5" /> View File
+            </a>
+          )}
+        </div>
+      </motion.div>
+    ))}
+  </div>
+);
 
 // ─── Feedback ─────────────────────────────────────────────────────────────────
 const FeedbackSection = ({ initialMessages, clientName }: { initialMessages: Message[]; clientName: string }) => {
@@ -433,24 +403,21 @@ const TimelineSection = ({ stages }: { stages?: TimelineStage[] }) => (
 
 // ─── Settings ─────────────────────────────────────────────────────────────────
 const SettingsSection = ({ data, onLogout }: { data: ClientData; onLogout: () => void }) => (
-  <div className="overflow-hidden">
+  <div className="border border-black/10 overflow-hidden">
     {[
       { label: "Username", value: data?.username || "—" },
       { label: "Email", value: data?.email || "—" },
       { label: "Project", value: data?.project_name || "—" },
       { label: "Access Level", value: "Premium Partner" },
-    ].map((field, i) => {
-      const isWhite = i % 2 === 0;
-      return (
-        <div key={field.label} className={`px-8 py-6 border-b ${ isWhite ? "bg-white border-black/10" : "bg-[#080808] border-white/5" }`}>
-          <p className={`text-[0.5rem] uppercase tracking-[0.2em] mb-1.5 ${ isWhite ? "text-black/30" : "text-white/30" }`}>{field.label}</p>
-          <p className={`text-[0.8rem] font-black tracking-widest uppercase ${ isWhite ? "text-black" : "text-white" }`}>{field.value}</p>
-        </div>
-      );
-    })}
-    <div className="bg-[#080808] px-8 py-6">
+    ].map((field) => (
+      <div key={field.label} className="border-b border-black/10 bg-white px-8 py-5 hover:bg-black/[0.02] transition-colors">
+        <p className="text-[0.5rem] uppercase tracking-[0.2em] text-black/30 mb-1.5">{field.label}</p>
+        <p className="text-[0.8rem] font-black tracking-widest uppercase text-black">{field.value}</p>
+      </div>
+    ))}
+    <div className="bg-white px-8 py-6">
       <button onClick={onLogout}
-        className="flex items-center gap-2 border border-red-400/30 text-red-400/70 px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-red-400/10 transition-all duration-300">
+        className="flex items-center gap-2 border border-red-500/30 text-red-500/70 px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-red-50 transition-all duration-300">
         <LogOut className="w-3.5 h-3.5" /> Sign Out
       </button>
     </div>
@@ -489,12 +456,12 @@ const RevisionModal = ({ onClose }: { onClose: () => void }) => {
 
 // ─── Nav Items ────────────────────────────────────────────────────────────────
 const NAV_ITEMS = [
-  { id: "overview", label: "Overview", icon: LayoutDashboard },
-  { id: "deliverables", label: "Deliverables", icon: Film },
-  { id: "feedback", label: "Feedback", icon: MessageSquare },
-  { id: "documents", label: "Documents", icon: FileText },
-  { id: "timeline", label: "Timeline", icon: Clock },
-  { id: "settings", label: "Settings", icon: Settings },
+  { id: "overview",     label: "Overview",     icon: LayoutDashboard, light: false },
+  { id: "deliverables", label: "Deliverables", icon: Film,            light: true  },
+  { id: "feedback",     label: "Feedback",     icon: MessageSquare,  light: false },
+  { id: "documents",    label: "Documents",    icon: FileText,       light: true  },
+  { id: "timeline",     label: "Timeline",     icon: Clock,          light: false },
+  { id: "settings",     label: "Settings",     icon: Settings,       light: true  },
 ];
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
@@ -506,6 +473,8 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
 
   const portal = useClientPortalData(data.username);
 
+  const isLight = currentNav?.light ?? false;
+
   const renderSection = () => {
     switch (active) {
       case "overview": return <OverviewSection data={data} onRevision={() => setShowRevision(true)} onGoHome={onGoHome} />;
@@ -514,9 +483,9 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
         return portal.deliverables.length > 0 ? (
           <DeliverablesSection deliverables={portal.deliverables} />
         ) : (
-          <div className="py-24 text-center border border-white/5 bg-white/[0.02]">
-            <Film className="w-8 h-8 text-white/10 mx-auto mb-4" />
-            <p className="text-[0.6rem] uppercase tracking-widest text-white/20">No deliverables yet</p>
+          <div className={`py-24 text-center border ${ isLight ? "border-black/10" : "border-white/5" }`}>
+            <Film className={`w-8 h-8 mx-auto mb-4 ${ isLight ? "text-black/10" : "text-white/10" }`} />
+            <p className={`text-[0.6rem] uppercase tracking-widest ${ isLight ? "text-black/20" : "text-white/20" }`}>No deliverables yet</p>
           </div>
         );
       case "feedback": return <FeedbackSection initialMessages={portal.messages} clientName={data?.username || "Client"} />;
@@ -562,30 +531,32 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
           </button>
         </div>
       </aside>
-      <div className="flex-1 md:ml-64 flex flex-col min-h-screen">
-        <header className="sticky top-0 z-50 bg-[#080808]/95 backdrop-blur-md border-b border-white/5 px-6 md:px-8 py-4">
+      <div className={`flex-1 md:ml-64 flex flex-col min-h-screen transition-colors duration-500 ${ isLight ? "bg-[#f8f8f8]" : "bg-[#080808]" }`}>
+        <header className={`sticky top-0 z-50 backdrop-blur-md border-b px-6 md:px-8 py-4 transition-colors duration-500 ${
+          isLight ? "bg-[#f8f8f8]/95 border-black/10" : "bg-[#080808]/95 border-white/5"
+        }`}>
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
-              <button onClick={() => setSidebarOpen(true)} className="md:hidden text-white/50 hover:text-white transition-colors"><Menu className="w-5 h-5" /></button>
+              <button onClick={() => setSidebarOpen(true)} className={`md:hidden transition-colors ${ isLight ? "text-black/50 hover:text-black" : "text-white/50 hover:text-white" }`}><Menu className="w-5 h-5" /></button>
               <div>
                 <div className="flex items-center gap-3 flex-wrap">
-                  <h1 className="text-[0.7rem] font-black uppercase tracking-tight text-white">{data?.project_name || "Your Project"}</h1>
+                  <h1 className={`text-[0.7rem] font-black uppercase tracking-tight ${ isLight ? "text-black" : "text-white" }`}>{data?.project_name || "Your Project"}</h1>
                   <StatusBadge status={data?.status || "active"} />
                 </div>
-                <p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-0.5">Client: {data?.username || "Client"}</p>
+                <p className={`text-[0.55rem] uppercase tracking-widest mt-0.5 ${ isLight ? "text-black/30" : "text-white/30" }`}>Client: {data?.username || "Client"}</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <button onClick={onGoHome} className="hidden sm:flex items-center gap-1.5 text-[0.55rem] uppercase tracking-widest font-bold text-white/20 hover:text-white transition-colors border-l border-white/10 pl-4">
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg> Back
-              </button>
-            </div>
+            <button onClick={onGoHome} className={`hidden sm:flex items-center gap-1.5 text-[0.55rem] uppercase tracking-widest font-bold transition-colors border-l pl-4 ${
+              isLight ? "text-black/20 hover:text-black border-black/10" : "text-white/20 hover:text-white border-white/10"
+            }`}>
+              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg> Back
+            </button>
           </div>
         </header>
         <main className="flex-1 px-6 md:px-10 py-8">
-          <div className="flex items-center gap-3 mb-8 pb-6 border-b border-white/5">
-            {currentNav && <currentNav.icon className="w-4 h-4 text-white/30" />}
-            <span className="text-[0.65rem] font-black uppercase tracking-[0.15em] text-white/50">{currentNav?.label}</span>
+          <div className={`flex items-center gap-3 mb-8 pb-6 border-b ${ isLight ? "border-black/10" : "border-white/5" }`}>
+            {currentNav && <currentNav.icon className={`w-4 h-4 ${ isLight ? "text-black/30" : "text-white/30" }`} />}
+            <span className={`text-[0.65rem] font-black uppercase tracking-[0.15em] ${ isLight ? "text-black/50" : "text-white/50" }`}>{currentNav?.label}</span>
           </div>
           <AnimatePresence mode="wait">
             <motion.div key={active} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}>

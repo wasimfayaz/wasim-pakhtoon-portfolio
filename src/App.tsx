@@ -19,7 +19,7 @@ const pexelsGrid = [
 ];
 
 const navLinks = [
-  { name: "WORK", href: "#work" },
+  { name: "WORK", href: "#work-gallery" },
   { name: "ABOUT", href: "#about" },
   { name: "CONTACT", href: "#contact" },
 ];
@@ -138,6 +138,46 @@ const faqs = [
   {
     question: "What equipment do you use for high-end property shoots?",
     answer: "We utilize professional mirrorless cinema cameras, gimbal stabilization systems, and advanced DJI Drones (Mavic 3 Pro & Mini 4K) to capture world-class ground and aerial visuals."
+  }
+];
+
+const portfolioCategories = [
+  {
+    id: 0,
+    title: "CINEMATIC FILMS",
+    description: "Story-driven visuals crafted for brands and businesses",
+    projects: cinematicProjects,
+    previews: [
+      "https://images.pexels.com/photos/35066424/pexels-photo-35066424.jpeg?auto=compress&cs=tinysrgb&w=600",
+      "https://images.pexels.com/photos/35028172/pexels-photo-35028172.jpeg?auto=compress&cs=tinysrgb&w=600"
+    ]
+  },
+  {
+    id: 1,
+    title: "AERIAL VISUALS",
+    description: "Drone cinematography for real estate, travel, and landscapes",
+    projects: droneProjects,
+    previews: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts"
+    ]
+  },
+  {
+    id: 2,
+    title: "POST-PRODUCTION",
+    description: "Editing, color grading, and cinematic finishing",
+    projects: editingProjects,
+    previews: [
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts"
+    ]
+  },
+  {
+    id: 3,
+    title: "BRAND STORIES",
+    description: "Creative content designed to grow your brand",
+    projects: brandingProjects,
+    previews: [
+      EcoBrewCardImg
+    ]
   }
 ];
 
@@ -386,66 +426,79 @@ export default function App() {
       </nav>
 
       {/* Mobile Menu Dropdown */}
-        <AnimatePresence>
-          {isMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+            className="fixed inset-0 bg-[#0B0B0B] z-[90] md:hidden flex flex-col pt-32 pb-12 px-8"
+          >
+            {/* Main Links */}
+            <div className="flex-1 flex flex-col justify-center space-y-10">
+              {navLinks.map((link, idx) => (
+                <motion.a
+                  key={link.name}
+                  href={link.href}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 + idx * 0.1, duration: 0.5 }}
+                  onClick={() => {
+                    setActiveLink(link.name);
+                    setIsMenuOpen(false);
+                  }}
+                  className={`text-4xl font-light uppercase tracking-[0.1em] transition-colors ${
+                    activeLink === link.name ? "text-white" : "text-white/30"
+                  }`}
+                >
+                  {link.name}
+                </motion.a>
+              ))}
+            </div>
+            
+            {/* Bottom Section */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="fixed inset-0 top-[80px] bg-[#0E0E0E]/95 backdrop-blur-2xl z-[80] md:hidden overflow-y-auto"
+              transition={{ delay: 0.5 }}
+              className="space-y-12"
             >
-              <div className="flex flex-col p-8 space-y-8">
-                {navLinks.map((link) => (
+              <div className="flex flex-col space-y-4">
+                <p className="text-[0.625rem] uppercase tracking-ultra font-bold text-white/20">GET IN TOUCH</p>
+                <a
+                  href="https://wa.me/919541591652?text=Hi%20Wasim%2C%20I%20saw%20your%20website%20and%20I%E2%80%99m%20interested%20in%20working%20with%20you."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-2xl font-light uppercase tracking-widest text-white hover:text-white/70 transition-colors"
+                >
+                  LET'S TALK
+                </a>
+                <a
+                  href="/#portal"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-sm font-medium uppercase tracking-[0.2em] text-white/40 hover:text-white transition-colors"
+                >
+                  CLIENT PORTAL
+                </a>
+              </div>
+
+              <div className="flex gap-8 pt-8 border-t border-white/5">
+                {socials.map((social) => (
                   <a
-                    key={link.name}
-                    href={link.href}
-                    onClick={() => {
-                      setActiveLink(link.name);
-                      setIsMenuOpen(false);
-                    }}
-                    className={`text-5xl font-medium uppercase tracking-[0.1em] transition-colors ${
-                      activeLink === link.name ? "text-white" : "text-white/40"
-                    }`}
+                    key={social.name}
+                    href={social.href}
+                    className="text-[0.625rem] uppercase tracking-ultra font-bold text-white/40 hover:text-white transition-colors"
                   >
-                    {link.name}
+                    {social.name}
                   </a>
                 ))}
-                
-                <div className="pt-12 border-t border-white/10 space-y-6">
-                  <a
-                    href="https://wa.me/919541591652?text=Hi%20Wasim%2C%20I%20saw%20your%20website%20and%20I%E2%80%99m%20interested%20in%20working%20with%20you."
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block text-2xl font-medium uppercase tracking-[0.1em] text-white hover:text-white/70 transition-colors"
-                  >
-                    LET'S TALK
-                  </a>
-                  
-                  <a
-                    href="/#portal"
-                    onClick={() => setIsMenuOpen(false)}
-                    className="block text-sm font-medium uppercase tracking-[0.2em] text-white/40 hover:text-white transition-colors"
-                  >
-                    CLIENT PORTAL
-                  </a>
-                  
-                  <div className="flex gap-8 pt-6">
-                    {socials.map((social) => (
-                      <a
-                        key={social.name}
-                        href={social.href}
-                        className="text-[0.625rem] uppercase tracking-ultra font-bold text-white/30 hover:text-white"
-                      >
-                        {social.name}
-                      </a>
-                    ))}
-                  </div>
-                </div>
               </div>
             </motion.div>
-          )}
-        </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <header id="home" className="min-h-screen flex flex-col justify-center pt-32 md:pt-48 pb-12 md:pb-24 px-8 max-w-screen-2xl mx-auto">
 
@@ -489,10 +542,10 @@ export default function App() {
                 START A PROJECT
               </button>
               <a
-                href="#work"
+                href="#work-gallery"
                 className="w-full sm:w-auto border border-outline/30 text-white px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:border-white hover:bg-white/5 transition-all duration-300 text-center"
               >
-                SELECTED WORK
+                VIEW MY WORK
               </a>
             </div>
             {/* Client Portal CTA */}
@@ -536,7 +589,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Selected Work */}
+      {/* View My Work */}
       <section className="bg-[#f8f8f8]" id="work">
         <div className="px-8 py-32 max-w-screen-2xl mx-auto">
           {/* Pexels Global Reach Section */}
@@ -591,8 +644,8 @@ export default function App() {
             </div>
           </div>
 
-          {/* Selected Work Details */}
-          <div className="flex justify-between items-center border-t border-black/10 pt-8 mb-16">
+          {/* View My Work Details */}
+          <div id="work-gallery" className="flex justify-between items-center border-t border-black/10 pt-8 mb-16">
             <div className="flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
               <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-black">VIEW MY WORK:</h2>
@@ -600,136 +653,79 @@ export default function App() {
           </div>
 
           <div className="flex flex-col border-t border-black/10">
-            {/* 01 // Cinematic Shoots */}
-            <div className="border-b border-black/10">
-              <button 
-                onClick={() => setActiveCategory(activeCategory === 0 ? null : 0)}
-                className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
-              >
-                <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 0 ? 'text-black' : 'text-black/30 group-hover:text-black'}`}>
-                  VISUAL STORYTELLING
-                </h3>
-                <div className="flex items-center gap-6">
-                  <div className="relative w-8 h-8 flex items-center justify-center">
-                    <AnimatePresence>
-                      {activeCategory !== 0 && (
-                        <motion.div
-                          animate={{ scale: [0.8, 2.2], opacity: [0.6, 0] }}
-                          transition={{ duration: 2, repeat: Infinity, ease: [0.4, 0, 0.2, 1] }}
-                          className="absolute w-full h-full rounded-full border border-black/20 pointer-events-none"
-                        />
-                      )}
-                    </AnimatePresence>
-                    <span className={`text-3xl font-light transition-transform duration-300 relative z-10 ${activeCategory === 0 ? 'rotate-45 text-black/30' : 'text-black group-hover:text-black/30'}`}>
-                      +
-                    </span>
+            {portfolioCategories.map((cat) => (
+              <div key={cat.id} className="border-b border-black/10">
+                <motion.div
+                  onClick={() => setActiveCategory(activeCategory === cat.id ? null : cat.id)}
+                  whileHover={{ backgroundColor: "rgba(0,0,0,0.02)" }}
+                  className="w-full flex flex-col md:flex-row justify-between items-start md:items-center py-10 px-4 cursor-pointer transition-all duration-500 group"
+                >
+                  <div className="flex-1 space-y-2">
+                    <h3 className={`text-2xl md:text-3xl font-light uppercase tracking-tighter transition-colors ${activeCategory === cat.id ? 'text-black' : 'text-black/30 group-hover:text-black'}`}>
+                      {cat.title}
+                    </h3>
+                    <p className="text-[0.625rem] text-black/40 uppercase tracking-[0.15em] font-medium max-w-sm">
+                      {cat.description}
+                    </p>
+                    <div className="pt-4 flex items-center gap-2 group-hover:gap-4 transition-all duration-300">
+                      <span className="text-[0.55rem] font-bold uppercase tracking-ultra text-black">
+                        {activeCategory === cat.id ? "CLOSE PROJECT" : "EXPLORE PROJECTS"}
+                      </span>
+                      <ArrowRight className={`w-3 h-3 transition-transform ${activeCategory === cat.id ? 'rotate-90' : 'group-hover:translate-x-1'}`} />
+                    </div>
                   </div>
-                </div>
-              </button>
-              <AnimatePresence>
-                {activeCategory === 0 && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 pb-16">
-                      {cinematicProjects.map((project) => (
-                        <motion.div key={project.id} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="group cursor-active md:cursor-zoom-in">
-                          <div className="aspect-video bg-black/[0.03] overflow-hidden relative border border-black/5">
-                            {(project as any).vimeoId ? (
-                              <div className="w-full h-full pointer-events-none">
-                                <iframe src={`https://player.vimeo.com/video/${(project as any).vimeoId}?background=1&autoplay=1&muted=1&loop=1&badge=0&autopause=0&player_id=0&app_id=58479`} className="w-full h-full object-cover scale-[1.05]" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" title={project.title} />
+
+                  <div className="mt-8 md:mt-0 flex items-center gap-4">
+                    {cat.previews.map((img, i) => (
+                      <div key={i} className="w-24 h-16 md:w-32 md:h-20 overflow-hidden border border-black/5 bg-black/[0.03] grayscale hover:grayscale-0 transition-all duration-700">
+                        <img src={img} alt="Work preview" className="w-full h-full object-cover scale-[1.05]" />
+                      </div>
+                    ))}
+                    <div className="w-10 h-10 flex items-center justify-center rounded-full border border-black/10 group-hover:border-black/30 transition-colors">
+                      <span className={`text-xl font-light transition-transform duration-500 ${activeCategory === cat.id ? 'rotate-45' : ''}`}>+</span>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <AnimatePresence>
+                  {activeCategory === cat.id && (
+                    <motion.div 
+                      initial={{ height: 0, opacity: 0 }} 
+                      animate={{ height: "auto", opacity: 1 }} 
+                      exit={{ height: 0, opacity: 0 }} 
+                      transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+                      className="overflow-hidden"
+                    >
+                      <div className={`grid gap-8 pt-8 pb-16 ${cat.title === "BRAND STORIES" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2"}`}>
+                        {cat.projects.map((project) => (
+                          <motion.div 
+                            key={project.id} 
+                            initial={{ opacity: 0, y: 20 }} 
+                            animate={{ opacity: 1, y: 0 }} 
+                            viewport={{ once: true }} 
+                            className="group cursor-active md:cursor-zoom-in"
+                          >
+                            <div className={`${cat.title === "BRAND STORIES" ? "aspect-square p-12" : "aspect-video"} bg-black/[0.03] overflow-hidden relative border border-black/5`}>
+                              {(project as any).vimeoId ? (
+                                <div className="w-full h-full pointer-events-none">
+                                  <iframe src={`https://player.vimeo.com/video/${(project as any).vimeoId}?background=1&autoplay=1&muted=1&loop=1&badge=0&autopause=0&player_id=0&app_id=58479`} className="w-full h-full object-cover scale-[1.05]" frameBorder="0" allow="autoplay; fullscreen; picture-in-picture" title={project.title} />
+                                </div>
+                              ) : (
+                                <img src={project.image} alt={project.title} className={`w-full h-full ${cat.title === "BRAND STORIES" ? "object-contain scale-90 group-hover:scale-100" : "object-cover group-hover:scale-110"} transition-all duration-700`} />
+                              )}
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-end p-6">
+                                <span className="text-[0.55rem] text-white/50 uppercase tracking-ultra mb-1">{project.year}</span>
+                                <h4 className="text-lg font-black uppercase tracking-tighter text-white">{project.title}</h4>
                               </div>
-                            ) : (
-                              <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" />
-                            )}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-end p-6">
-                              <span className="text-[0.55rem] text-white/50 uppercase tracking-ultra mb-1">{project.year}</span>
-                              <h4 className="text-lg font-black uppercase tracking-tighter text-white">{project.title}</h4>
                             </div>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* 02 // Drone */}
-            <div className="border-b border-black/10">
-              <button onClick={() => setActiveCategory(activeCategory === 1 ? null : 1)} className="w-full flex justify-between items-center py-6 text-left focus:outline-none group">
-                <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 1 ? 'text-black' : 'text-black/30 group-hover:text-black'}`}>
-                  AERIAL PERSPECTIVE
-                </h3>
-                <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 1 ? 'rotate-45 text-black/30' : 'text-black group-hover:text-black/30'}`}>+</span>
-              </button>
-              <AnimatePresence>
-                {activeCategory === 1 && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
-                      {droneProjects.map((project) => (
-                        <div key={project.id} className="group cursor-active md:cursor-zoom-in">
-                          <div className="aspect-video bg-black/[0.03] overflow-hidden mb-4 border border-black/5">
-                            <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" />
-                          </div>
-                          <h4 className="text-xs font-black uppercase tracking-widest text-black">{project.title}</h4>
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* 03 // Editing */}
-            <div className="border-b border-black/10">
-              <button onClick={() => setActiveCategory(activeCategory === 2 ? null : 2)} className="w-full flex justify-between items-center py-6 text-left focus:outline-none group">
-                <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 2 ? 'text-black' : 'text-black/30 group-hover:text-black'}`}>
-                  POST-PRODUCTION
-                </h3>
-                <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 2 ? 'rotate-45 text-black/30' : 'text-black group-hover:text-black/30'}`}>+</span>
-              </button>
-              <AnimatePresence>
-                {activeCategory === 2 && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
-                      {editingProjects.map((project) => (
-                        <div key={project.id} className="group cursor-active md:cursor-zoom-in">
-                          <div className="aspect-video bg-black/[0.03] overflow-hidden mb-4 border border-black/5">
-                            <img src={project.image} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" />
-                          </div>
-                          <h4 className="text-xs font-black uppercase tracking-widest text-black">{project.title}</h4>
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* 04 // Branding */}
-            <div className="border-b border-black/10">
-              <button onClick={() => setActiveCategory(activeCategory === 3 ? null : 3)} className="w-full flex justify-between items-center py-6 text-left focus:outline-none group">
-                <h3 className={`text-xl md:text-2xl font-black uppercase tracking-tighter transition-colors flex items-center ${activeCategory === 3 ? 'text-black' : 'text-black/30 group-hover:text-black'}`}>
-                  BRAND IDENTITY
-                </h3>
-                <span className={`text-3xl font-light transition-transform duration-300 ${activeCategory === 3 ? 'rotate-45 text-black/30' : 'text-black group-hover:text-black/30'}`}>+</span>
-              </button>
-              <AnimatePresence>
-                {activeCategory === 3 && (
-                  <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-8 pb-16">
-                      {brandingProjects.map((project) => (
-                        <div key={project.id} className="group cursor-active md:cursor-zoom-in">
-                          <div className="aspect-square bg-black/[0.02] overflow-hidden mb-4 flex items-center justify-center p-12 border border-black/5">
-                            <img src={project.image} alt={project.title} className="w-full h-auto object-contain group-hover:scale-115 transition-all duration-700" />
-                          </div>
-                          <h4 className="text-xs font-black uppercase tracking-widest text-black">{project.title}</h4>
-                        </div>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
           </div>
         </div>
       </section>

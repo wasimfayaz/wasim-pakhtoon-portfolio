@@ -186,13 +186,15 @@ const CustomSelect = ({
   label, 
   options, 
   required = false, 
-  defaultValue = "" 
+  defaultValue = "",
+  theme = "dark"
 }: { 
   name: string, 
   label: string, 
   options: { value: string, label: string }[], 
   required?: boolean,
   defaultValue?: string
+  theme?: "dark" | "light"
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(defaultValue);
@@ -201,16 +203,29 @@ const CustomSelect = ({
 
   return (
     <div className="space-y-2 relative">
-      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">{name.replace('_', ' ')} {required && "*"}</label>
+      <label className={`text-[0.625rem] uppercase tracking-ultra font-bold ${theme === 'light' ? 'text-black/40' : 'text-secondary-text'}`}>
+        {name.replace('_', ' ')} {required && "*"}
+      </label>
       <input type="hidden" name={name} value={selected} required={required} />
       
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex justify-between items-center bg-transparent border-0 border-b border-outline/30 focus:border-white py-3 px-0 text-sm uppercase tracking-widest transition-colors group text-left"
+        className={`w-full flex justify-between items-center bg-transparent border-0 border-b py-3 px-0 text-sm uppercase tracking-widest transition-colors group text-left ${
+          theme === 'light' 
+            ? 'border-black/10 focus:border-black' 
+            : 'border-outline/30 focus:border-white'
+        }`}
       >
-        <span className={selected ? "text-white" : "text-outline/40"}>{selectedLabel}</span>
-        <ChevronDown className={`w-4 h-4 text-secondary-text transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`} />
+        <span className={selected 
+          ? (theme === 'light' ? "text-black" : "text-white") 
+          : (theme === 'light' ? "text-black/20" : "text-outline/40")
+        }>
+          {selectedLabel}
+        </span>
+        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${
+          theme === 'light' ? 'text-black/40' : 'text-secondary-text'
+        } ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       <AnimatePresence>
@@ -221,7 +236,11 @@ const CustomSelect = ({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="absolute left-0 right-0 top-full mt-2 bg-[#0E0E0E] border border-outline/20 z-[120] backdrop-blur-xl max-h-60 overflow-y-auto"
+              className={`absolute left-0 right-0 top-full mt-2 border z-[120] backdrop-blur-xl max-h-60 overflow-y-auto ${
+                theme === 'light' 
+                  ? 'bg-white border-black/10 shadow-xl' 
+                  : 'bg-[#0E0E0E] border-outline/20'
+              }`}
             >
               {options.map((option) => (
                 <button
@@ -231,8 +250,10 @@ const CustomSelect = ({
                     setSelected(option.value);
                     setIsOpen(false);
                   }}
-                  className={`w-full text-left px-4 py-3 text-[0.625rem] uppercase tracking-widest hover:bg-white/5 transition-colors ${
-                    selected === option.value ? "text-white bg-white/5" : "text-secondary-text"
+                  className={`w-full text-left px-4 py-3 text-[0.625rem] uppercase tracking-widest transition-colors ${
+                    theme === 'light'
+                      ? (selected === option.value ? "text-black bg-black/5" : "text-black/60 hover:bg-black/5")
+                      : (selected === option.value ? "text-white bg-white/5" : "text-secondary-text hover:bg-white/5")
                   }`}
                 >
                   {option.label}
@@ -255,6 +276,18 @@ export default function App() {
   const [formStatus, setFormStatus] = useState("idle"); 
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<number | null>(0);
+  const [isRightClickOverlayOpen, setIsRightClickOverlayOpen] = useState(false);
+
+  // Handle cinematic right-click interaction
+  useEffect(() => {
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+      setIsRightClickOverlayOpen(true);
+    };
+
+    window.addEventListener('contextmenu', handleContextMenu);
+    return () => window.removeEventListener('contextmenu', handleContextMenu);
+  }, []);
 
   // Define section themes
   const sectionThemes: Record<string, "dark" | "light"> = {
@@ -960,17 +993,17 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-2xl bg-[#0E0E0E] border border-outline/20 p-8 md:p-12 overflow-y-auto max-h-[90vh]"
+              className="relative w-full max-w-2xl bg-white border border-black/5 p-8 md:p-12 overflow-y-auto max-h-[90vh] shadow-[0_30px_100px_rgba(0,0,0,0.1)]"
             >
               <button 
                 onClick={() => setIsQuoteModalOpen(false)}
-                className="absolute top-6 right-6 text-secondary-text hover:text-white transition-colors"
+                className="absolute top-6 right-6 text-black/40 hover:text-black transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
 
               {formStatus === "success" ? (
-                <div className="py-20 text-center">
+                <div className="py-20 text-center text-black">
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
@@ -978,8 +1011,8 @@ export default function App() {
                   >
                     <CheckCircle2 className="w-8 h-8 text-green-500" />
                   </motion.div>
-                  <h3 className="text-2xl font-bold uppercase tracking-tighter mb-4">REQUEST RECEIVED</h3>
-                  <p className="text-[0.6875rem] uppercase tracking-widest text-secondary-text leading-relaxed max-w-xs mx-auto">
+                  <h3 className="text-2xl font-black uppercase tracking-tighter mb-4">REQUEST RECEIVED</h3>
+                  <p className="text-[0.6875rem] uppercase tracking-widest text-black/60 leading-relaxed max-w-xs mx-auto">
                     YOUR REQUEST HAS BEEN RECEIVED. WE’LL REVIEW EVERYTHING PERSONALLY AND GET BACK TO YOU SHORTLY.
                   </p>
                   <button 
@@ -987,7 +1020,7 @@ export default function App() {
                       setIsQuoteModalOpen(false);
                       setTimeout(() => setFormStatus("idle"), 500);
                     }}
-                    className="mt-12 bg-white text-black px-12 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all"
+                    className="mt-12 bg-black text-white px-12 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-black/80 transition-all"
                   >
                     BACK TO SITE
                   </button>
@@ -995,31 +1028,32 @@ export default function App() {
               ) : (
                 <>
                   <div className="mb-12">
-                    <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text block mb-4">THE NEXT STEP:</span>
-                    <h2 className="text-3xl font-black uppercase tracking-tighter leading-none">LET’S CREATE VISUALS THAT GROW YOUR BUSINESS.</h2>
-                    <p className="text-[0.625rem] uppercase tracking-widest text-secondary-text mt-4">Currently accepting a limited number of high-impact projects.</p>
+                    <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40 block mb-4">THE NEXT STEP:</span>
+                    <h2 className="text-3xl font-black uppercase tracking-tighter leading-[0.9] text-black">LET’S CREATE VISUALS THAT GROW YOUR BUSINESS.</h2>
+                    <p className="text-[0.625rem] uppercase tracking-widest text-black/60 mt-4">Currently accepting a limited number of high-impact projects.</p>
                   </div>
 
                   <form className="space-y-8" onSubmit={handleQuoteSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-2">
-                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">YOUR NAME *</label>
-                        <input name="name" required type="text" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="ENTER NAME" />
+                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40">YOUR NAME *</label>
+                        <input name="name" required type="text" className="w-full bg-transparent border-0 border-b border-black/10 focus:border-black focus:ring-0 py-3 px-0 placeholder:text-black/10 text-sm uppercase tracking-widest text-black transition-colors" placeholder="ENTER NAME" />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">EMAIL ADDRESS *</label>
-                        <input name="email" required type="email" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="EMAIL@EXAMPLE.COM" />
+                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40">EMAIL ADDRESS *</label>
+                        <input name="email" required type="email" className="w-full bg-transparent border-0 border-b border-black/10 focus:border-black focus:ring-0 py-3 px-0 placeholder:text-black/10 text-sm uppercase tracking-widest text-black transition-colors" placeholder="EMAIL@EXAMPLE.COM" />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-2">
-                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">PHONE / WHATSAPP</label>
-                        <input name="phone" type="text" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="+00 000 000 000" />
+                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40">PHONE / WHATSAPP</label>
+                        <input name="phone" type="text" className="w-full bg-transparent border-0 border-b border-black/10 focus:border-black focus:ring-0 py-3 px-0 placeholder:text-black/10 text-sm uppercase tracking-widest text-black transition-colors" placeholder="+00 000 000 000" />
                       </div>
                       <CustomSelect 
                         name="project_type" 
                         label="SELECT TYPE" 
+                        theme="light"
                         required 
                         options={[
                           { value: "editing", label: "VIDEO EDITING" },
@@ -1035,6 +1069,7 @@ export default function App() {
                       <CustomSelect 
                         name="budget" 
                         label="SELECT BUDGET" 
+                        theme="light"
                         required 
                         options={[
                           { value: "under500", label: "UNDER $500" },
@@ -1047,6 +1082,7 @@ export default function App() {
                       <CustomSelect 
                         name="timeline" 
                         label="TIMELINE" 
+                        theme="light"
                         defaultValue="standard"
                         options={[
                           { value: "standard", label: "STANDARD (1-2 WEEKS)" },
@@ -1057,24 +1093,24 @@ export default function App() {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">PROJECT VISION *</label>
-                      <textarea name="vision" required rows={3} className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors resize-none" placeholder="TELL ME ABOUT YOUR GOALS AND VISION"></textarea>
+                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40">PROJECT VISION *</label>
+                      <textarea name="vision" required rows={3} className="w-full bg-transparent border-0 border-b border-black/10 focus:border-black focus:ring-0 py-3 px-0 placeholder:text-black/10 text-sm uppercase tracking-widest text-black transition-colors resize-none" placeholder="TELL ME ABOUT YOUR GOALS AND VISION"></textarea>
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">REFERENCE LINK (OPTIONAL)</label>
-                      <input name="reference" type="text" className="w-full bg-transparent border-0 border-b border-outline/30 focus:border-white focus:ring-0 py-3 px-0 placeholder:text-outline/20 text-sm uppercase tracking-widest transition-colors" placeholder="PASTE LINK TO INSPIRATION" />
+                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40">REFERENCE LINK (OPTIONAL)</label>
+                      <input name="reference" type="text" className="w-full bg-transparent border-0 border-b border-black/10 focus:border-black focus:ring-0 py-3 px-0 placeholder:text-black/10 text-sm uppercase tracking-widest text-black transition-colors" placeholder="PASTE LINK TO INSPIRATION" />
                     </div>
 
                     <div className="pt-8">
                       <button 
                         disabled={formStatus === "submitting"}
-                        className="w-full bg-white text-black py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all disabled:opacity-50 disabled:cursor-wait flex items-center justify-center gap-4"
+                        className="w-full bg-black text-white py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-black/90 transition-all disabled:opacity-50 disabled:cursor-wait flex items-center justify-center gap-4"
                       >
                         {formStatus === "submitting" ? "PREPARING..." : "REQUEST QUOTE"}
                         {formStatus === "idle" && <ArrowRight className="w-4 h-4" />}
                       </button>
-                      <p className="text-[0.5rem] uppercase tracking-widest text-secondary-text text-center mt-6">
+                      <p className="text-[0.5rem] uppercase tracking-widest text-black/40 text-center mt-6">
                         I review every project personally and respond within 24 hours.
                       </p>
                     </div>
@@ -1099,6 +1135,40 @@ export default function App() {
           >
             <ArrowUp className="w-5 h-5 group-hover:-translate-y-1 transition-transform duration-300" />
           </motion.button>
+        )}
+      </AnimatePresence>
+      
+      {/* Right Click Glassmorphism Overlay */}
+      <AnimatePresence>
+        {isRightClickOverlayOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setIsRightClickOverlayOpen(false)}
+            className="fixed inset-0 z-[1000] flex items-center justify-center p-6"
+          >
+            {/* Darker Backdrop for contrast on white sections */}
+            <motion.div 
+              initial={{ backdropFilter: "blur(0px)", backgroundColor: "rgba(0,0,0,0)" }}
+              animate={{ backdropFilter: "blur(12px)", backgroundColor: "rgba(0,0,0,0.4)" }}
+              className="absolute inset-0" 
+            />
+            
+            {/* Glass Card */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.25, ease: [0.23, 1, 0.32, 1] }}
+              className="relative z-10 px-8 py-5 bg-white/[0.05] border border-white/20 rounded-none backdrop-blur-md shadow-[0_20px_50px_rgba(0,0,0,0.3)] text-center"
+            >
+              <p className="text-[0.625rem] font-light uppercase tracking-[0.2em] text-white font-label">
+                © Wasim Pakhtoon — All rights reserved
+              </p>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

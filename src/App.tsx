@@ -330,7 +330,7 @@ export default function App() {
           </div>
           <div className="flex items-center gap-4">
             <a
-              href="/portal"
+              href="/#portal"
               className="hidden md:block font-label uppercase tracking-[0.1em] text-[0.625rem] font-bold text-white/50 hover:text-white px-4 py-2.5 transition-all duration-300"
             >
               CLIENT PORTAL
@@ -399,7 +399,7 @@ export default function App() {
                   </a>
                   
                   <a
-                    href="/portal"
+                    href="/#portal"
                     className="inline-block w-full text-center border border-white/20 text-white px-10 py-4 text-[0.65rem] font-bold uppercase tracking-ultra mt-4 hover:bg-white hover:text-black transition-all duration-300"
                   >
                     CLIENT PORTAL

@@ -4,7 +4,10 @@ import App from './App.tsx';
 import ClientPortal from './ClientPortal.tsx';
 import './index.css';
 
-const isPortal = window.location.pathname.startsWith('/portal');
+// Hash-based routing — works on any static host without server rewrites.
+// #portal  → Client Portal
+// (default) → Main portfolio
+const isPortal = window.location.hash === '#portal';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

@@ -10,6 +10,7 @@ import {
   Settings, Download, Play, X, ChevronRight, Send, Menu,
   LogOut, RefreshCcw, Sparkles, Lock, Eye, EyeOff,
   ArrowDownToLine, CheckCircle2, Loader2, User, ExternalLink,
+  ArrowLeft, ArrowRight
 } from "lucide-react";
 import LogoImg from "../images/logo.png";
 import { supabase } from "./lib/supabase";
@@ -109,6 +110,24 @@ const StatusBadge = ({ status }: { status: string }) => {
     </span>
   );
 };
+
+// ─── Progress Bar ─────────────────────────────────────────────────────────────
+const ProgressBar = ({ progress, light = false }: { progress: number; light?: boolean }) => (
+  <div className="w-full">
+    <div className="flex justify-between items-end mb-1.5">
+      <span className={`text-[0.45rem] font-bold uppercase tracking-widest ${light ? "text-black/30" : "text-white/20"}`}>Progress</span>
+      <span className={`text-[0.55rem] font-black tracking-tighter ${light ? "text-black" : "text-white"}`}>{progress}%</span>
+    </div>
+    <div className={`h-1 w-full ${light ? "bg-black/5" : "bg-white/5"} relative rounded-full overflow-hidden`}>
+      <motion.div 
+        initial={{ width: 0 }} 
+        animate={{ width: `${progress}%` }} 
+        transition={{ duration: 1, ease: "easeOut" }}
+        className={`absolute top-0 left-0 h-full ${light ? "bg-black" : "bg-white"}`} 
+      />
+    </div>
+  </div>
+);
 
 // ─── Login Gate ───────────────────────────────────────────────────────────────
 const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
@@ -219,12 +238,19 @@ const OverviewSection = ({ data, onRevision, onGoHome }: { data: ClientData; onR
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {[
         { label: "Project", value: data?.project_name || "—" },
-        { label: "Status", value: data?.status || "Active" },
+        { label: "Status", value: data?.status || "active" },
+        { label: "Progress", value: 0 },
       ].map((card, i) => (
         <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: i * 0.08 }}
           className="border border-white/10 bg-white/[0.03] p-6">
           <p className="text-[0.55rem] uppercase tracking-[0.15em] text-white/30 mb-2">{card.label}</p>
-          {card.label === "Status" ? <StatusBadge status={card.value} /> : <p className="font-black text-white text-lg uppercase tracking-tight">{card.value}</p>}
+          {card.label === "Status" ? (
+            <StatusBadge status={card.value as string} />
+          ) : card.label === "Progress" ? (
+            <ProgressBar progress={card.value as number} />
+          ) : (
+            <p className="font-black text-white text-lg uppercase tracking-tight">{card.value}</p>
+          )}
         </motion.div>
       ))}
     </div>
@@ -474,6 +500,16 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
   const [active, setActive] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showRevision, setShowRevision] = useState(false);
+
+  // Safety fallback UI
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <PortalLoadingState />
+      </div>
+    );
+  }
+
   const currentNav = NAV_ITEMS.find((n) => n.id === active);
 
   const portal = useClientPortalData(data.username);
@@ -522,10 +558,13 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
           })}
         </nav>
         <div className="p-4 border-t border-white/5">
-          <div className="bg-white/[0.03] border border-white/[0.08] p-3 rounded-sm">
-            <p className="text-[0.5rem] uppercase tracking-widest text-white/20 mb-1">Active Project</p>
-            <p className="text-[0.6rem] font-bold uppercase tracking-tight text-white/60 leading-snug">{data?.project_name || "—"}</p>
-            <div className="mt-2">
+          <div className="bg-white/[0.03] border border-white/[0.08] p-3 rounded-sm space-y-3">
+            <div>
+              <p className="text-[0.5rem] uppercase tracking-widest text-white/20 mb-1">Active Project</p>
+              <p className="text-[0.6rem] font-bold uppercase tracking-tight text-white/60 leading-snug">{data?.project_name || "—"}</p>
+            </div>
+            <ProgressBar progress={0} />
+            <div className="mt-1">
               <StatusBadge status={data?.status || "active"} />
             </div>
           </div>

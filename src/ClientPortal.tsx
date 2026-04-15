@@ -277,20 +277,47 @@ const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!username || !password) { setError("Please enter both username and password."); return; }
     setLoading(true);
-    setTimeout(() => {
-      const client = CLIENTS[username.toLowerCase().trim()];
-      if (client && client.password === password) {
-        onLogin({ ...client, username: username.toLowerCase().trim() });
+
+    try {
+      const res = await fetch("/api/notion", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await res.json();
+
+      if (!data.results) {
+        throw new Error("Invalid response from Notion");
+      }
+
+      const users = data.results.map((item: any) => ({
+        username: item.properties["Client Name"]?.title[0]?.text?.content || item.properties["Client Name"]?.title[0]?.plain_text,
+        password: item.properties["Password / Access Key"]?.rich_text[0]?.text?.content || item.properties["Password / Access Key"]?.rich_text[0]?.plain_text
+      }));
+
+      const match = users.find(
+        (user: any) => user.username === username.trim() && user.password === password.trim()
+      );
+
+      if (match) {
+        // Find base project data from hardcoded CLIENTS or create a fallback shell
+        // This ensures the dashboard has the required object structure
+        const baseClient = CLIENTS[username.toLowerCase().trim()] || CLIENTS['khyber'];
+        onLogin({ ...baseClient, username: username.toLowerCase().trim() });
       } else {
-        setError("Incorrect username or password. Please try again.");
-        setLoading(false);
+        setError("Incorrect username or password");
         setTimeout(() => setError(""), 3000);
       }
-    }, 900);
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Connection error. Please check your credentials or API setup.");
+      setTimeout(() => setError(""), 3000);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

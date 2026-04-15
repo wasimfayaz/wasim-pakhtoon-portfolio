@@ -220,7 +220,7 @@ const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
 };
 
 // ─── Overview ─────────────────────────────────────────────────────────────────
-const OverviewSection = ({ data, onRevision }: { data: ClientData; onRevision: () => void }) => (
+const OverviewSection = ({ data, onRevision, onGoHome }: { data: ClientData; onRevision: () => void; onGoHome: () => void }) => (
   <div className="space-y-8">
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
       className="border border-white/10 bg-white/[0.02] p-8">
@@ -278,9 +278,9 @@ const OverviewSection = ({ data, onRevision }: { data: ClientData; onRevision: (
           <p className="text-[0.65rem] text-white/40 max-w-md">Explore our full range — social media reels, drone packages, brand identity, and more.</p>
         </div>
       </div>
-      <a href="/" className="shrink-0 text-[0.6rem] font-bold uppercase tracking-[0.15em] text-white border border-white/20 px-5 py-2.5 hover:bg-white hover:text-black transition-all duration-300 flex items-center gap-2">
+      <button onClick={onGoHome} className="shrink-0 text-[0.6rem] font-bold uppercase tracking-[0.15em] text-white border border-white/20 px-5 py-2.5 hover:bg-white hover:text-black transition-all duration-300 flex items-center gap-2">
         View Services <ChevronRight className="w-3 h-3" />
-      </a>
+      </button>
     </motion.div>
   </div>
 );
@@ -516,7 +516,7 @@ const NAV_ITEMS = [
 ];
 
 // ─── Dashboard ────────────────────────────────────────────────────────────────
-const Dashboard = ({ data, onLogout }: { data: ClientData; onLogout: () => void }) => {
+const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: () => void; onGoHome: () => void }) => {
   const [active, setActive] = useState("overview");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showRevision, setShowRevision] = useState(false);
@@ -524,7 +524,7 @@ const Dashboard = ({ data, onLogout }: { data: ClientData; onLogout: () => void 
 
   const renderSection = () => {
     switch (active) {
-      case "overview":     return <OverviewSection data={data} onRevision={() => setShowRevision(true)} />;
+      case "overview":     return <OverviewSection data={data} onRevision={() => setShowRevision(true)} onGoHome={onGoHome} />;
       case "deliverables": return <DeliverablesSection deliverables={data.deliverables} />;
       case "feedback":     return <FeedbackSection initialMessages={data.messages} clientName={data.project.client} />;
       case "documents":    return <DocumentsSection documents={data.documents} />;
@@ -625,8 +625,9 @@ const Dashboard = ({ data, onLogout }: { data: ClientData; onLogout: () => void 
 };
 
 // ─── Root ─────────────────────────────────────────────────────────────────────
-export default function ClientPortal() {
+export default function ClientPortal({ onClose }: { onClose?: () => void }) {
   const [clientData, setClientData] = useState<ClientData | null>(null);
+  const handleLogout = () => { setClientData(null); onClose?.(); };
   return (
     <AnimatePresence mode="wait">
       {!clientData ? (
@@ -635,7 +636,7 @@ export default function ClientPortal() {
         </motion.div>
       ) : (
         <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-          <Dashboard data={clientData} onLogout={() => setClientData(null)} />
+          <Dashboard data={clientData} onLogout={handleLogout} onGoHome={onClose ?? (() => {})} />
         </motion.div>
       )}
     </AnimatePresence>

@@ -277,6 +277,16 @@ export default function App() {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<number | null>(0);
   const [isRightClickOverlayOpen, setIsRightClickOverlayOpen] = useState(false);
+  const [focusedSection, setFocusedSection] = useState<string | null>("home");
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Handle mobile check for performance
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Handle cinematic right-click interaction
   useEffect(() => {
@@ -343,6 +353,53 @@ export default function App() {
 
     return () => observer.disconnect();
   }, []);
+
+  // Focused Section Detection (Center Viewport)
+  useEffect(() => {
+    if (isMobile) {
+      setFocusedSection(null);
+      return;
+    }
+
+    const focusOptions = {
+      root: null,
+      rootMargin: '-30% 0px -30% 0px', // Target the center 40% of the viewport
+      threshold: 0
+    };
+
+    const handleFocus = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          setFocusedSection(entry.target.id);
+        }
+      });
+    };
+
+    const focusObserver = new IntersectionObserver(handleFocus, focusOptions);
+    const sectionIds = ['home', 'work', 'services', 'about', 'faq', 'contact'];
+    sectionIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) focusObserver.observe(el);
+    });
+
+    return () => focusObserver.disconnect();
+  }, [isMobile]);
+
+  // Focus Animation Variants
+  const focusVariants = {
+    active: { 
+      filter: "blur(0px)",
+      opacity: 1, 
+      scale: 1,
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+    },
+    inactive: { 
+      filter: "blur(4px)", 
+      opacity: 0.7, 
+      scale: 0.98,
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] }
+    }
+  };
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -536,7 +593,12 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <header id="home" className="min-h-screen flex flex-col justify-center pt-32 md:pt-48 pb-12 md:pb-24 px-8 max-w-screen-2xl mx-auto">
+      <motion.header 
+        id="home" 
+        variants={focusVariants}
+        animate={(!focusedSection || focusedSection === "home" || isMobile) ? "active" : "inactive"}
+        className="min-h-screen flex flex-col justify-center pt-32 md:pt-48 pb-12 md:pb-24 px-8 max-w-screen-2xl mx-auto focus-section"
+      >
 
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
@@ -623,10 +685,15 @@ export default function App() {
             ))}
           </div>
         </div>
-      </header>
+      </motion.header>
 
       {/* View My Work */}
-      <section className="bg-[#f8f8f8]" id="work">
+      <motion.section 
+        className="bg-[#f8f8f8] focus-section" 
+        id="work"
+        variants={focusVariants}
+        animate={(focusedSection === "work" || isMobile) ? "active" : "inactive"}
+      >
         <div className="px-8 py-32 max-w-screen-2xl mx-auto">
           {/* Pexels Global Reach Section */}
           <div className="mb-32">
@@ -793,10 +860,15 @@ export default function App() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Workflow Section */}
-      <section className="px-8 py-32 max-w-screen-2xl mx-auto" id="services">
+      <motion.section 
+        className="px-8 py-32 max-w-screen-2xl mx-auto focus-section" 
+        id="services"
+        variants={focusVariants}
+        animate={(focusedSection === "services" || isMobile) ? "active" : "inactive"}
+      >
         <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-20">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
@@ -827,10 +899,15 @@ export default function App() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* About Section */}
-      <section className="bg-[#f8f8f8]" id="about">
+      <motion.section 
+        className="bg-[#f8f8f8] focus-section" 
+        id="about"
+        variants={focusVariants}
+        animate={(focusedSection === "about" || isMobile) ? "active" : "inactive"}
+      >
         <div className="px-8 py-32 max-w-screen-2xl mx-auto">
           <div className="border-t border-black/10 pt-8">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
@@ -893,10 +970,15 @@ export default function App() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* FAQ Section */}
-      <section className="bg-white" id="faq">
+      <motion.section 
+        className="bg-white focus-section" 
+        id="faq"
+        variants={focusVariants}
+        animate={(focusedSection === "faq" || isMobile) ? "active" : "inactive"}
+      >
         <div className="px-8 py-32 max-w-screen-2xl mx-auto">
           <div className="border-t border-black/10 pt-8">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
@@ -944,10 +1026,15 @@ export default function App() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Contact Section */}
-      <section className="bg-white" id="contact">
+      <motion.section 
+        className="bg-white focus-section" 
+        id="contact"
+        variants={focusVariants}
+        animate={(focusedSection === "contact" || isMobile) ? "active" : "inactive"}
+      >
         <div className="px-8 py-32 max-w-screen-2xl mx-auto">
           <div className="border-t border-black/10 pt-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8">
@@ -990,7 +1077,7 @@ export default function App() {
             </div>
           </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Visually hidden SEO content — readable by search engines, invisible to users */}
       <div aria-hidden="true" className="sr-only" role="note">

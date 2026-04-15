@@ -82,3 +82,8 @@
   80% { transform:translate(3%, 35%) }
   90% { transform:translate(-10%, 10%) }
 }
+
+.focus-section {
+  will-change: filter, opacity, transform;
+}
+

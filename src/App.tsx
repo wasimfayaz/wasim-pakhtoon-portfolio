@@ -399,10 +399,8 @@ export default function App() {
             <img 
               src={LogoImg} 
               alt="Wasim Pakhtoon — Cinematic Video Editor and Cinematographer in Kashmir" 
-              width="120"
-              height="32"
               loading="eager"
-              className={`h-8 w-[120px] object-contain transition-all duration-500 group-hover:opacity-70 ${navTheme === 'light' ? 'invert' : ''}`} 
+              className={`h-8 w-auto object-left object-contain transition-all duration-500 group-hover:opacity-70 ${navTheme === 'light' ? 'invert' : ''}`} 
             />
           </a>
 

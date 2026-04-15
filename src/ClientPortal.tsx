@@ -141,11 +141,10 @@ function useNotionData(username: string) {
       const res = await fetch('/api/notion', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body),
+        body: JSON.stringify({}),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const responseJson = await res.json();
-      const results = responseJson.data?.results ?? [];
+      const results = await res.json();
 
       const getSection = (page: NotionPage) => {
         const s = (getProp(page.properties['Section'] ?? page.properties['Category']) || '').toUpperCase();
@@ -225,37 +224,26 @@ const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
     setError("");
 
     try {
-      // Faster login: targeted query for the specific username instead of fetching the whole DB
-      const body = {
-        filter: {
-          property: 'Client Name',
-          title: {
-            equals: cleanUser
-          }
-        }
-      };
+      const res = await fetch("/api/notion", { 
+        method: "POST" 
+      });
+      const data = await res.json();
 
-      const res = await fetch("/api/notion", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
+      const matchedUser = data.find((page: any) => {
+        const u = page.properties["Client Name"]?.title?.[0]?.plain_text;
+        const p = page.properties["Password / Access Key"]?.rich_text?.[0]?.plain_text;
+
+        return (
+          u === username.trim() &&
+          p === password.trim()
+        );
       });
 
-      if (!res.ok) throw new Error("Could not reach the database.");
-
-      const responseJson = await res.json();
-      const results = responseJson.data?.results ?? [];
-
-      const match = results.find((page: NotionPage) => {
-        const u = getProp(page.properties["Client Name"]).trim();
-        const p = getProp(page.properties["Password / Access Key"]).trim();
-        return u === cleanUser && p === cleanPass;
-      });
-
-      if (match) {
-        const project = mapToProject(match);
+      if (matchedUser) {
+        console.log("LOGIN SUCCESS");
+        const project = mapToProject(matchedUser);
         onLogin({
-          username: cleanUser,
+          username: username.trim(),
           project,
           timeline: [
             { label: "Brief", done: true },
@@ -265,8 +253,8 @@ const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
           ],
         });
       } else {
-        setError("Invalid username or password.");
-        setTimeout(() => setError(""), 3000);
+        console.log("LOGIN FAILED");
+        setError("Invalid username or password");
       }
     } catch (err) {
       console.error("[Login Error]:", err);

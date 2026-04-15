@@ -207,44 +207,49 @@ const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
 
 // ─── Overview ─────────────────────────────────────────────────────────────────
 const OverviewSection = ({ data, onRevision, onGoHome }: { data: ClientData; onRevision: () => void; onGoHome: () => void }) => (
-  <div className="space-y-8">
+  <div className="space-y-0">
+    {/* BLOCK 1 — WHITE: Welcome banner */}
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
-      className="border border-white/10 bg-white/[0.02] p-8">
-      <p className="text-[0.65rem] uppercase tracking-[0.15em] text-white/40 mb-3">Welcome back, {data?.username || "Client"}</p>
-      <h2 className="text-xl font-black uppercase tracking-tighter text-white mb-4">Your private project dashboard.</h2>
-      <p className="text-[0.75rem] text-white/50 leading-relaxed max-w-lg">
+      className="bg-white p-8 md:p-10">
+      <p className="text-[0.65rem] uppercase tracking-[0.15em] text-black/40 mb-3">Welcome back, {data?.username || "Client"}</p>
+      <h2 className="text-2xl font-black uppercase tracking-tighter text-black mb-4">Your private project dashboard.</h2>
+      <p className="text-[0.75rem] text-black/50 leading-relaxed max-w-lg">
         Track progress, review content, submit feedback, and manage all project files in one place.
       </p>
     </motion.div>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    {/* BLOCK 2 — BLACK: Project info cards */}
+    <div className="bg-[#080808] border-t border-b border-white/5 grid grid-cols-1 md:grid-cols-2">
       {[
         { label: "Project", value: data?.project_name || "—" },
         { label: "Status", value: data?.status || "Active" },
       ].map((card, i) => (
         <motion.div key={i} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: i * 0.08 }}
-          className="border border-white/10 bg-white/[0.02] p-6">
-          <p className="text-[0.55rem] uppercase tracking-[0.15em] text-white/30 mb-2">{card.label}</p>
+          className={`p-8 ${i === 0 ? "border-b md:border-b-0 md:border-r border-white/5" : ""}`}>
+          <p className="text-[0.55rem] uppercase tracking-[0.15em] text-white/30 mb-3">{card.label}</p>
           <div className="flex items-center gap-2">
             {card.label === "Status"
               ? <StatusBadge status={card.value} />
-              : <p className="font-black text-white text-sm uppercase tracking-tight leading-snug">{card.value}</p>}
+              : <p className="font-black text-white text-lg uppercase tracking-tight leading-snug">{card.value}</p>}
           </div>
         </motion.div>
       ))}
     </div>
 
-    <div className="flex flex-wrap gap-4">
-      <button onClick={onRevision} className="flex items-center gap-2 border border-white/20 text-white px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-white hover:text-black transition-colors">
+    {/* BLOCK 3 — WHITE: Actions */}
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }}
+      className="bg-[#f5f5f5] p-8 flex flex-wrap gap-4 border-b border-black/10">
+      <button onClick={onRevision} className="flex items-center gap-2 border border-black/20 text-black px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-black hover:text-white transition-colors">
         <RefreshCcw className="w-3.5 h-3.5" /> Request Revision
       </button>
-      <button className="flex items-center gap-2 bg-white text-black px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-white/90 transition-colors">
+      <button className="flex items-center gap-2 bg-black text-white px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-black/80 transition-colors">
         <ArrowDownToLine className="w-3.5 h-3.5" /> Download All Files
       </button>
-    </div>
+    </motion.div>
 
-    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.3 }}
-      className="border border-white/10 bg-white/[0.02] p-6 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+    {/* BLOCK 4 — BLACK: More services CTA */}
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.25 }}
+      className="bg-[#080808] p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div className="flex items-start gap-3">
         <Sparkles className="w-4 h-4 text-white/40 mt-0.5 shrink-0" />
         <div>
@@ -262,37 +267,48 @@ const OverviewSection = ({ data, onRevision, onGoHome }: { data: ClientData; onR
 // ─── Deliverables ─────────────────────────────────────────────────────────────
 const DeliverablesSection = ({ deliverables }: { deliverables: Deliverable[] }) => {
   return (
-    <div className="space-y-3">
-      {deliverables.map((item, i) => (
-        <motion.div key={item.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.07 }}
-          className="border border-white/10 bg-white/[0.02] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 hover:bg-white/[0.04] transition-colors group">
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 border border-white/10 flex items-center justify-center text-white/30 shrink-0 group-hover:border-white/20 transition-colors">
-              <Film className="w-4 h-4" />
+    <div className="divide-y divide-black/10 overflow-hidden">
+      {deliverables.map((item, i) => {
+        const isWhite = i % 2 === 0;
+        return (
+          <motion.div key={item.id} initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.07 }}
+            className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-6 py-5 transition-opacity ${
+              isWhite ? "bg-white" : "bg-[#0a0a0a] border-white/5"
+            }`}>
+            <div className="flex items-center gap-4">
+              <div className={`w-10 h-10 flex items-center justify-center shrink-0 ${
+                isWhite ? "bg-black/5 text-black/40" : "bg-white/5 text-white/30 border border-white/10"
+              }`}>
+                <Film className="w-4 h-4" />
+              </div>
+              <div>
+                <p className={`text-[0.7rem] font-bold uppercase tracking-widest ${ isWhite ? "text-black" : "text-white" }`}>{item.title}</p>
+                <p className={`text-[0.55rem] uppercase tracking-widest mt-1 ${ isWhite ? "text-black/30" : "text-white/30" }`}>
+                  {item.created_at ? new Date(item.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""}
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-[0.7rem] font-bold uppercase tracking-widest text-white">{item.title}</p>
-              <p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-1">
-                {item.created_at ? new Date(item.created_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) : ""}
-              </p>
+            <div className="flex items-center gap-3 shrink-0">
+              <StatusBadge status={item.status} />
+              {item.file_url && (
+                <a
+                  href={item.file_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`flex items-center gap-2 px-4 py-2 text-[0.6rem] font-bold uppercase tracking-widest transition-colors ${
+                    isWhite
+                      ? "bg-black text-white hover:bg-black/80"
+                      : "bg-white text-black hover:bg-white/90"
+                  }`}
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  View File
+                </a>
+              )}
             </div>
-          </div>
-          <div className="flex items-center gap-3 shrink-0">
-            <StatusBadge status={item.status} />
-            {item.file_url && (
-              <a
-                href={item.file_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-white text-black px-4 py-2 text-[0.6rem] font-bold uppercase tracking-widest hover:bg-white/90 transition-colors"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-                View File
-              </a>
-            )}
-          </div>
-        </motion.div>
-      ))}
+          </motion.div>
+        );
+      })}
     </div>
   );
 };
@@ -417,22 +433,27 @@ const TimelineSection = ({ stages }: { stages?: TimelineStage[] }) => (
 
 // ─── Settings ─────────────────────────────────────────────────────────────────
 const SettingsSection = ({ data, onLogout }: { data: ClientData; onLogout: () => void }) => (
-  <div className="space-y-4">
+  <div className="overflow-hidden">
     {[
       { label: "Username", value: data?.username || "—" },
       { label: "Email", value: data?.email || "—" },
       { label: "Project", value: data?.project_name || "—" },
       { label: "Access Level", value: "Premium Partner" },
-    ].map((field) => (
-      <div key={field.label} className="border border-white/10 bg-white/[0.02] px-6 py-4">
-        <p className="text-[0.55rem] uppercase tracking-[0.15em] text-white/30 mb-1">{field.label}</p>
-        <p className="text-[0.7rem] font-bold text-white tracking-widest">{field.value}</p>
-      </div>
-    ))}
-    <button onClick={onLogout}
-      className="flex items-center gap-2 border border-red-400/30 text-red-400/70 px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-red-400/10 transition-all duration-300 mt-4">
-      <LogOut className="w-3.5 h-3.5" /> Sign Out
-    </button>
+    ].map((field, i) => {
+      const isWhite = i % 2 === 0;
+      return (
+        <div key={field.label} className={`px-8 py-6 border-b ${ isWhite ? "bg-white border-black/10" : "bg-[#080808] border-white/5" }`}>
+          <p className={`text-[0.5rem] uppercase tracking-[0.2em] mb-1.5 ${ isWhite ? "text-black/30" : "text-white/30" }`}>{field.label}</p>
+          <p className={`text-[0.8rem] font-black tracking-widest uppercase ${ isWhite ? "text-black" : "text-white" }`}>{field.value}</p>
+        </div>
+      );
+    })}
+    <div className="bg-[#080808] px-8 py-6">
+      <button onClick={onLogout}
+        className="flex items-center gap-2 border border-red-400/30 text-red-400/70 px-6 py-3 text-[0.6rem] font-bold uppercase tracking-[0.15em] hover:bg-red-400/10 transition-all duration-300">
+        <LogOut className="w-3.5 h-3.5" /> Sign Out
+      </button>
+    </div>
   </div>
 );
 

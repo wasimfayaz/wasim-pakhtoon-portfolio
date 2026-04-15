@@ -3,7 +3,7 @@
  * Single URL, multi-client: username + password login.
  */
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   LayoutDashboard, Film, MessageSquare, FileText, Clock,
@@ -97,6 +97,7 @@ type TimelineStage = { label: string; done?: boolean; active?: boolean };
 type Project = { name: string; client: string; status: string; startDate: string; deliveryDate: string; progress: number };
 
 type ClientData = {
+  username: string;
   password: string;
   project: Project;
   deliverables: Deliverable[];
@@ -104,6 +105,152 @@ type ClientData = {
   documents: Doc[];
   timeline: TimelineStage[];
 };
+
+// ─── Notion Data Layer ─────────────────────────────────────────────────────────────────
+
+type NotionPage = { id: string; created_time: string; properties: Record<string, any> };
+
+/** Extract plain text from any Notion property type */
+const getProp = (prop: any): string => {
+  if (!prop) return '';
+  switch (prop.type) {
+    case 'title':     return (prop.title     ?? []).map((t: any) => t.plain_text).join('');
+    case 'rich_text': return (prop.rich_text ?? []).map((t: any) => t.plain_text).join('');
+    case 'select':    return prop.select?.name ?? '';
+    case 'url':       return prop.url ?? '';
+    case 'email':     return prop.email ?? '';
+    case 'date':      return prop.date?.start ?? '';
+    case 'number':    return String(prop.number ?? '');
+    default:          return '';
+  }
+};
+
+const getUrl = (prop: any): string => {
+  if (!prop) return '';
+  if (prop.type === 'url') return prop.url ?? '';
+  if (prop.type === 'files') {
+    const f = prop.files?.[0];
+    return f?.type === 'external' ? f.external.url : (f?.file?.url ?? '');
+  }
+  return '';
+};
+
+const FALLBACK_THUMBS = [
+  'https://images.pexels.com/photos/35066424/pexels-photo-35066424.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'https://images.pexels.com/photos/35028172/pexels-photo-35028172.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'https://images.pexels.com/photos/21908308/pexels-photo-21908308.jpeg?auto=compress&cs=tinysrgb&w=600',
+  'https://images.pexels.com/photos/35296645/pexels-photo-35296645.jpeg?auto=compress&cs=tinysrgb&w=600',
+];
+
+const mapToDeliverable = (page: NotionPage, idx: number): Deliverable => {
+  const p = page.properties;
+  const titleProp = p['Name'] ?? p['Title'] ?? p['Deliverable'] ?? Object.values(p).find((v: any) => v.type === 'title');
+  const videoUrl  = getUrl(p['Video Link'] ?? p['Vimeo'] ?? p['Video URL'] ?? p['Video']);
+  const thumb     = getUrl(p['Thumbnail']  ?? p['Cover'] ?? p['Image']) || FALLBACK_THUMBS[idx % 4];
+  const vimeoMatch = videoUrl.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  return {
+    id: idx + 1,
+    title:   getProp(titleProp) || `Deliverable ${idx + 1}`,
+    type:    (getProp(p['Type'] ?? p['Format']) || 'VIDEO').toUpperCase(),
+    duration: getProp(p['Duration'] ?? p['Length']) || '',
+    status:  getProp(p['Status']) || 'Pending',
+    thumb,
+    vimeoId: vimeoMatch ? vimeoMatch[1] : null,
+  };
+};
+
+const mapToMessage = (page: NotionPage, idx: number): Message => {
+  const p = page.properties;
+  const role = getProp(p['Role'] ?? p['Sender Type']);
+  const isMe = role.toLowerCase() === 'client';
+  return {
+    id:     idx + 1,
+    sender: getProp(p['Sender'] ?? p['From'] ?? p['Author'] ?? p['Name'] ?? Object.values(p).find((v: any) => v.type === 'title')) || 'Team',
+    role:   isMe ? 'Client' : 'Director',
+    text:   getProp(p['Message'] ?? p['Comment'] ?? p['Feedback'] ?? p['Content'] ?? Object.values(p).find((v: any) => v.type === 'rich_text')) || '…',
+    time:   getProp(p['Timestamp'] ?? p['Date']) || page.created_time.split('T')[0],
+    isMe,
+  };
+};
+
+const mapToDoc = (page: NotionPage, idx: number): Doc => {
+  const p = page.properties;
+  const titleProp = p['Name'] ?? p['Title'] ?? p['Document'] ?? Object.values(p).find((v: any) => v.type === 'title');
+  return {
+    id:   idx + 1,
+    name: getProp(titleProp) || `Document ${idx + 1}`,
+    type: (getProp(p['Type'] ?? p['Format'] ?? p['File Type']) || 'PDF').toUpperCase(),
+    size: getProp(p['Size'] ?? p['File Size']) || '—',
+    date: getProp(p['Date'] ?? p['Created']) || page.created_time.split('T')[0],
+  };
+};
+
+function useNotionData(username: string) {
+  const [deliverables, setDeliverables] = useState<Deliverable[]>([]);
+  const [messages,     setMessages]     = useState<Message[]>([]);
+  const [documents,    setDocuments]    = useState<Doc[]>([]);
+  const [loading,      setLoading]      = useState(true);
+  const [error,        setError]        = useState<string | null>(null);
+  const [lastUpdated,  setLastUpdated]  = useState<Date | null>(null);
+
+  const fetchData = useCallback(async () => {
+    try {
+      const body: Record<string, unknown> = {
+        sorts: [{ timestamp: 'created_time', direction: 'ascending' }],
+      };
+      if (username) {
+        body.filter = {
+          or: [
+            { property: 'Client', select:    { equals: username } },
+            { property: 'Client', rich_text: { contains: username } },
+          ],
+        };
+      }
+      const res = await fetch('/api/notion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const pages: NotionPage[] = data.results ?? [];
+
+      const getSection = (page: NotionPage) => {
+        const s = (getProp(page.properties['Section'] ?? page.properties['Category']) || '').toUpperCase();
+        if (s) return s;
+        if (getUrl(page.properties['Video Link'] ?? page.properties['Vimeo'] ?? page.properties['Video URL'])) return 'DELIVERABLE';
+        if (getProp(page.properties['Message'] ?? page.properties['Comment'] ?? page.properties['Feedback'])) return 'FEEDBACK';
+        return 'DOCUMENT';
+      };
+
+      setDeliverables(pages.filter(p => ['DELIVERABLE', 'VIDEO'].includes(getSection(p))).map(mapToDeliverable));
+      setMessages(pages.filter(p => ['FEEDBACK', 'MESSAGE', 'COMMENT'].includes(getSection(p))).map(mapToMessage));
+      setDocuments(pages.filter(p => ['DOCUMENT', 'FILE', 'PDF', 'ZIP'].includes(getSection(p))).map(mapToDoc));
+      setLastUpdated(new Date());
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load Notion data');
+    } finally {
+      setLoading(false);
+    }
+  }, [username]);
+
+  useEffect(() => {
+    fetchData();
+    const interval = setInterval(fetchData, 5000); // Auto-refresh every 5s
+    return () => clearInterval(interval);
+  }, [fetchData]);
+
+  return { deliverables, messages, documents, loading, error, lastUpdated, refetch: fetchData };
+}
+
+// ─── Notion Loading State ─────────────────────────────────────────────────────
+const NotionLoadingState = () => (
+  <div className="flex flex-col items-center justify-center py-24 gap-4">
+    <Loader2 className="w-6 h-6 text-white/20 animate-spin" />
+    <p className="text-[0.6rem] uppercase tracking-[0.15em] text-white/20">Loading from Notion…</p>
+  </div>
+);
 
 // ─── Status Badge ─────────────────────────────────────────────────────────────
 const StatusBadge = ({ status }: { status: string }) => {
@@ -137,7 +284,7 @@ const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
     setTimeout(() => {
       const client = CLIENTS[username.toLowerCase().trim()];
       if (client && client.password === password) {
-        onLogin(client);
+        onLogin({ ...client, username: username.toLowerCase().trim() });
       } else {
         setError("Incorrect username or password. Please try again.");
         setLoading(false);
@@ -522,12 +669,23 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
   const [showRevision, setShowRevision] = useState(false);
   const currentNav = NAV_ITEMS.find((n) => n.id === active);
 
+  // ― Notion live data (auto-refreshes every 5 s; falls back to static data) ―
+  const notion = useNotionData(data.username);
+  const liveDeliverables = notion.deliverables.length > 0 ? notion.deliverables : data.deliverables;
+  const liveMessages     = notion.messages.length     > 0 ? notion.messages     : data.messages;
+  const liveDocs         = notion.documents.length    > 0 ? notion.documents    : data.documents;
+
   const renderSection = () => {
+    // Show loader on first Notion fetch for dynamic sections
+    const firstLoad = notion.loading && notion.deliverables.length === 0 && notion.messages.length === 0 && notion.documents.length === 0;
+    if (firstLoad && ['deliverables', 'feedback', 'documents'].includes(active)) {
+      return <NotionLoadingState />;
+    }
     switch (active) {
       case "overview":     return <OverviewSection data={data} onRevision={() => setShowRevision(true)} onGoHome={onGoHome} />;
-      case "deliverables": return <DeliverablesSection deliverables={data.deliverables} />;
-      case "feedback":     return <FeedbackSection initialMessages={data.messages} clientName={data.project.client} />;
-      case "documents":    return <DocumentsSection documents={data.documents} />;
+      case "deliverables": return <DeliverablesSection deliverables={liveDeliverables} />;
+      case "feedback":     return <FeedbackSection initialMessages={liveMessages} clientName={data.project.client} />;
+      case "documents":    return <DocumentsSection documents={liveDocs} />;
       case "timeline":     return <TimelineSection stages={data.timeline} />;
       case "settings":     return <SettingsSection data={data} onLogout={onLogout} />;
       default:             return null;
@@ -629,8 +787,22 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
           </AnimatePresence>
         </main>
 
-        <footer className="px-6 md:px-10 py-4 border-t border-white/5">
+        <footer className="px-6 md:px-10 py-4 border-t border-white/5 flex items-center justify-between gap-4">
           <p className="text-[0.5rem] text-white/15 uppercase tracking-widest">© Wasim Pakhtoon Creative — Confidential Client Portal</p>
+          <div className="flex items-center gap-2 shrink-0">
+            {notion.error ? (
+              <span className="text-[0.5rem] text-red-400/50 uppercase tracking-widest">Notion offline</span>
+            ) : notion.lastUpdated ? (
+              <span className="text-[0.5rem] text-white/15 uppercase tracking-widest flex items-center gap-1.5">
+                <span className="w-1 h-1 rounded-full bg-green-500/60 animate-pulse inline-block" />
+                Live · {notion.lastUpdated.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </span>
+            ) : (
+              <span className="text-[0.5rem] text-white/10 uppercase tracking-widest flex items-center gap-1.5">
+                <Loader2 className="w-2.5 h-2.5 animate-spin" /> Connecting…
+              </span>
+            )}
+          </div>
         </footer>
       </div>
 

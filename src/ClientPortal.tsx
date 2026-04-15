@@ -224,10 +224,16 @@ const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
     setError("");
 
     try {
-      const res = await fetch("/api/notion", { 
-        method: "POST" 
-      });
+      const res = await fetch("/api/notion", { method: "POST" });
       const data = await res.json();
+
+      // 🚨 HANDLE API ERROR FIRST
+      if (!res.ok || !Array.isArray(data)) {
+        console.error("API ERROR:", data);
+        setError("Server error. Please try again later.");
+        setLoading(false);
+        return;
+      }
 
       const matchedUser = data.find((page: any) => {
         const u = page.properties["Client Name"]?.title?.[0]?.plain_text;

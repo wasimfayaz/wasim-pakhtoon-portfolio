@@ -8,7 +8,7 @@ export default async function handler(req, res) {
     }
 
     const response = await fetch(
-      "https://api.notion.com/v1/databases/3438385d067d8087a335dc8d6999fcaf/query",
+      "https://api.notion.com/v1/databases/3218b4cee1dd41f9888556c8a3c3f9bd/query",
       {
         method: "POST",
         headers: {

@@ -437,7 +437,7 @@ export default function App() {
             className="md:col-span-6 relative z-10"
           >
             <p className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-md">
-              FROM CONCEPT TO FINAL DELIVERY, WE PROVIDE END-TO-END CINEMATIC SOLUTIONS FOR LUXURY HOTELS AND GLOBAL BRANDS. BASED IN SRINAGAR, WASIM PAKHTOON OFFERS PROFESSIONAL VIDEO EDITING, CINEMATOGRAPHY, AND BRANDING SERVICES ACROSS KASHMIR AND INDIA.
+              END-TO-END CINEMATIC SOLUTIONS FOR LUXURY BRANDS AND HOTELS WORLDWIDE — VIDEO EDITING, CINEMATOGRAPHY, AND BRANDING, CRAFTED FROM SRINAGAR.
             </p>
             <div className="mt-4 md:mt-4 flex items-center gap-2">
               <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-green"></span>

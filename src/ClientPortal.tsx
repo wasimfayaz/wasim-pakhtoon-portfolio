@@ -39,14 +39,14 @@ type NotionPage = { id: string; created_time: string; properties: Record<string,
 const getProp = (prop: any): string => {
   if (!prop) return '';
   switch (prop.type) {
-    case 'title':     return (prop.title     ?? []).map((t: any) => t.plain_text).join('');
+    case 'title': return (prop.title ?? []).map((t: any) => t.plain_text).join('');
     case 'rich_text': return (prop.rich_text ?? []).map((t: any) => t.plain_text).join('');
-    case 'select':    return prop.select?.name ?? '';
-    case 'status':    return prop.status?.name ?? '';
-    case 'url':       return prop.url ?? '';
-    case 'date':      return prop.date?.start ?? '';
-    case 'number':    return String(prop.number ?? '');
-    default:          return '';
+    case 'select': return prop.select?.name ?? '';
+    case 'status': return prop.status?.name ?? '';
+    case 'url': return prop.url ?? '';
+    case 'date': return prop.date?.start ?? '';
+    case 'number': return String(prop.number ?? '');
+    default: return '';
   }
 };
 
@@ -64,15 +64,15 @@ const FALLBACK_THUMB = 'https://images.pexels.com/photos/35066424/pexels-photo-3
 
 const mapToDeliverable = (page: NotionPage, idx: number): Deliverable => {
   const p = page.properties;
-  const videoUrl  = getUrl(p['Video Link'] ?? p['Vimeo'] ?? p['Video URL'] ?? p['File Link']);
+  const videoUrl = getUrl(p['Video Link'] ?? p['Vimeo'] ?? p['Video URL'] ?? p['File Link']);
   const vimeoMatch = videoUrl.match(/vimeo\.com\/(?:video\/)?(\d+)/);
   return {
     id: idx + 1,
-    title:   getProp(p['Name'] ?? p['Title'] ?? p['Deliverable']) || `Deliverable ${idx + 1}`,
-    type:    (getProp(p['Type'] ?? p['Format']) || 'VIDEO').toUpperCase(),
+    title: getProp(p['Name'] ?? p['Title'] ?? p['Deliverable']) || `Deliverable ${idx + 1}`,
+    type: (getProp(p['Type'] ?? p['Format']) || 'VIDEO').toUpperCase(),
     duration: getProp(p['Duration'] ?? p['Length']) || '--:--',
-    status:  getProp(p['Status']) || 'Pending',
-    thumb:   getUrl(p['Thumbnail']  ?? p['Image'] ?? p['Cover']) || FALLBACK_THUMB,
+    status: getProp(p['Status']) || 'Pending',
+    thumb: getUrl(p['Thumbnail'] ?? p['Image'] ?? p['Cover']) || FALLBACK_THUMB,
     vimeoId: vimeoMatch ? vimeoMatch[1] : null,
   };
 };
@@ -82,11 +82,11 @@ const mapToMessage = (page: NotionPage, idx: number): Message => {
   const role = getProp(p['Role'] ?? p['Sender Type']);
   const isMe = role.toLowerCase() === 'client';
   return {
-    id:     idx + 1,
+    id: idx + 1,
     sender: getProp(p['Sender'] || p['From'] || p['Author'] || p['Name']) || 'Team',
-    role:   isMe ? 'Client' : 'Director',
-    text:   getProp(p['Message'] || p['Comment'] || p['Feedback'] || p['Content']) || '...',
-    time:   getProp(p['Timestamp'] ?? p['Date']) || page.created_time.split('T')[0],
+    role: isMe ? 'Client' : 'Director',
+    text: getProp(p['Message'] || p['Comment'] || p['Feedback'] || p['Content']) || '...',
+    time: getProp(p['Timestamp'] ?? p['Date']) || page.created_time.split('T')[0],
     isMe,
   };
 };
@@ -94,7 +94,7 @@ const mapToMessage = (page: NotionPage, idx: number): Message => {
 const mapToDoc = (page: NotionPage, idx: number): Doc => {
   const p = page.properties;
   return {
-    id:   idx + 1,
+    id: idx + 1,
     name: getProp(p['Name'] ?? p['Title'] ?? p['Document']) || `Document ${idx + 1}`,
     type: (getProp(p['Type'] ?? p['Format'] ?? p['File Type']) || 'PDF').toUpperCase(),
     size: getProp(p['Size'] ?? p['File Size']) || '—',
@@ -108,43 +108,34 @@ const mapToDoc = (page: NotionPage, idx: number): Doc => {
 const mapToProject = (page: NotionPage): Project => {
   const p = page.properties;
   return {
-    name:         getProp(p['Project Name'] || p['Name']) || 'Active Project',
-    client:       getProp(p['Client Name']) || 'Client Account',
-    status:       getProp(p['Status']) || 'Active',
-    startDate:    getProp(p['Start Date'] || p['Date']) || 'TBA',
+    name: getProp(p['Project Name'] || p['Name']) || 'Active Project',
+    client: getProp(p['Client Name']) || 'Client Account',
+    status: getProp(p['Status']) || 'Active',
+    startDate: getProp(p['Start Date'] || p['Date']) || 'TBA',
     deliveryDate: getProp(p['Delivery Date'] || p['Due Date']) || 'TBA',
-    progress:     Number(getProp(p['Progress'])) || 0,
+    progress: Number(getProp(p['Progress'])) || 0,
   };
 };
 
 function useNotionData(username: string) {
   const [deliverables, setDeliverables] = useState<Deliverable[]>([]);
-  const [messages,     setMessages]     = useState<Message[]>([]);
-  const [documents,    setDocuments]    = useState<Doc[]>([]);
-  const [loading,      setLoading]      = useState(true);
-  const [error,        setError]        = useState<string | null>(null);
-  const [lastUpdated,  setLastUpdated]  = useState<Date | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [documents, setDocuments] = useState<Doc[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
   const fetchData = useCallback(async () => {
     if (!username) return;
     try {
-      const body = {
-        filter: {
-          or: [
-            { property: 'Client', select: { equals: username } },
-            { property: 'Client', rich_text: { contains: username } },
-            { property: 'Client Name', title: { contains: username } }
-          ],
-        },
-        sorts: [{ timestamp: 'created_time', direction: 'ascending' }],
-      };
       const res = await fetch('/api/notion', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({}),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const results = await res.json();
+      const json = await res.json();
+      const results: NotionPage[] = json?.deliverables ?? [];
 
       const getSection = (page: NotionPage) => {
         const s = (getProp(page.properties['Section'] ?? page.properties['Category']) || '').toUpperCase();
@@ -154,9 +145,14 @@ function useNotionData(username: string) {
         return 'DOCUMENT';
       };
 
-      setDeliverables(results.filter((p: NotionPage) => ['DELIVERABLE', 'VIDEO'].includes(getSection(p))).map(mapToDeliverable));
-      setMessages(results.filter((p: NotionPage) => ['FEEDBACK', 'MESSAGE', 'COMMENT'].includes(getSection(p))).map(mapToMessage));
-      setDocuments(results.filter((p: NotionPage) => ['DOCUMENT', 'FILE', 'PDF', 'ZIP'].includes(getSection(p))).map(mapToDoc));
+      const clientFilter = (page: NotionPage) => {
+        const clientProp = getProp(page.properties['Client'] ?? page.properties['Client Name']);
+        return clientProp.toLowerCase().includes(username.toLowerCase());
+      };
+
+      setDeliverables(results.filter((p) => ['DELIVERABLE', 'VIDEO'].includes(getSection(p)) && clientFilter(p)).map(mapToDeliverable));
+      setMessages(results.filter((p) => ['FEEDBACK', 'MESSAGE', 'COMMENT'].includes(getSection(p)) && clientFilter(p)).map(mapToMessage));
+      setDocuments(results.filter((p) => ['DOCUMENT', 'FILE', 'PDF', 'ZIP'].includes(getSection(p)) && clientFilter(p)).map(mapToDoc));
       setLastUpdated(new Date());
       setError(null);
     } catch (err) {
@@ -228,14 +224,15 @@ const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
       const data = await res.json();
 
       // 🚨 HANDLE API ERROR FIRST
-      if (!res.ok || !Array.isArray(data)) {
+      const clients = data?.clients;
+      if (!res.ok || !Array.isArray(clients)) {
         console.error("API ERROR:", data);
         setError("Server error. Please try again later.");
         setLoading(false);
         return;
       }
 
-      const matchedUser = data.find((page: any) => {
+      const matchedUser = clients.find((page: any) => {
         const u = page.properties["Client Name"]?.title?.[0]?.plain_text;
         const p = page.properties["Password / Access Key"]?.rich_text?.[0]?.plain_text;
 
@@ -299,7 +296,7 @@ const LoginGate = ({ onLogin }: { onLogin: (data: ClientData) => void }) => {
           </div>
           <AnimatePresence>
             {error && <motion.p initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                className="text-[0.65rem] text-red-400 uppercase tracking-widest pt-1">{error}</motion.p>}
+              className="text-[0.65rem] text-red-400 uppercase tracking-widest pt-1">{error}</motion.p>}
           </AnimatePresence>
           <button type="submit" disabled={loading} className="w-full bg-white text-black py-4 text-[0.65rem] font-bold uppercase tracking-[0.15em] hover:bg-white/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-60 mt-2">
             {loading && <Loader2 className="w-4 h-4 animate-spin" />}
@@ -598,19 +595,19 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
       return <NotionLoadingState />;
     }
     switch (active) {
-      case "overview":     return <OverviewSection data={{ ...data, deliverables: notion.deliverables, messages: notion.messages }} onRevision={() => setShowRevision(true)} onGoHome={onGoHome} />;
-      case "deliverables": 
+      case "overview": return <OverviewSection data={{ ...data, deliverables: notion.deliverables, messages: notion.messages }} onRevision={() => setShowRevision(true)} onGoHome={onGoHome} />;
+      case "deliverables":
         return notion.deliverables.length > 0 ? <DeliverablesSection deliverables={notion.deliverables} /> : (
           <div className="py-24 text-center border border-white/5 bg-white/[0.02]">
             <Film className="w-8 h-8 text-white/10 mx-auto mb-4" />
             <p className="text-[0.6rem] uppercase tracking-widest text-white/20">No deliverables yet</p>
           </div>
         );
-      case "feedback":     return <FeedbackSection initialMessages={notion.messages} clientName={data.project.client} />;
-      case "documents":    return <DocumentsSection documents={notion.documents} />;
-      case "timeline":     return <TimelineSection stages={data.timeline} />;
-      case "settings":     return <SettingsSection data={data} onLogout={onLogout} />;
-      default:             return null;
+      case "feedback": return <FeedbackSection initialMessages={notion.messages} clientName={data.project.client} />;
+      case "documents": return <DocumentsSection documents={notion.documents} />;
+      case "timeline": return <TimelineSection stages={data.timeline} />;
+      case "settings": return <SettingsSection data={data} onLogout={onLogout} />;
+      default: return null;
     }
   };
 
@@ -692,7 +689,7 @@ export default function ClientPortal({ onClose }: { onClose?: () => void }) {
         </motion.div>
       ) : (
         <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
-          <Dashboard data={clientData} onLogout={handleLogout} onGoHome={onClose ?? (() => {})} />
+          <Dashboard data={clientData} onLogout={handleLogout} onGoHome={onClose ?? (() => { })} />
         </motion.div>
       )}
     </AnimatePresence>

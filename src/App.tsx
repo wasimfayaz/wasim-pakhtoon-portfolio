@@ -254,7 +254,7 @@ export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState("idle"); 
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-  const [activeCategory, setActiveCategory] = useState<number | null>(null);
+  const [activeCategory, setActiveCategory] = useState<number | null>(0);
 
   // Define section themes
   const sectionThemes: Record<string, "dark" | "light"> = {

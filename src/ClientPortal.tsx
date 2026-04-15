@@ -196,7 +196,7 @@ const OverviewSection = ({ data, onRevision, onGoHome }: { data: ClientData; onR
   <div className="space-y-8">
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
       className="border border-white/10 bg-white/[0.02] p-8">
-      <p className="text-[0.65rem] uppercase tracking-[0.15em] text-white/40 mb-3">Welcome back, {data.project.client}</p>
+      <p className="text-[0.65rem] uppercase tracking-[0.15em] text-white/40 mb-3">Welcome back, {data?.username || "Client"}</p>
       <h2 className="text-xl font-black uppercase tracking-tighter text-white mb-4">Your private project dashboard.</h2>
       <p className="text-[0.75rem] text-white/50 leading-relaxed max-w-lg">
         Track progress, review content, submit feedback, and manage all project files in one place.
@@ -407,7 +407,7 @@ const TimelineSection = ({ stages }: { stages?: TimelineStage[] }) => (
 const SettingsSection = ({ data, onLogout }: { data: ClientData; onLogout: () => void }) => (
   <div className="space-y-4">
     {[
-      { label: "Client Name", value: data.project.client },
+      { label: "Client Name", value: data?.username || "Client" },
       { label: "Project", value: data.project.name },
       { label: "Access Level", value: "Premium Partner" },
     ].map((field) => (
@@ -485,7 +485,7 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
             <p className="text-[0.6rem] uppercase tracking-widest text-white/20">No deliverables yet</p>
           </div>
         );
-      case "feedback": return <FeedbackSection initialMessages={portal.messages} clientName={data.project.client} />;
+      case "feedback": return <FeedbackSection initialMessages={portal.messages} clientName={data?.username || "Client"} />;
       case "documents": return <DocumentsSection documents={portal.documents} />;
       case "timeline": return <TimelineSection stages={data.timeline} />;
       case "settings": return <SettingsSection data={data} onLogout={onLogout} />;
@@ -534,7 +534,7 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <button onClick={() => setSidebarOpen(true)} className="md:hidden text-white/50 hover:text-white transition-colors"><Menu className="w-5 h-5" /></button>
-              <div><div className="flex items-center gap-3 flex-wrap"><h1 className="text-[0.7rem] font-black uppercase tracking-tight text-white">{data.project.name}</h1><StatusBadge status={data.project.status} /></div><p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-0.5">Client: {data.project.client}</p></div>
+              <div><div className="flex items-center gap-3 flex-wrap"><h1 className="text-[0.7rem] font-black uppercase tracking-tight text-white">{data.project.name}</h1><StatusBadge status={data.project.status} /></div><p className="text-[0.55rem] text-white/30 uppercase tracking-widest mt-0.5">Client: {data?.username || "Client"}</p></div>
             </div>
             <div className="flex items-center gap-4">
               <div className="w-24 h-0.5 bg-white/10 rounded-full overflow-hidden"><motion.div className="h-full bg-white" style={{ width: `${data.project.progress}%` }} /></div>

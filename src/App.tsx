@@ -5,7 +5,7 @@
 
 import { motion, AnimatePresence } from "motion/react";
 import { ArrowDown, ArrowRight, X, CheckCircle2, ChevronDown, Menu, ArrowUp } from "lucide-react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 // Image Imports
 import LogoImg from "../images/logo.png";
@@ -402,7 +402,7 @@ export default function App() {
               width="120"
               height="32"
               loading="eager"
-              className={`h-8 object-contain w-auto transition-all duration-500 group-hover:opacity-70 ${navTheme === 'light' ? 'brightness-0' : ''}`} 
+              className={`h-8 object-contain w-auto transition-all duration-500 group-hover:opacity-70 ${navTheme === 'light' ? 'invert' : ''}`} 
             />
           </a>
 
@@ -1025,8 +1025,8 @@ export default function App() {
           </div>
           <div className="flex gap-12">
             <a href="#" className="uppercase tracking-[0.1em] text-[0.625rem] text-secondary-text hover:text-white transition-colors duration-300">INSTAGRAM</a>
-            <a href="#" className="uppercase tracking-[0.1em] text-[0.625rem] text-secondary-text hover:text-white transition-colors duration-300">BEHANCE</a>
-            <a href="#" className="uppercase tracking-[0.1em] text-[0.625rem] text-secondary-text hover:text-white transition-colors duration-300">BEHANCE</a>
+            <a href="#" className="uppercase tracking-[0.1em] text-[0.625rem] text-secondary-text hover:text-white transition-colors duration-300">VIMEO</a>
+            <a href="#" className="uppercase tracking-[0.1em] text-[0.625rem] text-secondary-text hover:text-white transition-colors duration-300">LINKEDIN</a>
           </div>
         </div>
       </footer>

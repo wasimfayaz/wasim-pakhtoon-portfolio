@@ -3,7 +3,7 @@
  * Connected to Supabase.
  */
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   LayoutDashboard, Film, MessageSquare, FileText, Clock,

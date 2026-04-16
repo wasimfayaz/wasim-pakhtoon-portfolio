@@ -25,10 +25,10 @@ const navLinks = [
 ];
 
 const socials = [
-  { name: "INSTAGRAM", href: "#" },
-  { name: "BEHANCE", href: "#" },
-  { name: "VIMEO", href: "#" },
-  { name: "LINKEDIN", href: "#" },
+  { name: "INSTAGRAM", href: "https://www.instagram.com/wxeim/" },
+  { name: "BEHANCE", href: "https://www.behance.net/wasimpakhtoon" },
+  { name: "LINKEDIN", href: "https://www.linkedin.com/in/wasimpakhtoon/" },
+  { name: "YOUTUBE", href: "https://www.youtube.com/@wxm-port" },
 ];
 
 const brandingProjects = [
@@ -1119,8 +1119,8 @@ export default function App() {
                   </div>
                   <div>
                     <h4 className="text-[0.5rem] font-bold tracking-[0.2em] text-black/25 uppercase mb-3">EMAIL</h4>
-                    <a href="mailto:contact@cinmach.com" className="text-sm font-bold uppercase tracking-tight text-black hover:text-black/50 transition-colors duration-300">
-                      contact@cinmach.com
+                    <a href="mailto:wasim.hq@gmail.com" className="text-sm font-bold uppercase tracking-tight text-black hover:text-black/50 transition-colors duration-300">
+                      wasim.hq@gmail.com
                     </a>
                   </div>
                 </div>
@@ -1164,9 +1164,17 @@ export default function App() {
             </div>
             <div className="flex flex-col md:items-end gap-4">
               <div className="flex gap-8">
-                <a href="#" className="text-[0.55rem] uppercase tracking-[0.2em] text-white/30 hover:text-white transition-colors duration-300">Instagram</a>
-                <a href="#" className="text-[0.55rem] uppercase tracking-[0.2em] text-white/30 hover:text-white transition-colors duration-300">Vimeo</a>
-                <a href="#" className="text-[0.55rem] uppercase tracking-[0.2em] text-white/30 hover:text-white transition-colors duration-300">LinkedIn</a>
+                {socials.map((social) => (
+                  <a
+                    key={social.name}
+                    href={social.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[0.55rem] uppercase tracking-[0.2em] text-white/30 hover:text-white transition-colors duration-300"
+                  >
+                    {social.name}
+                  </a>
+                ))}
               </div>
               <p className="text-[0.5rem] uppercase tracking-[0.15em] text-white/15">Crafted from Srinagar, Kashmir</p>
             </div>

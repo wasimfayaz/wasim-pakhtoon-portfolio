@@ -588,10 +588,10 @@ export default function App() {
 
           {/* Palmer-style Difference Blend Spotlight — Scroll Driven */}
           <motion.div
-            className="absolute pointer-events-none z-20 rounded-full bg-white hidden md:block"
+            className="absolute pointer-events-none z-20 rounded-full bg-white"
             style={{
-              width: '300px',
-              height: '300px',
+              width: window.innerWidth < 768 ? '150px' : '300px',
+              height: window.innerWidth < 768 ? '150px' : '300px',
               left: '50%',
               top: '50%',
               scale: spotlightScale,

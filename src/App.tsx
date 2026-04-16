@@ -592,8 +592,8 @@ export default function App() {
         >
           <div className="flex flex-col md:flex-row gap-10 md:gap-0">
 
-            {/* Left Column */}
-            <div className="md:w-2/5 md:pr-16 flex-shrink-0">
+            {/* Left Column — Hidden on phone */}
+            <div className="hidden md:block md:w-2/5 md:pr-16 flex-shrink-0">
               <span className="text-[0.55rem] uppercase tracking-ultra font-bold text-secondary-text block mb-3">OUR MISSION</span>
               <p className="text-[0.6875rem] uppercase tracking-[0.1em] leading-loose text-on-surface/40 max-w-xs">
                 Cinematic excellence for luxury brands & hotels — crafted from Srinagar, delivered worldwide.

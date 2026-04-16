@@ -475,22 +475,22 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-            className="fixed inset-0 bg-[#0B0B0B] z-[90] md:hidden flex flex-col pt-32 pb-12 px-8"
+            className="fixed inset-0 bg-[#0B0B0B] z-[90] md:hidden flex flex-col pt-32 pb-12 px-8 items-center text-center"
           >
             {/* Main Links */}
-            <div className="flex-1 flex flex-col justify-center space-y-10">
+            <div className="flex-1 flex flex-col justify-center space-y-10 w-full">
               {navLinks.map((link, idx) => (
                 <motion.a
                   key={link.name}
                   href={link.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + idx * 0.1, duration: 0.5 }}
                   onClick={() => {
                     setActiveLink(link.name);
                     setIsMenuOpen(false);
                   }}
-                  className={`text-4xl font-light uppercase tracking-[0.1em] transition-colors ${
+                  className={`text-4xl font-black uppercase tracking-[0.1em] transition-colors ${
                     activeLink === link.name ? "text-white" : "text-white/30"
                   }`}
                 >
@@ -506,27 +506,27 @@ export default function App() {
               transition={{ delay: 0.5 }}
               className="space-y-12"
             >
-              <div className="flex flex-col space-y-4">
+              <div className="flex flex-col space-y-4 w-full max-w-[300px] mx-auto">
                 <p className="text-[0.625rem] uppercase tracking-ultra font-bold text-white/20">GET IN TOUCH</p>
                 <a
                   href="https://wa.me/919541591652?text=Hi%20Wasim%2C%20I%20saw%20your%20website%20and%20I%E2%80%99m%20interested%20in%20working%20with%20you."
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-2xl font-light uppercase tracking-widest text-white hover:text-white/70 transition-colors"
+                  className="w-full bg-white text-black py-5 px-6 text-sm font-black uppercase tracking-[0.2em] rounded-none hover:bg-white/90 transition-all text-center"
                 >
                   LET'S TALK
                 </a>
                 <a
                   href="/#portal"
                   onClick={() => setIsMenuOpen(false)}
-                  className="text-sm font-medium uppercase tracking-[0.2em] text-white/40 hover:text-white transition-colors"
+                  className="w-full bg-white text-black py-5 px-6 text-sm font-black uppercase tracking-[0.2em] rounded-none hover:bg-white/90 transition-all text-center"
                 >
                   CLIENT PORTAL
                 </a>
               </div>
 
-              <div className="flex gap-8 pt-8 border-t border-white/5">
+              <div className="flex justify-center gap-8 pt-8 border-t border-white/5">
                 {socials.map((social) => (
                   <a
                     key={social.name}

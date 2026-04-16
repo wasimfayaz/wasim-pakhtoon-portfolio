@@ -710,6 +710,8 @@ export default function App() {
               <a
                 key={social.name}
                 href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-[0.55rem] uppercase tracking-[0.2em] font-bold text-white/35 hover:text-white transition-colors duration-300"
               >
                 {social.name}
@@ -1119,8 +1121,8 @@ export default function App() {
                   </div>
                   <div>
                     <h4 className="text-[0.5rem] font-bold tracking-[0.2em] text-black/25 uppercase mb-3">EMAIL</h4>
-                    <a href="mailto:wasim.hq@gmail.com" className="text-sm font-bold uppercase tracking-tight text-black hover:text-black/50 transition-colors duration-300">
-                      wasim.hq@gmail.com
+                    <a href="mailto:waxim.hq@gmail.com" className="text-sm font-bold uppercase tracking-tight text-black hover:text-black/50 transition-colors duration-300">
+                      waxim.hq@gmail.com
                     </a>
                   </div>
                 </div>

@@ -573,15 +573,14 @@ export default function App() {
           </div>
         </motion.div>
 
-        {/* Eyebrow label */}
+        {/* Eyebrow — Availability/Scarcity tag */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="flex items-center gap-3 mb-8"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse-red flex-shrink-0" />
-          <span className="text-[0.55rem] uppercase tracking-[0.25em] font-bold text-white/40 font-label">WASIM PAKHTOON — CINEMATIC PRODUCTIONS</span>
+          <span className="text-[0.55rem] uppercase tracking-[0.25em] font-bold text-white/30 font-label">2 PROJECT SLOTS OPEN — BOOKING FOR NEXT 6 MONTHS</span>
         </motion.div>
 
         {/* Hero Heading + Impact Panel Row */}
@@ -659,9 +658,10 @@ export default function App() {
                 END-TO-END CINEMATIC SOLUTIONS FOR LUXURY BRANDS AND HOTELS — VIDEO EDITING, CINEMATOGRAPHY &amp; BRANDING, FROM SRINAGAR.
               </p>
 
+              {/* Single status indicator */}
               <div className="mt-5 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse-red flex-shrink-0" />
-                <span className="text-[0.55rem] uppercase tracking-[0.2em] font-bold text-white/50">AVAILABLE FOR PROJECTS</span>
+                <span className="text-[0.55rem] uppercase tracking-[0.2em] font-bold text-white/50">AVAILABLE NOW — LIMITED CAPACITY</span>
               </div>
 
               {/* CTA Buttons */}
@@ -682,14 +682,13 @@ export default function App() {
               </div>
 
               {/* Client Portal — demoted */}
-              <div className="mt-8 pt-6 border-t border-outline/15 flex flex-wrap items-center gap-3">
-                <span className="text-[0.5rem] uppercase tracking-widest text-white/25">EXISTING CLIENTS</span>
+              <div className="mt-6 pt-5 border-t border-outline/15 flex flex-wrap items-center gap-3">
+                <span className="text-[0.5rem] uppercase tracking-widest text-white/20">EXISTING CLIENTS</span>
                 <span className="text-white/15 text-xs">→</span>
                 <a
                   href="/#portal"
-                  className="inline-flex items-center gap-1.5 text-white/35 text-[0.5rem] font-bold uppercase tracking-widest hover:text-white/70 transition-colors duration-300"
+                  className="text-white/30 text-[0.5rem] font-bold uppercase tracking-widest hover:text-white/60 transition-colors duration-300"
                 >
-                  <span className="w-1 h-1 rounded-full bg-red-600 flex-shrink-0" />
                   CLIENT PORTAL
                 </a>
               </div>

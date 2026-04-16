@@ -38,7 +38,16 @@ type Deliverable = {
 };
 
 type Message = { id: number; sender: string; role: string; text: string; time: string; isMe: boolean };
-type Doc = { id: number; name: string; type: string; size: string; date: string };
+type Doc = {
+  id: string;
+  name: string;
+  type: string;
+  size: string;
+  file_url: string;
+  client_username: string;
+  created_at?: string;
+};
+
 type TimelineStage = { label: string; done?: boolean; active?: boolean };
 
 // ─── Supabase Data Hook ───────────────────────────────────────────────────────
@@ -46,7 +55,7 @@ type TimelineStage = { label: string; done?: boolean; active?: boolean };
 function useClientPortalData(username: string) {
   const [deliverables, setDeliverables] = useState<Deliverable[]>([]);
   const [messages] = useState<Message[]>([]);
-  const [documents] = useState<Doc[]>([]);
+  const [documents, setDocuments] = useState<Doc[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -55,16 +64,24 @@ function useClientPortalData(username: string) {
     if (!username || !supabase) return;
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      // 1. Fetch Deliverables
+      const { data: delData, error: delError } = await supabase
         .from("deliverables")
         .select("*")
         .eq("client_username", username);
 
-      if (error) {
-        console.error("[Deliverables Fetch Error]:", error);
-        setError("Failed to load deliverables.");
+      // 2. Fetch Documents
+      const { data: docData, error: docError } = await supabase
+        .from("documents")
+        .select("*")
+        .eq("client_username", username);
+
+      if (delError || docError) {
+        console.error("[Fetch Error]:", { delError, docError });
+        setError("Failed to load portal data.");
       } else {
-        setDeliverables(data || []);
+        setDeliverables(delData || []);
+        setDocuments(docData || []);
         setError(null);
       }
       setLastUpdated(new Date());
@@ -78,7 +95,26 @@ function useClientPortalData(username: string) {
 
   useEffect(() => {
     fetchPortalData();
-  }, [fetchPortalData]);
+
+    if (!username || !supabase) return;
+
+    // Set up real-time subscription for deliverables
+    const delChannel = supabase
+      .channel('deliverables-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'deliverables', filter: `client_username=eq.${username}` }, () => fetchPortalData())
+      .subscribe();
+
+    // Set up real-time subscription for documents
+    const docChannel = supabase
+      .channel('documents-realtime')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'documents', filter: `client_username=eq.${username}` }, () => fetchPortalData())
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(delChannel);
+      supabase.removeChannel(docChannel);
+    };
+  }, [fetchPortalData, username]);
 
   return { deliverables, messages, documents, loading, error, lastUpdated, refetch: fetchPortalData };
 }
@@ -373,19 +409,30 @@ const DocumentsSection = ({ documents }: { documents: Doc[] }) => (
         <div className="flex items-center gap-4">
           <div className="w-8 h-8 border border-white/10 flex items-center justify-center text-[0.5rem] font-bold text-white/40 uppercase">{doc.type}</div>
           <div>
-            <p className="text-[0.7rem] font-bold uppercase tracking-widest text-white">{doc.name}</p>
-            <p className="text-[0.55rem] text-white/30 mt-0.5">{doc.size} · {doc.date}</p>
+            <p className="text-[0.7rem] font-bold uppercase tracking-[0.15em] text-white">{doc.name}</p>
+            <div className="flex items-center gap-3 mt-1.5 justify-center md:justify-start">
+              <span className="text-[0.5rem] text-white/20 uppercase tracking-widest">{doc.size}</span>
+              <span className="w-1 h-1 rounded-full bg-white/10" />
+              <span className="text-[0.5rem] text-white/20 uppercase tracking-widest">
+                {doc.created_at ? new Date(doc.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) : "—"}
+              </span>
+            </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <button className="text-[0.55rem] uppercase tracking-widest text-white/30 hover:text-white transition-colors px-3 py-1.5 border border-transparent hover:border-white/20">View</button>
-          <button className="w-8 h-8 border border-white/10 flex items-center justify-center hover:bg-white hover:text-black transition-colors text-white/40"><Download className="w-3.5 h-3.5" /></button>
+          <a href={doc.file_url} target="_blank" rel="noopener noreferrer"
+            className="px-4 py-2 text-[0.55rem] uppercase tracking-widest font-black text-white/40 hover:text-white border border-white/10 hover:border-white/30 transition-all flex items-center gap-2">
+            <Eye className="w-3 h-3" /> VIEW
+          </a>
+          <a href={doc.file_url} download className="p-2 border border-white/10 text-white/30 hover:text-white hover:border-white/30 transition-all">
+            <Download className="w-3.5 h-3.5" />
+          </a>
         </div>
       </motion.div>
     )) : (
-      <div className="py-24 text-center">
-        <FileText className="w-8 h-8 text-white/10 mx-auto mb-4" />
-        <p className="text-[0.6rem] uppercase tracking-widest text-white/20">No documents shared yet</p>
+      <div className="py-24 flex flex-col items-center justify-center gap-4">
+        <FileText className="w-10 h-10 text-white/5" />
+        <p className="text-[0.6rem] uppercase tracking-[0.2em] text-white/20 font-bold">No documents shared yet</p>
       </div>
     )}
   </div>
@@ -637,13 +684,39 @@ export default function ClientPortal({ onClose }: { onClose?: () => void }) {
     const stored = localStorage.getItem("wasim_client_session");
     if (stored) {
       try {
-        setClientData(JSON.parse(stored));
+        const session = JSON.parse(stored);
+        if (session && session.username) {
+          // Re-fetch latest data from Supabase to ensure fresh state
+          const syncSession = async () => {
+            if (!supabase) return;
+            const { data, error } = await supabase
+              .from("clients")
+              .select("*")
+              .eq("username", session.username)
+              .maybeSingle();
+
+            if (data && !error) {
+              setClientData(data);
+              localStorage.setItem("wasim_client_session", JSON.stringify(data));
+            } else {
+              // If user no longer exists, clear session
+              setClientData(null);
+              localStorage.removeItem("wasim_client_session");
+            }
+            setIsCheckingSession(false);
+          };
+          syncSession();
+        } else {
+          setIsCheckingSession(false);
+        }
       } catch (e) {
         console.error("Failed to parse stored session", e);
         localStorage.removeItem("wasim_client_session");
+        setIsCheckingSession(false);
       }
+    } else {
+      setIsCheckingSession(false);
     }
-    setIsCheckingSession(false);
   }, []);
 
   const handleLogin = (data: ClientData) => {
@@ -656,6 +729,35 @@ export default function ClientPortal({ onClose }: { onClose?: () => void }) {
     localStorage.removeItem("wasim_client_session");
     onClose?.();
   };
+
+  // Real-time subscription for the client's own data (Status, Project Name, etc.)
+  useEffect(() => {
+    if (!clientData?.username || !supabase) return;
+
+    const channel = supabase
+      .channel(`client-sync-${clientData.username}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'clients',
+          filter: `username=eq.${clientData.username}`
+        },
+        (payload) => {
+          if (payload.new) {
+            const newData = payload.new as ClientData;
+            setClientData(newData);
+            localStorage.setItem("wasim_client_session", JSON.stringify(newData));
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [clientData?.username]);
 
   if (isCheckingSession) {
     return (

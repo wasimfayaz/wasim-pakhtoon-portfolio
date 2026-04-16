@@ -583,99 +583,69 @@ export default function App() {
           <span aria-hidden="true">DELIVERING<br />CINEMATIC<br />EXCELLENCE</span>
         </motion.h1>
 
-        {/* Hero Info — 2-Column Layout */}
+        {/* Hero Info Section */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
           className="border-t border-outline/30 pt-8 md:pt-10 mb-8 md:mb-20"
         >
-          <div className="grid grid-cols-1 md:grid-cols-[2fr_3px_3fr] gap-0 md:gap-0">
+          <div className="flex flex-col md:flex-row gap-10 md:gap-0">
 
-            {/* Left Column — 40% */}
-            <div className="pr-0 md:pr-12 pb-8 md:pb-0 flex flex-col justify-center">
-              <motion.span
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.4 }}
-                className="text-[0.55rem] uppercase tracking-ultra font-bold text-secondary-text mb-3 block"
-              >
-                OUR MISSION
-              </motion.span>
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.5 }}
-                className="text-[0.6875rem] uppercase tracking-[0.1em] leading-loose text-on-surface/50 max-w-[18rem]"
-              >
+            {/* Left Column */}
+            <div className="md:w-2/5 md:pr-16 flex-shrink-0">
+              <span className="text-[0.55rem] uppercase tracking-ultra font-bold text-secondary-text block mb-3">OUR MISSION</span>
+              <p className="text-[0.6875rem] uppercase tracking-[0.1em] leading-loose text-on-surface/40 max-w-xs">
                 Cinematic excellence for luxury brands & hotels — crafted from Srinagar, delivered worldwide.
-              </motion.p>
+              </p>
             </div>
 
-            {/* Vertical Divider — hidden on mobile */}
-            <div className="hidden md:block w-px bg-outline/30 self-stretch" />
+            {/* Thin divider — desktop only */}
+            <div className="hidden md:block w-px bg-outline/25 flex-shrink-0" />
 
-            {/* Right Column — 60% */}
-            <div className="pl-0 md:pl-12 flex flex-col justify-center gap-0">
-              {/* Main Paragraph */}
-              <motion.p
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.45 }}
-                className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-lg"
-              >
+            {/* Right Column */}
+            <div className="md:flex-1 md:pl-16">
+              {/* Tagline */}
+              <p className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-lg">
                 END-TO-END CINEMATIC SOLUTIONS FOR LUXURY BRANDS AND HOTELS WORLDWIDE — VIDEO EDITING, CINEMATOGRAPHY, AND BRANDING, CRAFTED FROM SRINAGAR.
-              </motion.p>
+              </p>
 
-              {/* Status */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="mt-5 flex items-center gap-2"
-              >
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse-red flex-shrink-0"></span>
+              {/* Status dot */}
+              <div className="mt-5 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse-red flex-shrink-0" />
                 <span className="text-[0.6rem] uppercase tracking-ultra font-bold text-on-surface/70">AVAILABLE FOR PROJECTS</span>
-              </motion.div>
+              </div>
 
               {/* CTA Buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.7 }}
-                className="mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
-              >
+              <div className="mt-7 flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => setIsQuoteModalOpen(true)}
-                  className="w-full sm:w-auto bg-white text-primary px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text hover:scale-[1.02] transition-all duration-300"
+                  className="sm:w-auto bg-white text-primary px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all duration-300"
                 >
                   START A PROJECT
                 </button>
                 <a
                   href="#work-gallery"
-                  className="w-full sm:w-auto border border-outline/30 text-white px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:border-white hover:bg-white/5 transition-all duration-300 text-center"
+                  className="sm:w-auto border border-outline/40 text-white px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:border-white hover:bg-white/5 transition-all duration-300 text-center"
                 >
                   VIEW MY WORK
                 </a>
-              </motion.div>
+              </div>
 
-              {/* Client Portal — demoted, secondary */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.9 }}
-                className="mt-7 pt-6 border-t border-outline/20 flex items-center gap-3"
-              >
-                <span className="text-[0.55rem] uppercase tracking-[0.18em] text-on-surface/35 font-medium">EXISTING CLIENTS</span>
-                <span className="text-outline/30">→</span>
+              {/* Client Portal — demoted but clearly a button */}
+              <div className="mt-8 pt-6 border-t border-outline/20 flex flex-wrap items-center gap-3">
+                <span className="text-[0.55rem] uppercase tracking-widest text-on-surface/35">EXISTING CLIENTS</span>
+                <span className="text-on-surface/20 text-xs">→</span>
                 <a
                   href="/#portal"
-                  className="text-[0.55rem] uppercase tracking-[0.18em] text-on-surface/50 hover:text-white transition-colors duration-300 font-medium underline underline-offset-4 decoration-outline/30 hover:decoration-white"
+                  className="inline-flex items-center gap-1.5 border border-outline/30 text-on-surface/60 px-4 py-2 text-[0.55rem] font-bold uppercase tracking-widest hover:border-white/30 hover:text-white transition-all duration-300"
                 >
-                  ACCESS YOUR PRIVATE DASHBOARD
+                  <span className="w-1 h-1 rounded-full bg-red-600 flex-shrink-0" />
+                  CLIENT PORTAL
                 </a>
-              </motion.div>
+              </div>
             </div>
+
           </div>
         </motion.div>
 

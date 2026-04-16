@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { ArrowDown, ArrowRight, X, CheckCircle2, ChevronDown, Menu, ArrowUp } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
@@ -268,6 +268,8 @@ const CustomSelect = ({
   );
 };
 
+
+
 export default function App() {
   const [activeLink, setActiveLink] = useState("HOME");
   const [navTheme, setNavTheme] = useState<"dark" | "light">("dark");
@@ -278,6 +280,9 @@ export default function App() {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<number | null>(0);
   const [isRightClickOverlayOpen, setIsRightClickOverlayOpen] = useState(false);
+
+  const { scrollY } = useScroll();
+  const scrollIndicatorOpacity = useTransform(scrollY, [0, 150], [1, 0]);
 
   // Handle cinematic right-click interaction
   useEffect(() => {
@@ -542,19 +547,31 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <header id="home" className="min-h-screen flex flex-col justify-center pt-32 md:pt-48 pb-12 md:pb-24 px-8 max-w-screen-2xl mx-auto">
+      <header id="home" className="relative min-h-screen flex flex-col justify-center pt-32 md:pt-48 pb-12 md:pb-24 px-8 max-w-screen-2xl mx-auto">
+        {/* Cinematic Scroll Indicator */}
+        <motion.div 
+          style={{ opacity: scrollIndicatorOpacity }}
+          className="fixed right-8 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-6 z-40 pointer-events-none"
+        >
+          <span className="text-[0.55rem] [writing-mode:vertical-lr] tracking-[0.4em] font-light text-white/40 uppercase">SCROLL</span>
+          <div className="w-[1px] h-20 bg-white/10 overflow-hidden relative">
+            <motion.div 
+              animate={{ top: ["-100%", "100%"] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute left-0 w-full h-[80%] bg-gradient-to-b from-transparent via-white/40 to-transparent"
+            />
+          </div>
+        </motion.div>
 
         <motion.h1
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[clamp(2.5rem,8vw,8rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24"
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+          className="text-[clamp(2.5rem,8vw,8rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24 relative z-20"
         >
-          {/* SEO: Full name + keywords hidden via sr-only — crawled by Google, invisible to users */}
           <span className="sr-only">
-            Wasim Pakhtoon — Video Editor &amp; Cinematographer in Kashmir. Professional cinematic video production, drone footage, hotel videography, color grading, and brand identity design in Srinagar, Kashmir, India.
+            Wasim Pakhtoon — Video Editor & Cinematographer in Kashmir. Professional cinematic video production, drone footage, hotel videography, color grading, and brand identity design in Srinagar, Kashmir, India.
           </span>
-          {/* Visually displayed: 3-word cinematic tagline */}
           <span aria-hidden="true">DELIVERING<br />CINEMATIC<br />EXCELLENCE</span>
         </motion.h1>
 
@@ -573,7 +590,7 @@ export default function App() {
               END-TO-END CINEMATIC SOLUTIONS FOR LUXURY BRANDS AND HOTELS WORLDWIDE — VIDEO EDITING, CINEMATOGRAPHY, AND BRANDING, CRAFTED FROM SRINAGAR.
             </p>
             <div className="mt-4 md:mt-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse-green"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse-red"></span>
               <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">AVAILABLE FOR PROJECTS</span>
             </div>
             <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-center gap-4">

@@ -20,6 +20,7 @@ const pexelsGrid = [
 
 const navLinks = [
   { name: "WORK", href: "#work-gallery" },
+  { name: "SERVICES", href: "#services" },
   { name: "ABOUT", href: "#about" },
   { name: "CONTACT", href: "#contact" },
 ];
@@ -89,19 +90,31 @@ const editingProjects = [
   },
 ];
 
-const processSteps = [
+const services = [
   {
-    title: "GEAR & CAPTURE",
-    description: "Utilizing professional mirrorless cameras and advanced drone systems (from DJI Mini 4K to DJI 3 Pro) for high-end cinematic and aerial footage."
+    id: "01",
+    title: "Cinematic Brand Films",
+    description: "Full-scale storytelling from concept to final edit, crafted to elevate your brand visually and leave a lasting impression.",
+    tags: ["Concept & Script", "Full Production", "Color Grading", "Sound Design"],
   },
   {
-    title: "POST-PRODUCTION",
-    description: "Industry-standard editing, motion graphics, and color grading using the complete Adobe Creative Suite to craft a seamless narrative."
+    id: "02",
+    title: "Luxury Property Showcases",
+    description: "High-end visuals combining aerial and interior cinematography to drive bookings, elevate perception, and capture every detail.",
+    tags: ["Drone Aerial", "Interior Shoots", "Hotels & Villas", "Real Estate"],
   },
   {
-    title: "FINAL DELIVERY",
-    description: "Providing fully optimized, premium visual assets that elevate your brand's presence across all digital platforms."
-  }
+    id: "03",
+    title: "Aerial & Drone Visuals",
+    description: "Professional drone cinematography capturing scale, landscape, and perspective — giving your audience a view they cannot forget.",
+    tags: ["DJI 3 Pro", "DJI Mini 4K", "4K Footage", "Landscape & Architecture"],
+  },
+  {
+    id: "04",
+    title: "Social Media Visual Campaigns",
+    description: "High-impact short-form content and edits designed for reach, engagement, and conversions across all major platforms.",
+    tags: ["Reels & Shorts", "Motion Graphics", "Platform Optimized", "Branded Content"],
+  },
 ];
 
 const skillCategories = [
@@ -326,40 +339,49 @@ export default function App() {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: '0px 0px -95% 0px', // Detect exactly what's at the top of the viewport
+      rootMargin: '-10% 0px -85% 0px', // Precise zone at the top of the viewport
       threshold: 0
     };
 
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          const id = entry.target.id;
-          
-          // Special cases for mapped sections
-          if (id === 'home') {
-            setActiveLink("HOME");
-          } else if (id === 'work' || id === 'work-gallery') {
-            setActiveLink("WORK");
-          } else {
-            const link = navLinks.find(l => l.href === `#${id}`);
-            if (link) {
-              setActiveLink(link.name);
-            }
-          }
-          
-          // Update Nav Theme
-          if (sectionThemes[id]) {
-            setNavTheme(sectionThemes[id]);
-          }
+      // Find the most relevant intersecting entry
+      const intersectingEntry = entries.find(entry => entry.isIntersecting);
+      
+      if (intersectingEntry) {
+        const id = intersectingEntry.target.id;
+        
+        // Manual override for hero
+        if (id === 'home') {
+          setActiveLink("HOME");
+          setNavTheme("dark");
+          return;
         }
-      });
+
+        // Map IDs to nav links
+        if (id === 'work' || id === 'work-gallery') {
+          setActiveLink("WORK");
+          setNavTheme("light");
+        } else if (id === 'services') {
+          setActiveLink("SERVICES");
+          setNavTheme("dark");
+        } else if (id === 'about') {
+          setActiveLink("ABOUT");
+          setNavTheme("light");
+        } else if (id === 'faq') {
+          setActiveLink("ABOUT"); // Keep about highlighted for FAQ? Or maybe none.
+          setNavTheme("light");
+        } else if (id === 'contact') {
+          setActiveLink("CONTACT");
+          setNavTheme("light");
+        }
+      }
     };
 
     const observer = new IntersectionObserver(handleIntersection, observerOptions);
     
-    // Observe all sections
-    const sectionIds = ['home', 'work', 'work-gallery', 'services', 'about', 'faq', 'contact'];
-    sectionIds.forEach(id => {
+    // observe all primary section containers
+    const sections = ['home', 'work', 'services', 'about', 'faq', 'contact'];
+    sections.forEach(id => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
@@ -907,89 +929,159 @@ export default function App() {
 
 
       {/* Services Section */}
-      <section className="px-8 md:px-12 py-24 md:py-36 max-w-screen-2xl mx-auto" id="services">
-        <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-16">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-white/60"></span>
-            <h2 className="text-[0.55rem] uppercase tracking-[0.2em] font-bold text-white/40">SERVICES &amp; WORKFLOW</h2>
-          </div>
-        </div>
+      <section className="bg-black" id="services">
+        <div className="px-8 md:px-12 py-24 md:py-36 max-w-screen-2xl mx-auto">
 
-        <div className="max-w-5xl">
-          <motion.h3
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-[clamp(2rem,6vw,5rem)] font-black uppercase tracking-tighter leading-[0.88] mb-16 md:mb-24"
-          >
-            Complete visual production.<br />Powered by industry tools.
-          </motion.h3>
-          
-          <div className="flex flex-col border-t border-outline/15">
-            {processSteps.map((step, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 12 }}
+          {/* Section Header */}
+          <div className="border-t border-white/10 pt-8 mb-16 md:mb-24 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div>
+              <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-white/25 block mb-3">WHAT WE DO</span>
+              <motion.h2
+                initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.08 }}
-                className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-10 md:py-14 border-b border-outline/15 items-start group hover:bg-white/[0.03] transition-colors duration-500 -mx-8 md:-mx-12 px-8 md:px-12"
+                className="text-[clamp(2.2rem,6vw,5.5rem)] font-black uppercase tracking-tighter leading-[0.88] text-white"
               >
-                <div className="md:col-span-2">
-                  <span className="text-[0.5rem] font-bold text-white/20 tracking-[0.2em]">STEP 0{index + 1}</span>
+                Cinematic services.<br />Built for results.
+              </motion.h2>
+            </div>
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.15 }}
+              className="hidden md:block text-[0.6rem] uppercase tracking-[0.18em] leading-loose text-white/30 max-w-xs text-right"
+            >
+              Every service is a complete production system — not just a task.
+            </motion.p>
+          </div>
+
+          {/* Services List */}
+          <div className="flex flex-col">
+            {services.map((service, index) => (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
+                className="group grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-10 md:py-14 border-b border-white/8 items-start hover:border-white/20 transition-all duration-500 cursor-default"
+              >
+                {/* Index */}
+                <div className="md:col-span-1">
+                  <span className="text-[0.5rem] font-bold text-white/15 tracking-[0.25em] group-hover:text-white/30 transition-colors duration-500">
+                    {service.id}
+                  </span>
                 </div>
+
+                {/* Title */}
                 <div className="md:col-span-4">
-                  <h4 className="text-xl md:text-2xl font-black uppercase tracking-tighter text-white/80 group-hover:text-white transition-colors duration-300">{step.title}</h4>
+                  <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white/60 group-hover:text-white transition-colors duration-500 leading-tight">
+                    {service.title}
+                  </h3>
                 </div>
-                <div className="md:col-span-5">
-                  <p className="text-[0.65rem] md:text-[0.75rem] uppercase tracking-widest leading-relaxed text-white/30 group-hover:text-white/60 transition-colors duration-300">
-                    {step.description}
+
+                {/* Description + Tags */}
+                <div className="md:col-span-6 flex flex-col gap-6">
+                  <p className="text-[0.65rem] md:text-[0.75rem] uppercase tracking-[0.12em] leading-loose text-white/30 group-hover:text-white/55 transition-colors duration-500 max-w-lg">
+                    {service.description}
                   </p>
+                  <div className="flex flex-wrap gap-2">
+                    {service.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[0.45rem] uppercase tracking-[0.18em] font-bold border border-white/10 text-white/25 px-3 py-1.5 group-hover:border-white/20 group-hover:text-white/40 transition-all duration-500"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <div className="md:col-span-1 flex justify-end items-start pt-1">
-                  <ArrowRight className={`w-4 h-4 text-white/10 transition-all duration-500 group-hover:text-white/40 group-hover:translate-x-1`} />
+
+                {/* Arrow */}
+                <div className="md:col-span-1 flex justify-end items-start pt-2">
+                  <ArrowRight className="w-4 h-4 text-white/10 group-hover:text-white/50 group-hover:translate-x-1 transition-all duration-500" />
                 </div>
               </motion.div>
             ))}
           </div>
+
+          {/* Bottom CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+            className="mt-16 flex flex-col sm:flex-row sm:items-center gap-6"
+          >
+            <button
+              onClick={() => setIsQuoteModalOpen(true)}
+              className="group inline-flex items-center gap-3 bg-white text-black px-10 py-4 text-[0.6rem] font-black uppercase tracking-[0.2em] hover:bg-white/90 active:scale-[0.98] transition-all duration-300"
+            >
+              START A PROJECT
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
+            </button>
+            <span className="text-[0.5rem] uppercase tracking-[0.2em] text-white/20">
+              All projects are scoped and quoted personally.
+            </span>
+          </motion.div>
+
         </div>
       </section>
 
       {/* About Section */}
       <section className="bg-[#f8f8f8]" id="about">
-        <div className="px-8 py-32 max-w-screen-2xl mx-auto">
+        <div className="px-8 md:px-12 py-24 md:py-32 max-w-screen-2xl mx-auto">
           <div className="border-t border-black/10 pt-8">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
+
               {/* Left Column: Label */}
-              <div className="md:col-span-4 flex items-center gap-2 self-start">
-                <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
-                <h2 className="text-[0.625rem] uppercase tracking-ultra font-black text-black/30">THE HANDS-ON APPROACH:</h2>
+              <div className="md:col-span-4 self-start">
+                <div className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-black flex-shrink-0" />
+                  <span className="text-[0.5rem] uppercase tracking-[0.25em] font-black text-black/25">ABOUT THE STUDIO</span>
+                </div>
               </div>
 
               {/* Right Column: Bio & Skills */}
               <div className="md:col-span-8">
-                <div className="max-w-3xl">
+                <div className="max-w-2xl">
+
+                  {/* Heading */}
                   <motion.h2
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-[0.85] mb-12 text-black"
+                    className="text-[clamp(2.4rem,6vw,5.5rem)] font-black tracking-tighter uppercase leading-[0.88] mb-10 text-black"
                   >
-                    Creating with vision.<br />Executing with precision.
+                    Vision.<br />Precision.<br />Cinematic.
                   </motion.h2>
 
-                  <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 }}
-                    className="text-[0.6875rem] md:text-xs uppercase tracking-[0.2em] leading-relaxed text-black/60 mb-20 max-w-2xl font-bold"
-                  >
-                    Based in Srinagar, Wasim Pakhtoon leads high-end cinematic productions for properties and global brands as a freelance video editor and cinematographer. We handle every phase of the video shoot in Kashmir—from the initial storyboard to final post-production—ensuring world-class standards for hotel shoots and commercial projects. Our focus is on seamless execution and uncompromising quality.
-                  </motion.p>
+                  {/* Divider */}
+                  <div className="w-8 h-px bg-black/15 mb-8" />
+
+                  {/* Short Bio — 3 scannable lines */}
+                  <div className="flex flex-col gap-5 mb-16">
+                    {[
+                      "A cinematic filmmaker based in Srinagar, Kashmir.",
+                      "I craft visual stories for luxury hotels, premium brands, and global clients.",
+                      "Every project — from concept to final delivery — is handled end-to-end.",
+                    ].map((line, i) => (
+                      <motion.p
+                        key={i}
+                        initial={{ opacity: 0, y: 12 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.08 + i * 0.07 }}
+                        className="text-[0.65rem] md:text-[0.7rem] uppercase tracking-[0.18em] leading-loose text-black/50 font-bold"
+                      >
+                        {line}
+                      </motion.p>
+                    ))}
+                  </div>
 
                   {/* Skills Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 pt-12 border-t border-black/10">
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10 pt-10 border-t border-black/8">
                     {skillCategories.map((category, idx) => (
                       <motion.div
                         key={category.title}
@@ -998,14 +1090,14 @@ export default function App() {
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 + idx * 0.1 }}
                       >
-                        <h4 className="text-[0.625rem] font-black tracking-ultra text-black mb-6 underline underline-offset-8 decoration-black/10">
+                        <h4 className="text-[0.5rem] font-black tracking-[0.2em] uppercase text-black/40 mb-5">
                           {category.title}
                         </h4>
-                        <ul className="space-y-4">
+                        <ul className="space-y-3">
                           {category.skills.map((skill) => (
-                            <li 
-                              key={skill} 
-                              className="text-[0.55rem] tracking-[0.2em] text-black/40 hover:text-black transition-colors cursor-default list-none font-bold"
+                            <li
+                              key={skill}
+                              className="text-[0.5rem] tracking-[0.15em] text-black/30 hover:text-black transition-colors cursor-default list-none font-bold uppercase"
                             >
                               {skill}
                             </li>
@@ -1014,6 +1106,7 @@ export default function App() {
                       </motion.div>
                     ))}
                   </div>
+
                 </div>
               </div>
             </div>

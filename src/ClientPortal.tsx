@@ -569,9 +569,12 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
             </div>
           </div>
         </div>
-        <div className="p-4 border-t border-white/5">
-          <button onClick={onGoHome} className="w-full flex items-center gap-2 px-3 py-2.5 text-[0.6rem] uppercase tracking-widest font-bold text-white/20 hover:text-white hover:bg-white/5 transition-colors">
-            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg> Back to Website
+        <div className="p-4 border-t border-white/5 space-y-1">
+          <button onClick={onGoHome} className="w-full flex items-center gap-2 px-3 py-2 text-[0.6rem] uppercase tracking-widest font-bold text-white/20 hover:text-white hover:bg-white/5 transition-colors">
+            <ArrowLeft className="w-3 h-3" /> Back to Website
+          </button>
+          <button onClick={onLogout} className="w-full flex items-center gap-2 px-3 py-2 text-[0.6rem] uppercase tracking-widest font-bold text-red-500/40 hover:text-red-500 hover:bg-red-500/5 transition-colors">
+            <LogOut className="w-3 h-3" /> Sign Out
           </button>
         </div>
       </aside>
@@ -627,12 +630,46 @@ const Dashboard = ({ data, onLogout, onGoHome }: { data: ClientData; onLogout: (
 // ─── Root ─────────────────────────────────────────────────────────────────────
 export default function ClientPortal({ onClose }: { onClose?: () => void }) {
   const [clientData, setClientData] = useState<ClientData | null>(null);
-  const handleLogout = () => { setClientData(null); onClose?.(); };
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
+
+  // Restore session on mount
+  useEffect(() => {
+    const stored = localStorage.getItem("wasim_client_session");
+    if (stored) {
+      try {
+        setClientData(JSON.parse(stored));
+      } catch (e) {
+        console.error("Failed to parse stored session", e);
+        localStorage.removeItem("wasim_client_session");
+      }
+    }
+    setIsCheckingSession(false);
+  }, []);
+
+  const handleLogin = (data: ClientData) => {
+    setClientData(data);
+    localStorage.setItem("wasim_client_session", JSON.stringify(data));
+  };
+
+  const handleLogout = () => {
+    setClientData(null);
+    localStorage.removeItem("wasim_client_session");
+    onClose?.();
+  };
+
+  if (isCheckingSession) {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <PortalLoadingState />
+      </div>
+    );
+  }
+
   return (
     <AnimatePresence mode="wait">
       {!clientData ? (
         <motion.div key="login" exit={{ opacity: 0 }} transition={{ duration: 0.4 }}>
-          <LoginGate onLogin={setClientData} />
+          <LoginGate onLogin={handleLogin} />
         </motion.div>
       ) : (
         <motion.div key="dashboard" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>

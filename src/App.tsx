@@ -72,9 +72,10 @@ const droneProjects = [
   {
     id: 4,
     year: "2024",
-    title: "COASTAL PROPERTY REEL",
+    title: "AERIAL KASHMIR",
     category: "DRONE",
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts",
+    youtubeId: "go1COYbNIdI",
+    fullWidth: true,
   },
 ];
 
@@ -760,7 +761,7 @@ export default function App() {
                             initial={{ opacity: 0, y: 20 }} 
                             animate={{ opacity: 1, y: 0 }} 
                             viewport={{ once: true }} 
-                            className="group cursor-active md:cursor-zoom-in"
+                            className={`group cursor-active md:cursor-zoom-in ${(project as any).fullWidth ? "md:col-span-2" : ""}`}
                           >
                             <div className={`${cat.title === "BRAND STORIES" ? "aspect-square p-12" : "aspect-video"} bg-black/[0.03] overflow-hidden relative border border-black/5`}>
                               {(project as any).vimeoId ? (
@@ -772,6 +773,17 @@ export default function App() {
                                     allow="autoplay; fullscreen; picture-in-picture"
                                     title={`${project.title} — cinematic video production by Wasim Pakhtoon, Kashmir`}
                                     loading="lazy"
+                                  />
+                                </div>
+                              ) : (project as any).youtubeId ? (
+                                <div className="w-full h-full overflow-hidden bg-black">
+                                  <iframe
+                                    src={`https://www.youtube-nocookie.com/embed/${(project as any).youtubeId}?autoplay=1&mute=1&loop=1&playlist=${(project as any).youtubeId}&controls=0&rel=0&showinfo=0&iv_load_policy=3&modestbranding=1&vq=hd1080&hd=1&autohide=1`}
+                                    className="w-[100.5%] h-[100.5%] -ml-[0.25%] -mt-[0.25%]"
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    title={`${project.title} — aerial visuals by Wasim Pakhtoon, Kashmir`}
+                                    loading="eager"
                                   />
                                 </div>
                               ) : (

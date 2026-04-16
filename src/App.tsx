@@ -44,7 +44,7 @@ const brandingProjects = [
     year: "2024",
     title: "MUTATE TECH IDENTITY",
     category: "BRANDING",
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuChMoA0l5Zw1yXCauYAFPoWeYOVWjA3tjztcuVOi_kdjAJGLS6At-It-CP61QsW1z9_c0b4g7Uctx1NisEDppR8T2h5hQOzV_QcbWX-ikv88mHjSB44jOykWnsFTr93yuusnUKx1wiyZ_C_qehchIBFm68GNcgdfRByhUG4ZzRAAmEA2IvzdromgSWJetLnkkzsRznJeum1GqomErYW5u9VIa_MIXzjqONiaC6tTg6G3yj-BqS9aSxJ-I9P1LLvT_bKOq5DpWWCCi0",
+    image: "https://images.pexels.com/photos/1766604/pexels-photo-1766604.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
 ];
 
@@ -85,7 +85,7 @@ const editingProjects = [
     year: "2024",
     title: "MIDNIGHT SESSIONS",
     category: "EDITING",
-    image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts",
+    image: "https://images.pexels.com/photos/3183183/pexels-photo-3183183.jpeg?auto=compress&cs=tinysrgb&w=800",
   },
 ];
 
@@ -149,8 +149,8 @@ const portfolioCategories = [
     description: "Story-driven visuals crafted for brands and businesses",
     projects: cinematicProjects,
     previews: [
-      "https://images.pexels.com/photos/35066424/pexels-photo-35066424.jpeg?auto=compress&cs=tinysrgb&w=600",
-      "https://images.pexels.com/photos/35028172/pexels-photo-35028172.jpeg?auto=compress&cs=tinysrgb&w=600"
+      "https://images.pexels.com/photos/3062541/pexels-photo-3062541.jpeg?auto=compress&cs=tinysrgb&w=800",
+      "https://images.pexels.com/photos/2510428/pexels-photo-2510428.jpeg?auto=compress&cs=tinysrgb&w=800"
     ]
   },
   {
@@ -159,7 +159,7 @@ const portfolioCategories = [
     description: "Drone cinematography for real estate, travel, and landscapes",
     projects: droneProjects,
     previews: [
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts"
+      "https://images.pexels.com/photos/210243/pexels-photo-210243.jpeg?auto=compress&cs=tinysrgb&w=800"
     ]
   },
   {
@@ -168,7 +168,7 @@ const portfolioCategories = [
     description: "Editing, color grading, and cinematic finishing",
     projects: editingProjects,
     previews: [
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDUSq7yEUXaW2RtWvMeyZrMwCH6fxoHLJviEx7nlU1OBIYRij7gIrfUISIqu6HAUYZ6VwQVLu4u6ugcYvaweKPQxRZtI82sDE_uDf4VuJeju9NVtDtN2pmc6qq32N44dmEBjyvHKf2rB2xvs5yU_9JxwYkbAjX1ur4jrvyKGiCY-SIkNSQ-PjmK6l65Rqe-9elUDUT2EQf77aDP6SC0C-3No7ep5b_iaeM69oGXG27jPgYkMs75byh8Gm93JLclpGbJ39q66cTgpts"
+      "https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=800"
     ]
   },
   {
@@ -763,7 +763,7 @@ export default function App() {
                             viewport={{ once: true }} 
                             className={`group cursor-active md:cursor-zoom-in ${(project as any).fullWidth ? "md:col-span-2" : ""}`}
                           >
-                            <div className={`${cat.title === "BRAND STORIES" ? "aspect-square p-12" : "aspect-video"} bg-black/[0.03] overflow-hidden relative border border-black/5`}>
+                            <div className={`${cat.title === "BRAND STORIES" ? "aspect-square" : "aspect-video"} overflow-hidden relative`}>
                               {(project as any).vimeoId ? (
                                 <div className="w-full h-full pointer-events-none">
                                   <iframe
@@ -792,7 +792,7 @@ export default function App() {
                                   alt={`${project.title} — ${cat.title.toLowerCase()} by Wasim Pakhtoon, video editor in Kashmir`}
                                   loading="lazy"
                                   decoding="async"
-                                  className={`w-full h-full ${cat.title === "BRAND STORIES" ? "object-contain scale-90 group-hover:scale-100" : "object-cover group-hover:scale-110"} transition-all duration-700`}
+                                  className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-700`}
                                 />
                               )}
                               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-end p-6">

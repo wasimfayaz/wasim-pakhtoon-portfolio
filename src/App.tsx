@@ -283,9 +283,6 @@ export default function App() {
 
   const { scrollY } = useScroll();
   const scrollIndicatorOpacity = useTransform(scrollY, [0, 150], [1, 0]);
-  const spotlightScale = useTransform(scrollY, [0, 600], [1, 3.5]);
-  const spotlightX = useTransform(scrollY, [0, 600], ["-50%", "-35%"]);
-  const spotlightY = useTransform(scrollY, [0, 600], ["-50%", "-65%"]);
 
   // Handle cinematic right-click interaction
   useEffect(() => {
@@ -576,30 +573,15 @@ export default function App() {
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="text-[clamp(2.5rem,8vw,8rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24 relative z-20 overflow-hidden py-12 -my-12"
+          className="text-[clamp(2.5rem,8vw,8rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24 relative z-20"
         >
           {/* Base Text */}
           <span className="sr-only">
             Wasim Pakhtoon — Video Editor & Cinematographer in Kashmir. Professional cinematic video production, drone footage, hotel videography, color grading, and brand identity design in Srinagar, Kashmir, India.
           </span>
           <span aria-hidden="true" className="relative z-10">DELIVERING<br />CINEMATIC<br />EXCELLENCE</span>
-
-          {/* Palmer-style Difference Blend Spotlight — Scroll Driven */}
-          <motion.div
-            className="absolute pointer-events-none z-20 rounded-full bg-white"
-            style={{
-              width: window.innerWidth < 768 ? '150px' : '300px',
-              height: window.innerWidth < 768 ? '150px' : '300px',
-              left: '50%',
-              top: '50%',
-              scale: spotlightScale,
-              x: spotlightX,
-              y: spotlightY,
-              mixBlendMode: 'difference'
-            }}
-          />
         </motion.h1>
 
         {/* Hero Info Section */}

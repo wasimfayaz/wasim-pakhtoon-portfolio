@@ -5,7 +5,7 @@
 
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
 import { ArrowDown, ArrowRight, X, CheckCircle2, ChevronDown, Menu, ArrowUp } from "lucide-react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 // Image Imports
 import LogoImg from "../images/logo.png";
@@ -204,7 +204,7 @@ const CustomSelect = ({
 
   return (
     <div className="space-y-2 relative">
-      <label className={`text-[0.625rem] uppercase tracking-ultra font-bold ${theme === 'light' ? 'text-primary/40' : 'text-secondary-text'}`}>
+      <label className={`text-[0.625rem] uppercase tracking-ultra font-bold ${theme === 'light' ? 'text-black/40' : 'text-secondary-text'}`}>
         {name.replace('_', ' ')} {required && "*"}
       </label>
       <input type="hidden" name={name} value={selected} required={required} />
@@ -214,18 +214,18 @@ const CustomSelect = ({
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full flex justify-between items-center bg-transparent border-0 border-b py-3 px-0 text-sm uppercase tracking-widest transition-colors group text-left ${
           theme === 'light' 
-            ? 'border-primary/10 focus:border-primary' 
+            ? 'border-black/10 focus:border-black' 
             : 'border-outline/30 focus:border-white'
         }`}
       >
         <span className={selected 
-          ? (theme === 'light' ? "text-primary" : "text-white") 
-          : (theme === 'light' ? "text-primary/20" : "text-outline/40")
+          ? (theme === 'light' ? "text-black" : "text-white") 
+          : (theme === 'light' ? "text-black/20" : "text-outline/40")
         }>
           {selectedLabel}
         </span>
         <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${
-          theme === 'light' ? 'text-primary/40' : 'text-secondary-text'
+          theme === 'light' ? 'text-black/40' : 'text-secondary-text'
         } ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
@@ -239,8 +239,8 @@ const CustomSelect = ({
               exit={{ opacity: 0, y: 10 }}
               className={`absolute left-0 right-0 top-full mt-2 border z-[120] backdrop-blur-xl max-h-60 overflow-y-auto ${
                 theme === 'light' 
-                  ? 'bg-white border-primary/10 shadow-xl' 
-                  : 'bg-[#191919] border-outline/20'
+                  ? 'bg-white border-black/10 shadow-xl' 
+                  : 'bg-[#0a0a0a] border-outline/20'
               }`}
             >
               {options.map((option) => (
@@ -253,7 +253,7 @@ const CustomSelect = ({
                   }}
                   className={`w-full text-left px-4 py-3 text-[0.625rem] uppercase tracking-widest transition-colors ${
                     theme === 'light'
-                      ? (selected === option.value ? "text-primary bg-primary/5" : "text-primary/60 hover:bg-primary/5")
+                      ? (selected === option.value ? "text-black bg-black/5" : "text-black/60 hover:bg-black/5")
                       : (selected === option.value ? "text-white bg-white/5" : "text-secondary-text hover:bg-white/5")
                   }`}
                 >
@@ -283,6 +283,9 @@ export default function App() {
 
   const { scrollY } = useScroll();
   const scrollIndicatorOpacity = useTransform(scrollY, [0, 150], [1, 0]);
+  const spotlightScale = useTransform(scrollY, [0, 600], [1, 3.5]);
+  const spotlightX = useTransform(scrollY, [0, 600], ["-50%", "-35%"]);
+  const spotlightY = useTransform(scrollY, [0, 600], ["-50%", "-65%"]);
 
   // Handle cinematic right-click interaction
   useEffect(() => {
@@ -404,14 +407,14 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-on-surface selection:bg-white selection:text-primary">
+    <div className="min-h-screen bg-background text-on-surface selection:bg-white selection:text-black">
       {/* Navigation */}
       <nav 
         className={`fixed top-0 w-full z-[100] transition-all duration-500 ${
           scrolled 
             ? (navTheme === "dark" 
-                ? "bg-[#131313]/80 backdrop-blur-md border-b border-outline/20 py-4" 
-                : "bg-[#f8f8f8]/80 backdrop-blur-md border-b border-primary/10 py-4") 
+                ? "bg-black/80 backdrop-blur-md border-b border-outline/20 py-4" 
+                : "bg-[#f8f8f8]/80 backdrop-blur-md border-b border-black/10 py-4") 
             : "bg-transparent border-b border-transparent py-6"
         }`}
       >
@@ -436,7 +439,7 @@ export default function App() {
                   className={`font-label uppercase tracking-[0.15em] text-[0.6875rem] font-medium transition-colors ${
                     navTheme === "dark" 
                       ? (activeLink === link.name ? "text-white opacity-100" : "text-white opacity-60")
-                      : (activeLink === link.name ? "text-primary opacity-100" : "text-primary opacity-60")
+                      : (activeLink === link.name ? "text-black opacity-100" : "text-black opacity-60")
                   }`}
                 >
                   {link.name}
@@ -453,7 +456,7 @@ export default function App() {
               className={`font-label uppercase tracking-[0.15em] text-[0.625rem] font-bold border-b py-1 transition-all duration-500 ${
                 navTheme === "dark"
                   ? "text-white border-white/20 hover:border-white"
-                  : "text-primary border-primary/20 hover:border-primary"
+                  : "text-black border-black/20 hover:border-black"
               }`}
             >
               LET'S TALK
@@ -462,7 +465,7 @@ export default function App() {
             
           <button 
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className={`md:hidden p-2 hover:bg-white/5 transition-colors z-50 rounded-full ${navTheme === 'light' ? 'text-primary' : 'text-white'}`}
+            className={`md:hidden p-2 hover:bg-white/5 transition-colors z-50 rounded-full ${navTheme === 'light' ? 'text-black' : 'text-white'}`}
             aria-label="Toggle Menu"
           >
             <AnimatePresence mode="wait">
@@ -526,14 +529,14 @@ export default function App() {
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => setIsMenuOpen(false)}
-                  className="w-full bg-white text-primary py-5 px-6 text-sm font-black uppercase tracking-[0.2em] rounded-none hover:bg-white/90 transition-all text-center"
+                  className="w-full bg-white text-black py-5 px-6 text-sm font-black uppercase tracking-[0.2em] rounded-none hover:bg-white/90 transition-all text-center"
                 >
                   LET'S TALK
                 </a>
                 <a
                   href="/#portal"
                   onClick={() => setIsMenuOpen(false)}
-                  className="w-full bg-white text-primary py-5 px-6 text-sm font-black uppercase tracking-[0.2em] rounded-none hover:bg-white/90 transition-all text-center"
+                  className="w-full bg-white text-black py-5 px-6 text-sm font-black uppercase tracking-[0.2em] rounded-none hover:bg-white/90 transition-all text-center"
                 >
                   CLIENT PORTAL
                 </a>
@@ -573,14 +576,30 @@ export default function App() {
 
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="text-[clamp(2.5rem,8vw,8rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24 relative z-20"
+          className="text-[clamp(2.5rem,8vw,8rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24 relative z-20 overflow-hidden py-12 -my-12"
         >
+          {/* Base Text */}
           <span className="sr-only">
             Wasim Pakhtoon — Video Editor & Cinematographer in Kashmir. Professional cinematic video production, drone footage, hotel videography, color grading, and brand identity design in Srinagar, Kashmir, India.
           </span>
-          <span aria-hidden="true">DELIVERING<br />CINEMATIC<br />EXCELLENCE</span>
+          <span aria-hidden="true" className="relative z-10">DELIVERING<br />CINEMATIC<br />EXCELLENCE</span>
+
+          {/* Palmer-style Difference Blend Spotlight — Scroll Driven */}
+          <motion.div
+            className="absolute pointer-events-none z-20 rounded-full bg-white hidden md:block"
+            style={{
+              width: '300px',
+              height: '300px',
+              left: '50%',
+              top: '50%',
+              scale: spotlightScale,
+              x: spotlightX,
+              y: spotlightY,
+              mixBlendMode: 'difference'
+            }}
+          />
         </motion.h1>
 
         {/* Hero Info Section */}
@@ -620,7 +639,7 @@ export default function App() {
               <div className="mt-7 flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => setIsQuoteModalOpen(true)}
-                  className="sm:w-auto bg-white text-primary px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all duration-300"
+                  className="sm:w-auto bg-white text-black px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all duration-300"
                 >
                   START A PROJECT
                 </button>
@@ -673,25 +692,25 @@ export default function App() {
         <div className="px-8 py-32 max-w-screen-2xl mx-auto">
           {/* Pexels Global Reach Section */}
           <div className="mb-32">
-            <div className="bg-white border border-primary/5 p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-10 group hover:border-primary/10 transition-colors duration-500 mb-8 border-l-4 border-l-primary/20 hover:border-l-primary shadow-sm">
+            <div className="bg-white border border-black/5 p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-10 group hover:border-black/10 transition-colors duration-500 mb-8 border-l-4 border-l-black/20 hover:border-l-black shadow-sm">
               <div className="max-w-xl">
-                <h3 className="text-sm md:text-base font-black uppercase tracking-tighter text-primary mb-3">Global Reach & Authority</h3>
-                <p className="text-[0.6875rem] text-primary/40 uppercase tracking-[0.1em] leading-relaxed">
+                <h3 className="text-sm md:text-base font-black uppercase tracking-tighter text-black mb-3">Global Reach & Authority</h3>
+                <p className="text-[0.6875rem] text-black/40 uppercase tracking-[0.1em] leading-relaxed">
                   Featured photography reaching hundreds of thousands of viewers worldwide on Pexels. Establishing visual authority through compelling, high-quality imagery.
                 </p>
               </div>
               
               <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 items-start sm:items-center w-full md:w-auto">
                 <div>
-                  <h4 className="text-5xl md:text-6xl font-black text-primary tracking-tighter">125.2K<span className="text-primary/30 text-3xl">+</span></h4>
-                  <div className="text-[0.625rem] text-primary/30 uppercase tracking-ultra font-bold mt-2">TOTAL VIEWS</div>
+                  <h4 className="text-5xl md:text-6xl font-black text-black tracking-tighter">125.2K<span className="text-black/30 text-3xl">+</span></h4>
+                  <div className="text-[0.625rem] text-black/30 uppercase tracking-ultra font-bold mt-2">TOTAL VIEWS</div>
                 </div>
                 
                 <a 
                   href="https://www.pexels.com/@wxeim-768574136/" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="w-full sm:w-auto border border-primary/10 text-primary px-8 py-5 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-primary hover:text-white transition-all duration-300 text-center flex items-center justify-center group-hover:border-primary/30"
+                  className="w-full sm:w-auto border border-black/10 text-black px-8 py-5 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-black hover:text-white transition-all duration-300 text-center flex items-center justify-center group-hover:border-black/30"
                 >
                   VIEW ACCOUNT <span className="ml-2 font-normal text-base leading-none transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
                 </a>
@@ -713,7 +732,7 @@ export default function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: idx * 0.1 }}
-                    className="aspect-[3/4] bg-primary/[0.03] overflow-hidden group relative cursor-zoom-in"
+                    className="aspect-[3/4] bg-black/[0.03] overflow-hidden group relative cursor-zoom-in"
                   >
                     <img 
                       src={img} 
@@ -722,7 +741,7 @@ export default function App() {
                       decoding="async"
                       className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
                     />
-                    <div className="absolute inset-0 border border-primary/5 group-hover:border-primary/10 transition-colors pointer-events-none z-10" />
+                    <div className="absolute inset-0 border border-black/5 group-hover:border-black/10 transition-colors pointer-events-none z-10" />
                     <div className="absolute top-4 left-4 z-20 flex items-center gap-2 transition-opacity duration-500">
                       <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
                       <span className="text-[0.5rem] tracking-ultra text-white font-bold uppercase">PEXELS</span>
@@ -734,30 +753,30 @@ export default function App() {
           </div>
 
           {/* View My Work Details */}
-          <div id="work-gallery" className="flex justify-between items-center border-t border-primary/10 pt-8 mb-16">
+          <div id="work-gallery" className="flex justify-between items-center border-t border-black/10 pt-8 mb-16">
             <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-              <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-primary">VIEW MY WORK:</h2>
+              <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
+              <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-black">VIEW MY WORK:</h2>
             </div>
           </div>
 
-          <div className="flex flex-col border-t border-primary/10">
+          <div className="flex flex-col border-t border-black/10">
             {portfolioCategories.map((cat) => (
-              <div key={cat.id} className="border-b border-primary/10">
+              <div key={cat.id} className="border-b border-black/10">
                 <motion.div
                   onClick={() => setActiveCategory(activeCategory === cat.id ? null : cat.id)}
                   whileHover={{ backgroundColor: "rgba(0,0,0,0.02)" }}
                   className="w-full flex flex-col md:flex-row justify-between items-start md:items-center py-10 px-4 cursor-pointer transition-all duration-500 group"
                 >
                   <div className="flex-1 space-y-2">
-                    <h3 className={`text-2xl md:text-3xl font-light uppercase tracking-tighter transition-colors ${activeCategory === cat.id ? 'text-primary' : 'text-primary/30 group-hover:text-primary'}`}>
+                    <h3 className={`text-2xl md:text-3xl font-light uppercase tracking-tighter transition-colors ${activeCategory === cat.id ? 'text-black' : 'text-black/30 group-hover:text-black'}`}>
                       {cat.title}
                     </h3>
-                    <p className="text-[0.625rem] text-primary/40 uppercase tracking-[0.15em] font-medium max-w-sm">
+                    <p className="text-[0.625rem] text-black/40 uppercase tracking-[0.15em] font-medium max-w-sm">
                       {cat.description}
                     </p>
                     <div className="pt-4 flex items-center gap-2 group-hover:gap-4 transition-all duration-300">
-                      <span className="text-[0.55rem] font-bold uppercase tracking-ultra text-primary">
+                      <span className="text-[0.55rem] font-bold uppercase tracking-ultra text-black">
                         {activeCategory === cat.id ? "CLOSE PROJECT" : "EXPLORE PROJECTS"}
                       </span>
                       <ArrowRight className={`w-3 h-3 transition-transform ${activeCategory === cat.id ? 'rotate-90' : 'group-hover:translate-x-1'}`} />
@@ -766,7 +785,7 @@ export default function App() {
 
                   <div className="mt-8 md:mt-0 flex items-center gap-4">
                     {cat.previews.map((img, i) => (
-                      <div key={i} className="w-24 h-16 md:w-32 md:h-20 overflow-hidden border border-primary/5 bg-primary/[0.03] grayscale hover:grayscale-0 transition-all duration-700">
+                      <div key={i} className="w-24 h-16 md:w-32 md:h-20 overflow-hidden border border-black/5 bg-black/[0.03] grayscale hover:grayscale-0 transition-all duration-700">
                         <img
                           src={img}
                           alt={`${cat.title.toLowerCase()} work preview — video production by Wasim Pakhtoon in Kashmir`}
@@ -776,7 +795,7 @@ export default function App() {
                         />
                       </div>
                     ))}
-                    <div className="w-10 h-10 flex items-center justify-center rounded-full border border-primary/10 group-hover:border-primary/30 transition-colors">
+                    <div className="w-10 h-10 flex items-center justify-center rounded-full border border-black/10 group-hover:border-black/30 transition-colors">
                       <span className={`text-xl font-light transition-transform duration-500 ${activeCategory === cat.id ? 'rotate-45' : ''}`}>+</span>
                     </div>
                   </div>
@@ -813,7 +832,7 @@ export default function App() {
                                   />
                                 </div>
                               ) : (project as any).youtubeId ? (
-                                <div className="w-full h-full overflow-hidden bg-primary">
+                                <div className="w-full h-full overflow-hidden bg-black">
                                   <iframe
                                     src={`https://www.youtube-nocookie.com/embed/${(project as any).youtubeId}?autoplay=1&mute=1&loop=1&playlist=${(project as any).youtubeId}&controls=0&rel=0&showinfo=0&iv_load_policy=3&modestbranding=1&vq=hd1080&hd=1&autohide=1`}
                                     className="w-[100.5%] h-[100.5%] -ml-[0.25%] -mt-[0.25%]"
@@ -832,7 +851,7 @@ export default function App() {
                                   className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-700`}
                                 />
                               )}
-                              <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/10 to-transparent flex flex-col justify-end p-6">
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-end p-6">
                                 <span className="text-[0.55rem] text-white/50 uppercase tracking-ultra mb-1">{project.year}</span>
                                 <h4 className="text-lg font-black uppercase tracking-tighter text-white">{project.title}</h4>
                               </div>
@@ -886,12 +905,12 @@ export default function App() {
       {/* About Section */}
       <section className="bg-[#f8f8f8]" id="about">
         <div className="px-8 py-32 max-w-screen-2xl mx-auto">
-          <div className="border-t border-primary/10 pt-8">
+          <div className="border-t border-black/10 pt-8">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
               {/* Left Column: Label */}
               <div className="md:col-span-4 flex items-center gap-2 self-start">
-                <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                <h2 className="text-[0.625rem] uppercase tracking-ultra font-black text-primary/30">THE HANDS-ON APPROACH:</h2>
+                <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
+                <h2 className="text-[0.625rem] uppercase tracking-ultra font-black text-black/30">THE HANDS-ON APPROACH:</h2>
               </div>
 
               {/* Right Column: Bio & Skills */}
@@ -901,7 +920,7 @@ export default function App() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-[0.85] mb-12 text-primary"
+                    className="text-4xl md:text-7xl font-black tracking-tighter uppercase leading-[0.85] mb-12 text-black"
                   >
                     Creating with vision.<br />Executing with precision.
                   </motion.h2>
@@ -911,13 +930,13 @@ export default function App() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.1 }}
-                    className="text-[0.6875rem] md:text-xs uppercase tracking-[0.2em] leading-relaxed text-primary/60 mb-20 max-w-2xl font-bold"
+                    className="text-[0.6875rem] md:text-xs uppercase tracking-[0.2em] leading-relaxed text-black/60 mb-20 max-w-2xl font-bold"
                   >
                     Based in Srinagar, Wasim Pakhtoon leads high-end cinematic productions for properties and global brands as a freelance video editor and cinematographer. We handle every phase of the video shoot in Kashmir—from the initial storyboard to final post-production—ensuring world-class standards for hotel shoots and commercial projects. Our focus is on seamless execution and uncompromising quality.
                   </motion.p>
 
                   {/* Skills Grid */}
-                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 pt-12 border-t border-primary/10">
+                  <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 pt-12 border-t border-black/10">
                     {skillCategories.map((category, idx) => (
                       <motion.div
                         key={category.title}
@@ -926,14 +945,14 @@ export default function App() {
                         viewport={{ once: true }}
                         transition={{ delay: 0.2 + idx * 0.1 }}
                       >
-                        <h4 className="text-[0.625rem] font-black tracking-ultra text-primary mb-6 underline underline-offset-8 decoration-primary/10">
+                        <h4 className="text-[0.625rem] font-black tracking-ultra text-black mb-6 underline underline-offset-8 decoration-black/10">
                           {category.title}
                         </h4>
                         <ul className="space-y-4">
                           {category.skills.map((skill) => (
                             <li 
                               key={skill} 
-                              className="text-[0.55rem] tracking-[0.2em] text-primary/40 hover:text-primary transition-colors cursor-default list-none font-bold"
+                              className="text-[0.55rem] tracking-[0.2em] text-black/40 hover:text-black transition-colors cursor-default list-none font-bold"
                             >
                               {skill}
                             </li>
@@ -952,28 +971,28 @@ export default function App() {
       {/* FAQ Section */}
       <section className="bg-white" id="faq">
         <div className="px-8 py-32 max-w-screen-2xl mx-auto">
-          <div className="border-t border-primary/10 pt-8">
+          <div className="border-t border-black/10 pt-8">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-16">
               <div className="md:col-span-4">
                 <div className="flex items-center gap-2 mb-4">
-                  <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                  <h2 className="text-[0.625rem] uppercase tracking-ultra font-black text-primary/30">CLARITY:</h2>
+                  <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
+                  <h2 className="text-[0.625rem] uppercase tracking-ultra font-black text-black/30">CLARITY:</h2>
                 </div>
-                <h2 className="text-3xl font-black uppercase tracking-tighter leading-none text-primary">FREQUENTLY ASKED.</h2>
+                <h2 className="text-3xl font-black uppercase tracking-tighter leading-none text-black">FREQUENTLY ASKED.</h2>
               </div>
               
               <div className="md:col-span-8">
-                <div className="flex flex-col border-t border-primary/10">
+                <div className="flex flex-col border-t border-black/10">
                   {faqs.map((faq, index) => (
-                    <div key={index} className="border-b border-primary/10">
+                    <div key={index} className="border-b border-black/10">
                       <button 
                         onClick={() => setActiveFaq(activeFaq === index ? null : index)}
                         className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
                       >
-                        <h4 className={`text-sm md:text-base font-bold uppercase tracking-widest transition-colors ${activeFaq === index ? 'text-primary' : 'text-primary/60 group-hover:text-primary'}`}>
+                        <h4 className={`text-sm md:text-base font-bold uppercase tracking-widest transition-colors ${activeFaq === index ? 'text-black' : 'text-black/60 group-hover:text-black'}`}>
                           {faq.question}
                         </h4>
-                        <span className={`text-2xl font-bold transition-transform duration-300 ${activeFaq === index ? 'rotate-45 text-primary/40' : 'text-primary group-hover:text-primary/40'}`}>
+                        <span className={`text-2xl font-bold transition-transform duration-300 ${activeFaq === index ? 'rotate-45 text-black/40' : 'text-black group-hover:text-black/40'}`}>
                           +
                         </span>
                       </button>
@@ -985,7 +1004,7 @@ export default function App() {
                             exit={{ height: 0, opacity: 0 }}
                             className="overflow-hidden"
                           >
-                            <p className="text-[0.6875rem] md:text-xs uppercase tracking-[0.12em] leading-relaxed text-primary/40 pb-8 font-medium max-w-2xl">
+                            <p className="text-[0.6875rem] md:text-xs uppercase tracking-[0.12em] leading-relaxed text-black/40 pb-8 font-medium max-w-2xl">
                               {faq.answer}
                             </p>
                           </motion.div>
@@ -1003,23 +1022,23 @@ export default function App() {
       {/* Contact Section */}
       <section className="bg-white" id="contact">
         <div className="px-8 py-32 max-w-screen-2xl mx-auto">
-          <div className="border-t border-primary/10 pt-16">
+          <div className="border-t border-black/10 pt-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8">
               <div className="md:col-span-8">
-                <span className="text-[0.625rem] uppercase tracking-ultra font-black text-primary/30 block mb-6">NEXT PHASE:</span>
-                <h2 className="text-4xl md:text-8xl font-black tracking-tighter uppercase leading-[0.8] mb-12 text-primary">
+                <span className="text-[0.625rem] uppercase tracking-ultra font-black text-black/30 block mb-6">NEXT PHASE:</span>
+                <h2 className="text-4xl md:text-8xl font-black tracking-tighter uppercase leading-[0.8] mb-12 text-black">
                   READY TO BUILD<br />YOUR VISION?
                 </h2>
                 <div className="flex flex-col sm:flex-row gap-6">
                   <button
                     onClick={() => setIsQuoteModalOpen(true)}
-                    className="bg-primary text-white px-12 py-6 text-[0.625rem] font-black uppercase tracking-ultra hover:bg-primary/80 transition-all flex items-center justify-center gap-4 group"
+                    className="bg-black text-white px-12 py-6 text-[0.625rem] font-black uppercase tracking-ultra hover:bg-black/80 transition-all flex items-center justify-center gap-4 group"
                   >
                     START A PROJECT <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                   </button>
                   <a
                     href="mailto:contact@cinmach.com"
-                    className="border border-primary/10 text-primary px-12 py-6 text-[0.625rem] font-black uppercase tracking-ultra hover:bg-primary hover:text-white transition-all text-center flex items-center justify-center"
+                    className="border border-black/10 text-black px-12 py-6 text-[0.625rem] font-black uppercase tracking-ultra hover:bg-black hover:text-white transition-all text-center flex items-center justify-center"
                   >
                     DIRECT EMAIL
                   </a>
@@ -1029,13 +1048,13 @@ export default function App() {
               <div className="md:col-span-4 flex flex-col justify-end">
                 <div className="space-y-12">
                   <div>
-                    <h4 className="text-[0.55rem] font-black tracking-ultra text-primary/30 uppercase mb-4">LOCATION:</h4>
-                    <p className="text-lg font-black uppercase tracking-tighter text-primary">SRINAGAR, KASHMIR</p>
-                    <p className="text-[0.625rem] uppercase tracking-widest text-primary/40 mt-1">AVAILABLE WORLDWIDE</p>
+                    <h4 className="text-[0.55rem] font-black tracking-ultra text-black/30 uppercase mb-4">LOCATION:</h4>
+                    <p className="text-lg font-black uppercase tracking-tighter text-black">SRINAGAR, KASHMIR</p>
+                    <p className="text-[0.625rem] uppercase tracking-widest text-black/40 mt-1">AVAILABLE WORLDWIDE</p>
                   </div>
                   <div>
-                    <h4 className="text-[0.55rem] font-black tracking-ultra text-primary/30 uppercase mb-4">LOCAL TIME:</h4>
-                    <p className="text-lg font-black uppercase tracking-tighter text-primary">
+                    <h4 className="text-[0.55rem] font-black tracking-ultra text-black/30 uppercase mb-4">LOCAL TIME:</h4>
+                    <p className="text-lg font-black uppercase tracking-tighter text-black">
                       {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' })} IST
                     </p>
                   </div>
@@ -1094,24 +1113,24 @@ export default function App() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsQuoteModalOpen(false)}
-              className="absolute inset-0 bg-primary/90 backdrop-blur-xl"
+              className="absolute inset-0 bg-black/90 backdrop-blur-xl"
             />
             
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-2xl bg-white border border-primary/5 p-8 md:p-12 overflow-y-auto max-h-[90vh] shadow-[0_30px_100px_rgba(0,0,0,0.1)]"
+              className="relative w-full max-w-2xl bg-white border border-black/5 p-8 md:p-12 overflow-y-auto max-h-[90vh] shadow-[0_30px_100px_rgba(0,0,0,0.1)]"
             >
               <button 
                 onClick={() => setIsQuoteModalOpen(false)}
-                className="absolute top-6 right-6 text-primary/40 hover:text-primary transition-colors"
+                className="absolute top-6 right-6 text-black/40 hover:text-black transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
 
               {formStatus === "success" ? (
-                <div className="py-20 text-center text-primary">
+                <div className="py-20 text-center text-black">
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
@@ -1120,7 +1139,7 @@ export default function App() {
                     <CheckCircle2 className="w-8 h-8 text-green-500" />
                   </motion.div>
                   <h3 className="text-2xl font-black uppercase tracking-tighter mb-4">REQUEST RECEIVED</h3>
-                  <p className="text-[0.6875rem] uppercase tracking-widest text-primary/60 leading-relaxed max-w-xs mx-auto">
+                  <p className="text-[0.6875rem] uppercase tracking-widest text-black/60 leading-relaxed max-w-xs mx-auto">
                     YOUR REQUEST HAS BEEN RECEIVED. WE’LL REVIEW EVERYTHING PERSONALLY AND GET BACK TO YOU SHORTLY.
                   </p>
                   <button 
@@ -1128,7 +1147,7 @@ export default function App() {
                       setIsQuoteModalOpen(false);
                       setTimeout(() => setFormStatus("idle"), 500);
                     }}
-                    className="mt-12 bg-primary text-white px-12 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-primary/90 transition-all"
+                    className="mt-12 bg-black text-white px-12 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-black/90 transition-all"
                   >
                     BACK TO SITE
                   </button>
@@ -1136,27 +1155,27 @@ export default function App() {
               ) : (
                 <>
                   <div className="mb-12">
-                    <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-primary/40 block mb-4">THE NEXT STEP:</span>
-                    <h2 className="text-3xl font-black uppercase tracking-tighter leading-[0.9] text-primary">LET’S CREATE VISUALS THAT GROW YOUR BUSINESS.</h2>
-                    <p className="text-[0.625rem] uppercase tracking-widest text-primary/60 mt-4">Currently accepting a limited number of high-impact projects.</p>
+                    <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40 block mb-4">THE NEXT STEP:</span>
+                    <h2 className="text-3xl font-black uppercase tracking-tighter leading-[0.9] text-black">LET’S CREATE VISUALS THAT GROW YOUR BUSINESS.</h2>
+                    <p className="text-[0.625rem] uppercase tracking-widest text-black/60 mt-4">Currently accepting a limited number of high-impact projects.</p>
                   </div>
 
                   <form className="space-y-8" onSubmit={handleQuoteSubmit}>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-2">
-                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-primary/40">YOUR NAME *</label>
-                        <input name="name" required type="text" className="w-full bg-transparent border-0 border-b border-primary/10 focus:border-primary focus:ring-0 py-3 px-0 placeholder:text-primary/10 text-sm uppercase tracking-widest text-primary transition-colors" placeholder="ENTER NAME" />
+                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40">YOUR NAME *</label>
+                        <input name="name" required type="text" className="w-full bg-transparent border-0 border-b border-black/10 focus:border-black focus:ring-0 py-3 px-0 placeholder:text-black/10 text-sm uppercase tracking-widest text-black transition-colors" placeholder="ENTER NAME" />
                       </div>
                       <div className="space-y-2">
-                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-primary/40">EMAIL ADDRESS *</label>
-                        <input name="email" required type="email" className="w-full bg-transparent border-0 border-b border-primary/10 focus:border-primary focus:ring-0 py-3 px-0 placeholder:text-primary/10 text-sm uppercase tracking-widest text-primary transition-colors" placeholder="EMAIL@EXAMPLE.COM" />
+                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40">EMAIL ADDRESS *</label>
+                        <input name="email" required type="email" className="w-full bg-transparent border-0 border-b border-black/10 focus:border-black focus:ring-0 py-3 px-0 placeholder:text-black/10 text-sm uppercase tracking-widest text-black transition-colors" placeholder="EMAIL@EXAMPLE.COM" />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                       <div className="space-y-2">
-                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-primary/40">PHONE / WHATSAPP</label>
-                        <input name="phone" type="text" className="w-full bg-transparent border-0 border-b border-primary/10 focus:border-primary focus:ring-0 py-3 px-0 placeholder:text-primary/10 text-sm uppercase tracking-widest text-primary transition-colors" placeholder="+00 000 000 000" />
+                        <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40">PHONE / WHATSAPP</label>
+                        <input name="phone" type="text" className="w-full bg-transparent border-0 border-b border-black/10 focus:border-black focus:ring-0 py-3 px-0 placeholder:text-black/10 text-sm uppercase tracking-widest text-black transition-colors" placeholder="+00 000 000 000" />
                       </div>
                       <CustomSelect 
                         name="project_type" 
@@ -1201,24 +1220,24 @@ export default function App() {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-primary/40">PROJECT VISION *</label>
-                      <textarea name="vision" required rows={3} className="w-full bg-transparent border-0 border-b border-primary/10 focus:border-primary focus:ring-0 py-3 px-0 placeholder:text-primary/10 text-sm uppercase tracking-widest text-primary transition-colors resize-none" placeholder="TELL ME ABOUT YOUR GOALS AND VISION"></textarea>
+                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40">PROJECT VISION *</label>
+                      <textarea name="vision" required rows={3} className="w-full bg-transparent border-0 border-b border-black/10 focus:border-black focus:ring-0 py-3 px-0 placeholder:text-black/10 text-sm uppercase tracking-widest text-black transition-colors resize-none" placeholder="TELL ME ABOUT YOUR GOALS AND VISION"></textarea>
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-primary/40">REFERENCE LINK (OPTIONAL)</label>
-                      <input name="reference" type="text" className="w-full bg-transparent border-0 border-b border-primary/10 focus:border-primary focus:ring-0 py-3 px-0 placeholder:text-primary/10 text-sm uppercase tracking-widest text-primary transition-colors" placeholder="PASTE LINK TO INSPIRATION" />
+                      <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40">REFERENCE LINK (OPTIONAL)</label>
+                      <input name="reference" type="text" className="w-full bg-transparent border-0 border-b border-black/10 focus:border-black focus:ring-0 py-3 px-0 placeholder:text-black/10 text-sm uppercase tracking-widest text-black transition-colors" placeholder="PASTE LINK TO INSPIRATION" />
                     </div>
 
                     <div className="pt-8">
                       <button 
                         disabled={formStatus === "submitting"}
-                        className="w-full bg-primary text-white py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-wait flex items-center justify-center gap-4"
+                        className="w-full bg-black text-white py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-black/90 transition-all disabled:opacity-50 disabled:cursor-wait flex items-center justify-center gap-4"
                       >
                         {formStatus === "submitting" ? "PREPARING..." : "REQUEST QUOTE"}
                         {formStatus === "idle" && <ArrowRight className="w-4 h-4" />}
                       </button>
-                      <p className="text-[0.5rem] uppercase tracking-widest text-primary/40 text-center mt-6">
+                      <p className="text-[0.5rem] uppercase tracking-widest text-black/40 text-center mt-6">
                         I review every project personally and respond within 24 hours.
                       </p>
                     </div>
@@ -1238,7 +1257,7 @@ export default function App() {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="fixed bottom-8 right-8 z-[60] bg-white text-primary p-4 rounded-full shadow-xl border border-primary/5 hover:scale-110 active:scale-95 transition-all duration-300 group"
+            className="fixed bottom-8 right-8 z-[60] bg-white text-black p-4 rounded-full shadow-xl border border-black/5 hover:scale-110 active:scale-95 transition-all duration-300 group"
             aria-label="Back to Top"
           >
             <ArrowUp className="w-5 h-5 group-hover:-translate-y-1 transition-transform duration-300" />
@@ -1260,7 +1279,7 @@ export default function App() {
             {/* Darker Backdrop for contrast on white sections */}
             <motion.div 
               initial={{ backdropFilter: "blur(0px)", backgroundColor: "rgba(0,0,0,0)" }}
-              animate={{ backdropFilter: "blur(12px)", backgroundColor: "rgba(18,18,18,0.5)" }}
+              animate={{ backdropFilter: "blur(12px)", backgroundColor: "rgba(0,0,0,0.5)" }}
               className="absolute inset-0" 
             />
             

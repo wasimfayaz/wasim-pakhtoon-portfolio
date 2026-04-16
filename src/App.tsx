@@ -571,18 +571,70 @@ export default function App() {
           </div>
         </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="text-[clamp(2.5rem,8vw,8rem)] font-black tracking-tighter uppercase leading-[0.85] mb-10 md:mb-24 relative z-20"
-        >
-          {/* Base Text */}
-          <span className="sr-only">
-            Wasim Pakhtoon — Video Editor & Cinematographer in Kashmir. Professional cinematic video production, drone footage, hotel videography, color grading, and brand identity design in Srinagar, Kashmir, India.
-          </span>
-          <span aria-hidden="true" className="relative z-10">DELIVERING<br />CINEMATIC<br />EXCELLENCE</span>
-        </motion.h1>
+        {/* Hero Heading + Impact Panel Row */}
+        <div className="flex items-start justify-between gap-8 mb-10 md:mb-24">
+
+          {/* Main Heading — Left */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            className="text-[clamp(2.5rem,8vw,8rem)] font-black tracking-tighter uppercase leading-[0.85] relative z-20 flex-shrink-0"
+          >
+            <span className="sr-only">
+              Wasim Pakhtoon — Video Editor & Cinematographer in Kashmir. Professional cinematic video production, drone footage, hotel videography, color grading, and brand identity design in Srinagar, Kashmir, India.
+            </span>
+            <span aria-hidden="true">DELIVERING<br />CINEMATIC<br />EXCELLENCE</span>
+          </motion.h1>
+
+          {/* Impact Panel — Right, desktop only */}
+          <motion.div
+            style={{ opacity: useTransform(scrollY, [0, 300], [1, 0]) }}
+            className="hidden md:flex flex-col justify-center gap-12 flex-1 max-w-sm self-center"
+          >
+            {[
+              {
+                num: "01",
+                value: "+300% Brand Visibility",
+                primary: true,
+              },
+              {
+                num: "02",
+                value: "More Direct Bookings",
+                primary: false,
+              },
+              {
+                num: "03",
+                value: "Cinematic First Impressions",
+                primary: false,
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={item.num}
+                initial={{ opacity: 0, x: 24, y: 10 }}
+                animate={{ opacity: 1, x: 0, y: 0 }}
+                transition={{
+                  duration: 0.9,
+                  ease: [0.16, 1, 0.3, 1],
+                  delay: 0.5 + i * 0.2,
+                }}
+                className="group flex items-start gap-5"
+              >
+                <span className={`text-[0.5rem] font-bold tracking-[0.2em] font-label mt-1 transition-colors duration-500 ${item.primary ? "text-white/40" : "text-white/15"}`}>
+                  {item.num}
+                </span>
+                <span className={`font-black uppercase tracking-tight leading-tight transition-all duration-500 group-hover:text-white ${
+                  item.primary
+                    ? "text-[1.15rem] text-white/90"
+                    : "text-[0.9rem] text-white/35"
+                }`}>
+                  {item.value}
+                </span>
+              </motion.div>
+            ))}
+          </motion.div>
+
+        </div>
 
         {/* Hero Info Section */}
         <motion.div

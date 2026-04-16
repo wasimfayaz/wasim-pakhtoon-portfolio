@@ -332,9 +332,17 @@ export default function App() {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
           const id = entry.target.id;
-          const link = navLinks.find(l => l.href === `#${id}` || (id === 'home' && l.href === '#'));
-          if (link) {
-            setActiveLink(link.name);
+          
+          // Special cases for mapped sections
+          if (id === 'home') {
+            setActiveLink("HOME");
+          } else if (id === 'work' || id === 'work-gallery') {
+            setActiveLink("WORK");
+          } else {
+            const link = navLinks.find(l => l.href === `#${id}`);
+            if (link) {
+              setActiveLink(link.name);
+            }
           }
           
           // Update Nav Theme
@@ -348,7 +356,7 @@ export default function App() {
     const observer = new IntersectionObserver(handleIntersection, observerOptions);
     
     // Observe all sections
-    const sectionIds = ['home', 'work', 'services', 'about', 'faq', 'contact'];
+    const sectionIds = ['home', 'work', 'work-gallery', 'services', 'about', 'faq', 'contact'];
     sectionIds.forEach(id => {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
@@ -575,61 +583,103 @@ export default function App() {
           <span aria-hidden="true">DELIVERING<br />CINEMATIC<br />EXCELLENCE</span>
         </motion.h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 border-t border-outline/30 pt-6 md:pt-8 mb-8 md:mb-20">
-          <div className="md:col-span-4">
-            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">OUR MISSION:</span>
-          </div>
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="md:col-span-6 relative z-10"
-          >
-            <p className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-md">
-              END-TO-END CINEMATIC SOLUTIONS FOR LUXURY BRANDS AND HOTELS WORLDWIDE — VIDEO EDITING, CINEMATOGRAPHY, AND BRANDING, CRAFTED FROM SRINAGAR.
-            </p>
-            <div className="mt-4 md:mt-4 flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse-red"></span>
-              <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">AVAILABLE FOR PROJECTS</span>
-            </div>
-            <div className="mt-6 md:mt-8 flex flex-col sm:flex-row items-center gap-4">
-              <button
-                onClick={() => setIsQuoteModalOpen(true)}
-                className="w-full sm:w-auto bg-white text-primary px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text hover:scale-[1.02] transition-all duration-300"
-              >
-                START A PROJECT
-              </button>
-              <a
-                href="#work-gallery"
-                className="w-full sm:w-auto border border-outline/30 text-white px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:border-white hover:bg-white/5 transition-all duration-300 text-center"
-              >
-                VIEW MY WORK
-              </a>
-            </div>
-            {/* Client Portal CTA */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-6 border-t border-outline/20 pt-6 flex items-center justify-between gap-4"
-            >
-              <div>
-                <p className="text-[0.55rem] uppercase tracking-ultra font-bold text-secondary-text mb-0.5">EXISTING CLIENTS</p>
-                <p className="text-[0.625rem] text-on-surface/60 uppercase tracking-widest">Access your private project dashboard</p>
-              </div>
-              <a
-                href="/#portal"
-                className="shrink-0 flex items-center gap-2 bg-white text-primary px-5 py-2.5 text-[0.55rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all duration-300 whitespace-nowrap"
-              >
-                <span className="w-1 h-1 rounded-full bg-primary"></span>
-                CLIENT PORTAL
-              </a>
-            </motion.div>
-          </motion.div>
-        </div>
+        {/* Hero Info — 2-Column Layout */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+          className="border-t border-outline/30 pt-8 md:pt-10 mb-8 md:mb-20"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-[2fr_3px_3fr] gap-0 md:gap-0">
 
+            {/* Left Column — 40% */}
+            <div className="pr-0 md:pr-12 pb-8 md:pb-0 flex flex-col justify-center">
+              <motion.span
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.4 }}
+                className="text-[0.55rem] uppercase tracking-ultra font-bold text-secondary-text mb-3 block"
+              >
+                OUR MISSION
+              </motion.span>
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.5 }}
+                className="text-[0.6875rem] uppercase tracking-[0.1em] leading-loose text-on-surface/50 max-w-[18rem]"
+              >
+                Cinematic excellence for luxury brands & hotels — crafted from Srinagar, delivered worldwide.
+              </motion.p>
+            </div>
+
+            {/* Vertical Divider — hidden on mobile */}
+            <div className="hidden md:block w-px bg-outline/30 self-stretch" />
+
+            {/* Right Column — 60% */}
+            <div className="pl-0 md:pl-12 flex flex-col justify-center gap-0">
+              {/* Main Paragraph */}
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.45 }}
+                className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-lg"
+              >
+                END-TO-END CINEMATIC SOLUTIONS FOR LUXURY BRANDS AND HOTELS WORLDWIDE — VIDEO EDITING, CINEMATOGRAPHY, AND BRANDING, CRAFTED FROM SRINAGAR.
+              </motion.p>
+
+              {/* Status */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.6 }}
+                className="mt-5 flex items-center gap-2"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse-red flex-shrink-0"></span>
+                <span className="text-[0.6rem] uppercase tracking-ultra font-bold text-on-surface/70">AVAILABLE FOR PROJECTS</span>
+              </motion.div>
+
+              {/* CTA Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.7 }}
+                className="mt-7 flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
+              >
+                <button
+                  onClick={() => setIsQuoteModalOpen(true)}
+                  className="w-full sm:w-auto bg-white text-primary px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text hover:scale-[1.02] transition-all duration-300"
+                >
+                  START A PROJECT
+                </button>
+                <a
+                  href="#work-gallery"
+                  className="w-full sm:w-auto border border-outline/30 text-white px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:border-white hover:bg-white/5 transition-all duration-300 text-center"
+                >
+                  VIEW MY WORK
+                </a>
+              </motion.div>
+
+              {/* Client Portal — demoted, secondary */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.9 }}
+                className="mt-7 pt-6 border-t border-outline/20 flex items-center gap-3"
+              >
+                <span className="text-[0.55rem] uppercase tracking-[0.18em] text-on-surface/35 font-medium">EXISTING CLIENTS</span>
+                <span className="text-outline/30">→</span>
+                <a
+                  href="/#portal"
+                  className="text-[0.55rem] uppercase tracking-[0.18em] text-on-surface/50 hover:text-white transition-colors duration-300 font-medium underline underline-offset-4 decoration-outline/30 hover:decoration-white"
+                >
+                  ACCESS YOUR PRIVATE DASHBOARD
+                </a>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Socials Row */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-outline/30 pt-8">
           <div className="md:col-span-4">
             <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">SOCIALS:</span>

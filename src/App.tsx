@@ -283,6 +283,8 @@ export default function App() {
 
   const { scrollY } = useScroll();
   const scrollIndicatorOpacity = useTransform(scrollY, [0, 150], [1, 0]);
+  const impactPanelOpacity = useTransform(scrollY, [0, 320], [1, 0]);
+  const impactPanelY = useTransform(scrollY, [0, 320], [0, -20]);
 
   // Handle cinematic right-click interaction
   useEffect(() => {
@@ -555,78 +557,73 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <header id="home" className="relative min-h-screen flex flex-col justify-center pt-32 md:pt-48 pb-12 md:pb-24 px-8 max-w-screen-2xl mx-auto">
+      <header id="home" className="relative min-h-screen flex flex-col justify-center pt-28 md:pt-40 pb-10 md:pb-20 px-8 md:px-12 max-w-screen-2xl mx-auto">
         {/* Cinematic Scroll Indicator */}
         <motion.div 
           style={{ opacity: scrollIndicatorOpacity }}
-          className="fixed right-8 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-6 z-40 pointer-events-none"
+          className="fixed right-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-5 z-40 pointer-events-none"
         >
-          <span className="text-[0.55rem] [writing-mode:vertical-lr] tracking-[0.4em] font-light text-white/40 uppercase">SCROLL</span>
-          <div className="w-[1px] h-20 bg-white/10 overflow-hidden relative">
+          <span className="text-[0.5rem] [writing-mode:vertical-lr] tracking-[0.4em] font-light text-white/30 uppercase">SCROLL</span>
+          <div className="w-px h-16 bg-white/10 overflow-hidden relative">
             <motion.div 
               animate={{ top: ["-100%", "100%"] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-              className="absolute left-0 w-full h-[80%] bg-gradient-to-b from-transparent via-white/40 to-transparent"
+              className="absolute left-0 w-full h-[80%] bg-gradient-to-b from-transparent via-white/50 to-transparent"
             />
           </div>
         </motion.div>
 
+        {/* Eyebrow label */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-center gap-3 mb-8"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse-red flex-shrink-0" />
+          <span className="text-[0.55rem] uppercase tracking-[0.25em] font-bold text-white/40 font-label">WASIM PAKHTOON — CINEMATIC PRODUCTIONS</span>
+        </motion.div>
+
         {/* Hero Heading + Impact Panel Row */}
-        <div className="flex items-start justify-between gap-8 mb-10 md:mb-24">
+        <div className="flex items-center justify-between gap-6 lg:gap-12 mb-12 md:mb-20">
 
           {/* Main Heading — Left */}
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="text-[clamp(2.5rem,8vw,8rem)] font-black tracking-tighter uppercase leading-[0.85] relative z-20 flex-shrink-0"
+            className="text-[clamp(3rem,8.5vw,8.5rem)] font-black tracking-tighter uppercase leading-[0.82] relative z-20 max-w-[65%] lg:max-w-[60%] flex-shrink-0"
           >
             <span className="sr-only">
-              Wasim Pakhtoon — Video Editor & Cinematographer in Kashmir. Professional cinematic video production, drone footage, hotel videography, color grading, and brand identity design in Srinagar, Kashmir, India.
+              Wasim Pakhtoon — Video Editor &amp; Cinematographer in Kashmir. Professional cinematic video production, drone footage, hotel videography, color grading, and brand identity design in Srinagar, Kashmir, India.
             </span>
             <span aria-hidden="true">DELIVERING<br />CINEMATIC<br />EXCELLENCE</span>
           </motion.h1>
 
           {/* Impact Panel — Right, desktop only */}
           <motion.div
-            style={{ opacity: useTransform(scrollY, [0, 300], [1, 0]) }}
-            className="hidden md:flex flex-col justify-center gap-12 flex-1 max-w-sm self-center"
+            style={{ opacity: impactPanelOpacity, y: impactPanelY }}
+            className="hidden md:flex flex-col justify-center gap-10 flex-1 pl-8 lg:pl-12 border-l border-white/8"
           >
             {[
-              {
-                num: "01",
-                value: "+300% Brand Visibility",
-                primary: true,
-              },
-              {
-                num: "02",
-                value: "More Direct Bookings",
-                primary: false,
-              },
-              {
-                num: "03",
-                value: "Cinematic First Impressions",
-                primary: false,
-              },
+              { num: "01", value: "+300% Brand Visibility", primary: true },
+              { num: "02", value: "More Direct Bookings", primary: false },
+              { num: "03", value: "Cinematic First Impressions", primary: false },
             ].map((item, i) => (
               <motion.div
                 key={item.num}
-                initial={{ opacity: 0, x: 24, y: 10 }}
-                animate={{ opacity: 1, x: 0, y: 0 }}
-                transition={{
-                  duration: 0.9,
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: 0.5 + i * 0.2,
-                }}
-                className="group flex items-start gap-5"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.5 + i * 0.18 }}
+                className="group flex items-start gap-4"
               >
-                <span className={`text-[0.5rem] font-bold tracking-[0.2em] font-label mt-1 transition-colors duration-500 ${item.primary ? "text-white/40" : "text-white/15"}`}>
+                <span className={`text-[0.45rem] font-bold tracking-[0.2em] font-label mt-1.5 flex-shrink-0 transition-colors duration-500 ${item.primary ? "text-white/35" : "text-white/12"}`}>
                   {item.num}
                 </span>
                 <span className={`font-black uppercase tracking-tight leading-tight transition-all duration-500 group-hover:text-white ${
                   item.primary
-                    ? "text-[1.15rem] text-white/90"
-                    : "text-[0.9rem] text-white/35"
+                    ? "text-[1.1rem] text-white/85"
+                    : "text-[0.85rem] text-white/28"
                 }`}>
                   {item.value}
                 </span>
@@ -636,62 +633,61 @@ export default function App() {
 
         </div>
 
-        {/* Hero Info Section */}
+        {/* Hero Info Bar */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-          className="border-t border-outline/30 pt-8 md:pt-10 mb-8 md:mb-20"
+          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
+          className="border-t border-outline/25 pt-8 md:pt-10"
         >
           <div className="flex flex-col md:flex-row gap-10 md:gap-0">
 
             {/* Left Column — Hidden on phone */}
             <div className="hidden md:block md:w-2/5 md:pr-16 flex-shrink-0">
-              <span className="text-[0.55rem] uppercase tracking-ultra font-bold text-secondary-text block mb-3">OUR MISSION</span>
-              <p className="text-[0.6875rem] uppercase tracking-[0.1em] leading-loose text-on-surface/40 max-w-xs">
-                Cinematic excellence for luxury brands & hotels — crafted from Srinagar, delivered worldwide.
+              <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-white/20 block mb-3 font-label">OUR MISSION</span>
+              <p className="text-[0.65rem] uppercase tracking-[0.1em] leading-loose text-white/30 max-w-xs">
+                Cinematic excellence for luxury brands &amp; hotels — crafted from Srinagar, delivered worldwide.
               </p>
             </div>
 
             {/* Thin divider — desktop only */}
-            <div className="hidden md:block w-px bg-outline/25 flex-shrink-0" />
+            <div className="hidden md:block w-px bg-outline/20 flex-shrink-0" />
 
             {/* Right Column */}
             <div className="md:flex-1 md:pl-16">
-              {/* Tagline */}
-              <p className="text-[0.6875rem] uppercase leading-relaxed tracking-widest text-on-surface max-w-lg">
-                END-TO-END CINEMATIC SOLUTIONS FOR LUXURY BRANDS AND HOTELS WORLDWIDE — VIDEO EDITING, CINEMATOGRAPHY, AND BRANDING, CRAFTED FROM SRINAGAR.
+              <p className="text-[0.65rem] uppercase leading-relaxed tracking-widest text-white/70 max-w-lg">
+                END-TO-END CINEMATIC SOLUTIONS FOR LUXURY BRANDS AND HOTELS — VIDEO EDITING, CINEMATOGRAPHY &amp; BRANDING, FROM SRINAGAR.
               </p>
 
-              {/* Status dot */}
               <div className="mt-5 flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse-red flex-shrink-0" />
-                <span className="text-[0.6rem] uppercase tracking-ultra font-bold text-on-surface/70">AVAILABLE FOR PROJECTS</span>
+                <span className="text-[0.55rem] uppercase tracking-[0.2em] font-bold text-white/50">AVAILABLE FOR PROJECTS</span>
               </div>
 
               {/* CTA Buttons */}
-              <div className="mt-7 flex flex-col sm:flex-row gap-3">
+              <div className="mt-8 flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => setIsQuoteModalOpen(true)}
-                  className="sm:w-auto bg-white text-black px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-secondary-text transition-all duration-300"
+                  className="group sm:w-auto bg-white text-black px-10 py-4 text-[0.6rem] font-bold uppercase tracking-[0.18em] hover:bg-white/90 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3"
                 >
                   START A PROJECT
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
                 </button>
                 <a
                   href="#work-gallery"
-                  className="sm:w-auto border border-outline/40 text-white px-10 py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:border-white hover:bg-white/5 transition-all duration-300 text-center"
+                  className="sm:w-auto border border-white/20 text-white/70 px-10 py-4 text-[0.6rem] font-bold uppercase tracking-[0.18em] hover:border-white/60 hover:text-white hover:bg-white/5 active:scale-[0.98] transition-all duration-300 text-center"
                 >
                   VIEW MY WORK
                 </a>
               </div>
 
-              {/* Client Portal — demoted but clearly a button */}
-              <div className="mt-8 pt-6 border-t border-outline/20 flex flex-wrap items-center gap-3">
-                <span className="text-[0.55rem] uppercase tracking-widest text-on-surface/35">EXISTING CLIENTS</span>
-                <span className="text-on-surface/20 text-xs">→</span>
+              {/* Client Portal — demoted */}
+              <div className="mt-8 pt-6 border-t border-outline/15 flex flex-wrap items-center gap-3">
+                <span className="text-[0.5rem] uppercase tracking-widest text-white/25">EXISTING CLIENTS</span>
+                <span className="text-white/15 text-xs">→</span>
                 <a
                   href="/#portal"
-                  className="inline-flex items-center gap-1.5 border border-outline/30 text-on-surface/60 px-4 py-2 text-[0.55rem] font-bold uppercase tracking-widest hover:border-white/30 hover:text-white transition-all duration-300"
+                  className="inline-flex items-center gap-1.5 text-white/35 text-[0.5rem] font-bold uppercase tracking-widest hover:text-white/70 transition-colors duration-300"
                 >
                   <span className="w-1 h-1 rounded-full bg-red-600 flex-shrink-0" />
                   CLIENT PORTAL
@@ -703,22 +699,25 @@ export default function App() {
         </motion.div>
 
         {/* Socials Row */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 border-t border-outline/30 pt-8">
-          <div className="md:col-span-4">
-            <span className="text-[0.625rem] uppercase tracking-ultra font-bold text-secondary-text">SOCIALS:</span>
-          </div>
-          <div className="md:col-span-8 flex flex-wrap gap-8">
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.7 }}
+          className="flex items-center gap-8 border-t border-outline/25 pt-8 mt-8 md:mt-12"
+        >
+          <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-white/20 flex-shrink-0 font-label">FOLLOW</span>
+          <div className="flex flex-wrap gap-6 md:gap-10">
             {socials.map((social) => (
               <a
                 key={social.name}
                 href={social.href}
-                className="text-[0.625rem] uppercase tracking-ultra font-bold hover:text-secondary-text transition-colors"
+                className="text-[0.55rem] uppercase tracking-[0.2em] font-bold text-white/35 hover:text-white transition-colors duration-300"
               >
                 {social.name}
               </a>
             ))}
           </div>
-        </div>
+        </motion.div>
       </header>
 
       {/* View My Work */}
@@ -786,151 +785,170 @@ export default function App() {
             </div>
           </div>
 
-          {/* View My Work Details */}
-          <div id="work-gallery" className="flex justify-between items-center border-t border-black/10 pt-8 mb-16">
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-black"></span>
-              <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tighter text-black">VIEW MY WORK:</h2>
+          {/* Portfolio Header */}
+          <div id="work-gallery" className="border-t border-black/10 pt-10 mb-12">
+            <div className="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-10">
+              <div>
+                <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-black/25 mb-3 block">SELECTED WORK</span>
+                <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black leading-none">Portfolio</h2>
+              </div>
+              <p className="text-[0.65rem] uppercase tracking-[0.12em] text-black/40 max-w-xs leading-relaxed md:text-right">
+                Cinematic productions for hotels, brands &amp; beyond — crafted to convert.
+              </p>
+            </div>
+
+            {/* Category Filter Tabs */}
+            <div className="flex flex-wrap gap-2 mb-10">
+              {[{ id: -1, title: "ALL WORK" }, ...portfolioCategories].map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id === -1 ? null : cat.id)}
+                  className={`px-5 py-2.5 text-[0.55rem] font-bold uppercase tracking-[0.18em] transition-all duration-300 border ${
+                    (cat.id === -1 && activeCategory === null) || activeCategory === cat.id
+                      ? "bg-black text-white border-black"
+                      : "bg-white text-black/50 border-black/10 hover:border-black/30 hover:text-black"
+                  }`}
+                >
+                  {cat.title}
+                </button>
+              ))}
             </div>
           </div>
 
-          <div className="flex flex-col border-t border-black/10">
-            {portfolioCategories.map((cat) => (
-              <div key={cat.id} className="border-b border-black/10">
+          {/* Project Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {portfolioCategories
+              .filter(cat => activeCategory === null || activeCategory === cat.id)
+              .flatMap(cat => cat.projects.map(project => ({ ...project, catTitle: cat.title, catDescription: cat.description })))
+              .map((project: any, idx) => (
                 <motion.div
-                  onClick={() => setActiveCategory(activeCategory === cat.id ? null : cat.id)}
-                  whileHover={{ backgroundColor: "rgba(0,0,0,0.02)" }}
-                  className="w-full flex flex-col md:flex-row justify-between items-start md:items-center py-10 px-4 cursor-pointer transition-all duration-500 group"
+                  key={project.id}
+                  layout
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.5, delay: idx * 0.07, ease: [0.16, 1, 0.3, 1] }}
+                  className={`group relative overflow-hidden bg-black ${project.fullWidth ? "md:col-span-2" : ""}`}
                 >
-                  <div className="flex-1 space-y-2">
-                    <h3 className={`text-2xl md:text-3xl font-light uppercase tracking-tighter transition-colors ${activeCategory === cat.id ? 'text-black' : 'text-black/30 group-hover:text-black'}`}>
-                      {cat.title}
-                    </h3>
-                    <p className="text-[0.625rem] text-black/40 uppercase tracking-[0.15em] font-medium max-w-sm">
-                      {cat.description}
-                    </p>
-                    <div className="pt-4 flex items-center gap-2 group-hover:gap-4 transition-all duration-300">
-                      <span className="text-[0.55rem] font-bold uppercase tracking-ultra text-black">
-                        {activeCategory === cat.id ? "CLOSE PROJECT" : "EXPLORE PROJECTS"}
-                      </span>
-                      <ArrowRight className={`w-3 h-3 transition-transform ${activeCategory === cat.id ? 'rotate-90' : 'group-hover:translate-x-1'}`} />
-                    </div>
-                  </div>
-
-                  <div className="mt-8 md:mt-0 flex items-center gap-4">
-                    {cat.previews.map((img, i) => (
-                      <div key={i} className="w-24 h-16 md:w-32 md:h-20 overflow-hidden border border-black/5 bg-black/[0.03] grayscale hover:grayscale-0 transition-all duration-700">
-                        <img
-                          src={img}
-                          alt={`${cat.title.toLowerCase()} work preview — video production by Wasim Pakhtoon in Kashmir`}
+                  {/* Media */}
+                  <div className="aspect-video w-full overflow-hidden relative">
+                    {project.vimeoId ? (
+                      <div className="w-full h-full pointer-events-none">
+                        <iframe
+                          src={`https://player.vimeo.com/video/${project.vimeoId}?background=1&autoplay=1&muted=1&loop=1&badge=0&autopause=0`}
+                          className="w-full h-full object-cover scale-[1.05] group-hover:scale-110 transition-transform duration-700"
+                          frameBorder="0"
+                          allow="autoplay; fullscreen; picture-in-picture"
+                          title={`${project.title} — cinematic video production by Wasim Pakhtoon`}
                           loading="lazy"
-                          decoding="async"
-                          className="w-full h-full object-cover scale-[1.05]"
                         />
                       </div>
-                    ))}
-                    <div className="w-10 h-10 flex items-center justify-center rounded-full border border-black/10 group-hover:border-black/30 transition-colors">
-                      <span className={`text-xl font-light transition-transform duration-500 ${activeCategory === cat.id ? 'rotate-45' : ''}`}>+</span>
+                    ) : project.youtubeId ? (
+                      <div className="w-full h-full overflow-hidden bg-black">
+                        <iframe
+                          src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${project.youtubeId}&controls=0&rel=0&showinfo=0&modestbranding=1&vq=hd1080`}
+                          className="w-[100.5%] h-[100.5%] -ml-[0.25%] -mt-[0.25%]"
+                          frameBorder="0"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          title={`${project.title} — aerial visuals by Wasim Pakhtoon`}
+                          loading="eager"
+                        />
+                      </div>
+                    ) : (
+                      <img
+                        src={project.image}
+                        alt={`${project.title} — ${project.catTitle} by Wasim Pakhtoon`}
+                        loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      />
+                    )}
+
+                    {/* Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
+
+                    {/* Category Tag — top left */}
+                    <div className="absolute top-4 left-4 z-10">
+                      <span className="bg-white/10 backdrop-blur-sm text-white text-[0.45rem] font-bold uppercase tracking-[0.2em] px-3 py-1.5 border border-white/10">
+                        {project.category}
+                      </span>
+                    </div>
+
+                    {/* Year tag — top right */}
+                    <div className="absolute top-4 right-4 z-10">
+                      <span className="text-white/40 text-[0.45rem] font-bold uppercase tracking-[0.2em]">{project.year}</span>
+                    </div>
+
+                    {/* Title — bottom */}
+                    <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
+                      <h3 className="text-base md:text-lg font-black uppercase tracking-tighter text-white leading-tight mb-1">
+                        {project.title}
+                      </h3>
+                      {project.description && (
+                        <p className="text-[0.55rem] uppercase tracking-[0.15em] text-white/50 leading-relaxed">
+                          {project.description}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </motion.div>
-
-                <AnimatePresence>
-                  {activeCategory === cat.id && (
-                    <motion.div 
-                      initial={{ height: 0, opacity: 0 }} 
-                      animate={{ height: "auto", opacity: 1 }} 
-                      exit={{ height: 0, opacity: 0 }} 
-                      transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
-                      className="overflow-hidden"
-                    >
-                      <div className={`grid gap-8 pt-8 pb-16 ${cat.title === "BRAND STORIES" ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1 md:grid-cols-2"}`}>
-                        {cat.projects.map((project) => (
-                          <motion.div 
-                            key={project.id} 
-                            initial={{ opacity: 0, y: 20 }} 
-                            animate={{ opacity: 1, y: 0 }} 
-                            viewport={{ once: true }} 
-                            className={`group cursor-active md:cursor-zoom-in ${(project as any).fullWidth ? "md:col-span-2" : ""}`}
-                          >
-                            <div className={`${cat.title === "BRAND STORIES" ? "aspect-square" : "aspect-video"} overflow-hidden relative`}>
-                              {(project as any).vimeoId ? (
-                                <div className="w-full h-full pointer-events-none">
-                                  <iframe
-                                    src={`https://player.vimeo.com/video/${(project as any).vimeoId}?background=1&autoplay=1&muted=1&loop=1&badge=0&autopause=0&player_id=0&app_id=58479`}
-                                    className="w-full h-full object-cover scale-[1.05]"
-                                    frameBorder="0"
-                                    allow="autoplay; fullscreen; picture-in-picture"
-                                    title={`${project.title} — cinematic video production by Wasim Pakhtoon, Kashmir`}
-                                    loading="lazy"
-                                  />
-                                </div>
-                              ) : (project as any).youtubeId ? (
-                                <div className="w-full h-full overflow-hidden bg-black">
-                                  <iframe
-                                    src={`https://www.youtube-nocookie.com/embed/${(project as any).youtubeId}?autoplay=1&mute=1&loop=1&playlist=${(project as any).youtubeId}&controls=0&rel=0&showinfo=0&iv_load_policy=3&modestbranding=1&vq=hd1080&hd=1&autohide=1`}
-                                    className="w-[100.5%] h-[100.5%] -ml-[0.25%] -mt-[0.25%]"
-                                    frameBorder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                    title={`${project.title} — aerial visuals by Wasim Pakhtoon, Kashmir`}
-                                    loading="eager"
-                                  />
-                                </div>
-                              ) : (
-                                <img
-                                  src={project.image}
-                                  alt={`${project.title} — ${cat.title.toLowerCase()} by Wasim Pakhtoon, video editor in Kashmir`}
-                                  loading="lazy"
-                                  decoding="async"
-                                  className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-700`}
-                                />
-                              )}
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent flex flex-col justify-end p-6">
-                                <span className="text-[0.55rem] text-white/50 uppercase tracking-ultra mb-1">{project.year}</span>
-                                <h4 className="text-lg font-black uppercase tracking-tighter text-white">{project.title}</h4>
-                              </div>
-                            </div>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ))}
+              ))}
           </div>
+
+          {/* Empty state */}
+          {portfolioCategories.filter(cat => activeCategory === null || activeCategory === cat.id).flatMap(c => c.projects).length === 0 && (
+            <div className="text-center py-24 text-black/30">
+              <p className="text-[0.65rem] uppercase tracking-[0.2em]">No projects in this category yet.</p>
+            </div>
+          )}
         </div>
       </section>
 
-      {/* Workflow Section */}
-      <section className="px-8 py-32 max-w-screen-2xl mx-auto" id="services">
-        <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-20">
+
+      {/* Services Section */}
+      <section className="px-8 md:px-12 py-24 md:py-36 max-w-screen-2xl mx-auto" id="services">
+        <div className="flex justify-between items-center border-t border-outline/30 pt-8 mb-16">
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-on-surface"></span>
-            <h2 className="text-[0.625rem] uppercase tracking-ultra font-bold text-on-surface">SERVICES & WORKFLOW:</h2>
+            <span className="w-1.5 h-1.5 rounded-full bg-white/60"></span>
+            <h2 className="text-[0.55rem] uppercase tracking-[0.2em] font-bold text-white/40">SERVICES &amp; WORKFLOW</h2>
           </div>
         </div>
 
-        <div className="max-w-6xl">
-          <h3 className="text-[clamp(2rem,6vw,5rem)] font-black uppercase tracking-tighter leading-[0.9] mb-16 md:mb-24">
+        <div className="max-w-5xl">
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-[clamp(2rem,6vw,5rem)] font-black uppercase tracking-tighter leading-[0.88] mb-16 md:mb-24"
+          >
             Complete visual production.<br />Powered by industry tools.
-          </h3>
+          </motion.h3>
           
-          <div className="flex flex-col border-t border-outline/20">
+          <div className="flex flex-col border-t border-outline/15">
             {processSteps.map((step, index) => (
-              <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 py-10 md:py-16 border-b border-outline/20 items-start group hover:bg-white/5 transition-colors duration-500 -mx-8 px-8">
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.08 }}
+                className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-10 md:py-14 border-b border-outline/15 items-start group hover:bg-white/[0.03] transition-colors duration-500 -mx-8 md:-mx-12 px-8 md:px-12"
+              >
                 <div className="md:col-span-2">
-                  <span className="text-[0.625rem] font-bold text-secondary-text tracking-ultra">STEP 0{index + 1}</span>
+                  <span className="text-[0.5rem] font-bold text-white/20 tracking-[0.2em]">STEP 0{index + 1}</span>
                 </div>
                 <div className="md:col-span-4">
-                  <h4 className="text-xl md:text-2xl font-black uppercase tracking-tighter text-white group-hover:text-secondary-text transition-colors">{step.title}</h4>
+                  <h4 className="text-xl md:text-2xl font-black uppercase tracking-tighter text-white/80 group-hover:text-white transition-colors duration-300">{step.title}</h4>
                 </div>
-                <div className="md:col-span-6">
-                  <p className="text-[0.6875rem] md:text-sm uppercase tracking-widest leading-relaxed text-secondary-text font-medium group-hover:text-white transition-colors">
+                <div className="md:col-span-5">
+                  <p className="text-[0.65rem] md:text-[0.75rem] uppercase tracking-widest leading-relaxed text-white/30 group-hover:text-white/60 transition-colors duration-300">
                     {step.description}
                   </p>
                 </div>
-              </div>
+                <div className="md:col-span-1 flex justify-end items-start pt-1">
+                  <ArrowRight className={`w-4 h-4 text-white/10 transition-all duration-500 group-hover:text-white/40 group-hover:translate-x-1`} />
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -1055,42 +1073,56 @@ export default function App() {
 
       {/* Contact Section */}
       <section className="bg-white" id="contact">
-        <div className="px-8 py-32 max-w-screen-2xl mx-auto">
-          <div className="border-t border-black/10 pt-16">
+        <div className="px-8 md:px-12 py-24 md:py-36 max-w-screen-2xl mx-auto">
+          <div className="border-t border-black/10 pt-12 md:pt-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8">
               <div className="md:col-span-8">
-                <span className="text-[0.625rem] uppercase tracking-ultra font-black text-black/30 block mb-6">NEXT PHASE:</span>
-                <h2 className="text-4xl md:text-8xl font-black tracking-tighter uppercase leading-[0.8] mb-12 text-black">
+                <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-black/25 block mb-8">NEXT PHASE</span>
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  className="text-[clamp(2.5rem,7vw,7rem)] font-black tracking-tighter uppercase leading-[0.82] mb-12 text-black"
+                >
                   READY TO BUILD<br />YOUR VISION?
-                </h2>
-                <div className="flex flex-col sm:flex-row gap-6">
+                </motion.h2>
+                <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={() => setIsQuoteModalOpen(true)}
-                    className="bg-black text-white px-12 py-6 text-[0.625rem] font-black uppercase tracking-ultra hover:bg-black/80 transition-all flex items-center justify-center gap-4 group"
+                    className="group bg-black text-white px-10 py-5 text-[0.6rem] font-black uppercase tracking-[0.18em] hover:bg-black/80 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3"
                   >
-                    START A PROJECT <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    START A PROJECT
+                    <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                   </button>
                   <a
-                    href="mailto:contact@cinmach.com"
-                    className="border border-black/10 text-black px-12 py-6 text-[0.625rem] font-black uppercase tracking-ultra hover:bg-black hover:text-white transition-all text-center flex items-center justify-center"
+                    href="https://wa.me/919541591652?text=Hi%20Wasim%2C%20I%20saw%20your%20website%20and%20I%E2%80%99m%20interested%20in%20working%20with%20you."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="border border-black/15 text-black/70 px-10 py-5 text-[0.6rem] font-black uppercase tracking-[0.18em] hover:border-black hover:text-black active:scale-[0.98] transition-all duration-300 text-center flex items-center justify-center gap-2"
                   >
-                    DIRECT EMAIL
+                    WHATSAPP
                   </a>
                 </div>
               </div>
               
-              <div className="md:col-span-4 flex flex-col justify-end">
-                <div className="space-y-12">
+              <div className="md:col-span-4 flex flex-col justify-between">
+                <div className="space-y-8">
                   <div>
-                    <h4 className="text-[0.55rem] font-black tracking-ultra text-black/30 uppercase mb-4">LOCATION:</h4>
-                    <p className="text-lg font-black uppercase tracking-tighter text-black">SRINAGAR, KASHMIR</p>
-                    <p className="text-[0.625rem] uppercase tracking-widest text-black/40 mt-1">AVAILABLE WORLDWIDE</p>
+                    <h4 className="text-[0.5rem] font-bold tracking-[0.2em] text-black/25 uppercase mb-3">LOCATION</h4>
+                    <p className="text-xl font-black uppercase tracking-tighter text-black">SRINAGAR, KASHMIR</p>
+                    <p className="text-[0.55rem] uppercase tracking-[0.2em] text-black/40 mt-2">AVAILABLE WORLDWIDE</p>
                   </div>
                   <div>
-                    <h4 className="text-[0.55rem] font-black tracking-ultra text-black/30 uppercase mb-4">LOCAL TIME:</h4>
-                    <p className="text-lg font-black uppercase tracking-tighter text-black">
+                    <h4 className="text-[0.5rem] font-bold tracking-[0.2em] text-black/25 uppercase mb-3">LOCAL TIME</h4>
+                    <p className="text-xl font-black uppercase tracking-tighter text-black">
                       {new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' })} IST
                     </p>
+                  </div>
+                  <div>
+                    <h4 className="text-[0.5rem] font-bold tracking-[0.2em] text-black/25 uppercase mb-3">EMAIL</h4>
+                    <a href="mailto:contact@cinmach.com" className="text-sm font-bold uppercase tracking-tight text-black hover:text-black/50 transition-colors duration-300">
+                      contact@cinmach.com
+                    </a>
                   </div>
                 </div>
               </div>
@@ -1122,18 +1154,23 @@ export default function App() {
       </div>
 
       {/* Footer */}
-      <footer className="bg-[#0E0E0E] border-t border-outline/20">
-        <div className="flex flex-col md:flex-row justify-between items-center w-full px-8 py-12 gap-6 max-w-screen-2xl mx-auto">
-          <div className="flex flex-col items-center md:items-start">
-            <span className="text-lg font-black text-white">WASIM PAKHTOON</span>
-            <p className="uppercase tracking-[0.1em] text-[0.625rem] text-secondary-text mt-2">
-              © 2024 WASIM PAKHTOON. ALL RIGHTS RESERVED.
-            </p>
-          </div>
-          <div className="flex gap-12">
-            <a href="#" className="uppercase tracking-[0.1em] text-[0.625rem] text-secondary-text hover:text-white transition-colors duration-300">INSTAGRAM</a>
-            <a href="#" className="uppercase tracking-[0.1em] text-[0.625rem] text-secondary-text hover:text-white transition-colors duration-300">VIMEO</a>
-            <a href="#" className="uppercase tracking-[0.1em] text-[0.625rem] text-secondary-text hover:text-white transition-colors duration-300">LINKEDIN</a>
+      <footer className="bg-black border-t border-white/8">
+        <div className="px-8 md:px-12 py-14 max-w-screen-2xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-10">
+            <div>
+              <img src={LogoImg} alt="Wasim Pakhtoon" className="h-6 w-auto object-contain mb-4" />
+              <p className="text-[0.5rem] uppercase tracking-[0.2em] text-white/20">
+                &copy; 2025 Wasim Pakhtoon. All rights reserved.
+              </p>
+            </div>
+            <div className="flex flex-col md:items-end gap-4">
+              <div className="flex gap-8">
+                <a href="#" className="text-[0.55rem] uppercase tracking-[0.2em] text-white/30 hover:text-white transition-colors duration-300">Instagram</a>
+                <a href="#" className="text-[0.55rem] uppercase tracking-[0.2em] text-white/30 hover:text-white transition-colors duration-300">Vimeo</a>
+                <a href="#" className="text-[0.55rem] uppercase tracking-[0.2em] text-white/30 hover:text-white transition-colors duration-300">LinkedIn</a>
+              </div>
+              <p className="text-[0.5rem] uppercase tracking-[0.15em] text-white/15">Crafted from Srinagar, Kashmir</p>
+            </div>
           </div>
         </div>
       </footer>

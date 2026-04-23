@@ -32,7 +32,19 @@ const socials = [
   { name: "YOUTUBE", href: "https://www.youtube.com/@wxm-port" },
 ];
 
-const brandingProjects = [
+interface Project {
+  id: number;
+  year: string;
+  title: string;
+  category: string;
+  vimeoId?: string;
+  youtubeId?: string;
+  image?: string;
+  description?: string;
+  fullWidth?: boolean;
+}
+
+const brandingProjects: Project[] = [
   {
     id: 3,
     year: "2024",
@@ -49,7 +61,7 @@ const brandingProjects = [
   },
 ];
 
-const cinematicProjects = [
+const cinematicProjects: Project[] = [
   {
     id: 7,
     year: "2025",
@@ -69,7 +81,7 @@ const cinematicProjects = [
 ];
 
 
-const droneProjects = [
+const droneProjects: Project[] = [
   {
     id: 4,
     year: "2024",
@@ -80,7 +92,7 @@ const droneProjects = [
   },
 ];
 
-const editingProjects = [
+const editingProjects: Project[] = [
   {
     id: 5,
     year: "2024",
@@ -155,7 +167,13 @@ const faqs = [
   }
 ];
 
-const portfolioCategories = [
+const portfolioCategories: {
+  id: number;
+  title: string;
+  description: string;
+  projects: Project[];
+  previews: string[];
+}[] = [
   {
     id: 0,
     title: "CINEMATIC FILMS",
@@ -579,7 +597,13 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <header id="home" className="relative min-h-screen flex flex-col justify-center pt-28 md:pt-40 pb-10 md:pb-20 px-8 md:px-12 max-w-screen-2xl mx-auto">
+      <header id="home" className="relative min-h-screen flex flex-col justify-center pt-28 md:pt-40 pb-10 md:pb-20 px-8 md:px-12 max-w-screen-2xl mx-auto overflow-hidden">
+        {/* Subtle background motion effect */}
+        <div className="absolute inset-0 pointer-events-none -z-10">
+          <div className="absolute top-[10%] left-[10%] w-[50vw] h-[50vw] max-w-[600px] max-h-[600px] bg-white/[0.03] rounded-full blur-[100px] mix-blend-screen opacity-50 animate-pulse" style={{ animationDuration: '8s' }} />
+          <div className="absolute bottom-[10%] right-[5%] w-[40vw] h-[40vw] max-w-[500px] max-h-[500px] bg-white/[0.02] rounded-full blur-[120px] mix-blend-screen opacity-30 animate-pulse" style={{ animationDuration: '12s' }} />
+        </div>
+
         {/* Cinematic Scroll Indicator */}
         <motion.div 
           style={{ opacity: scrollIndicatorOpacity }}
@@ -600,131 +624,121 @@ export default function App() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center gap-3 mb-8"
+          className="flex items-center gap-3 mb-8 md:mb-12 mt-12 md:mt-0 relative z-20"
         >
-          <span className="text-[0.55rem] uppercase tracking-[0.25em] font-bold text-white/30 font-label">2 PROJECT SLOTS OPEN — BOOKING FOR NEXT 6 MONTHS</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse flex-shrink-0 shadow-[0_0_8px_rgba(255,255,255,0.6)]" />
+          <span className="text-[0.6rem] uppercase tracking-[0.25em] font-bold text-white/70 font-label">ONLY 2 PROJECT SLOTS AVAILABLE THIS MONTH</span>
         </motion.div>
 
-        {/* Hero Heading + Impact Panel Row */}
-        <div className="flex items-center justify-between gap-6 lg:gap-12 mb-12 md:mb-20">
+        {/* Hero Content Area */}
+        <div className="flex flex-col md:flex-row justify-between gap-16 lg:gap-24 relative z-20">
+          
+          {/* Left Side: Headline, Subheadline, CTAs */}
+          <div className="flex flex-col max-w-[100%] md:max-w-[60%] lg:max-w-[65%] flex-shrink-0">
+            {/* Main Headline */}
+            <motion.h1
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 1.2 }}
+              className="text-[clamp(2.75rem,6.5vw,7.5rem)] font-black tracking-tighter uppercase leading-[0.88] mb-8"
+            >
+              <span className="sr-only">
+                Wasim Pakhtoon — Video Editor &amp; Cinematographer in Kashmir. Professional cinematic video production, drone footage, hotel videography, color grading, and brand identity design in Srinagar, Kashmir, India.
+              </span>
+              <span aria-hidden="true" className="relative block overflow-hidden">
+                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }} className="block">CINEMATIC</motion.span>
+              </span>
+              <span aria-hidden="true" className="relative block overflow-hidden">
+                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 }} className="block">CONTENT THAT</motion.span>
+              </span>
+              <span aria-hidden="true" className="relative block overflow-hidden text-white/80">
+                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.3 }} className="block">DRIVES LUXURY</motion.span>
+              </span>
+              <span aria-hidden="true" className="relative block overflow-hidden text-white/80">
+                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.4 }} className="block">BOOKINGS</motion.span>
+              </span>
+            </motion.h1>
+            
+            {/* Subheadline */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
+              className="text-white/80 text-lg md:text-xl lg:text-2xl font-medium max-w-xl tracking-wide leading-relaxed mb-12"
+            >
+              End-to-end cinematic solutions for luxury hotels & premium brands
+            </motion.p>
+            
+            {/* CTAs */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
+              className="flex flex-col gap-8"
+            >
+              <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
+                <button
+                  onClick={() => setIsQuoteModalOpen(true)}
+                  className="group w-full sm:w-auto bg-white text-black px-10 py-5 text-[0.65rem] font-bold uppercase tracking-[0.2em] hover:bg-white/90 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-4"
+                >
+                  START A PROJECT
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                </button>
+                <a
+                  href="#work-gallery"
+                  className="group w-full sm:w-auto border border-transparent text-white/60 px-6 py-5 text-[0.65rem] font-bold uppercase tracking-[0.2em] hover:text-white transition-all duration-300 flex items-center justify-center gap-3"
+                >
+                  VIEW MY WORK
+                  <ArrowDown className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-y-1 transition-all duration-300" />
+                </a>
+              </div>
+              
+              {/* Trust Signal */}
+              <div className="flex items-center gap-4 opacity-80">
+                <span className="text-[0.6rem] uppercase tracking-widest text-white/40 font-medium">TRUSTED BY LUXURY HOTELS & BRANDS</span>
+                <div className="h-px bg-white/10 flex-1 max-w-[120px]" />
+              </div>
+            </motion.div>
+          </div>
 
-          {/* Main Heading — Left */}
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="text-[clamp(3rem,8.5vw,8.5rem)] font-black tracking-tighter uppercase leading-[0.82] relative z-20 max-w-[65%] lg:max-w-[60%] flex-shrink-0"
-          >
-            <span className="sr-only">
-              Wasim Pakhtoon — Video Editor &amp; Cinematographer in Kashmir. Professional cinematic video production, drone footage, hotel videography, color grading, and brand identity design in Srinagar, Kashmir, India.
-            </span>
-            <span aria-hidden="true">DELIVERING<br />CINEMATIC<br />EXCELLENCE</span>
-          </motion.h1>
-
-          {/* Impact Panel — Right, desktop only */}
+          {/* Right Side: Impact Metrics */}
           <motion.div
             style={{ opacity: impactPanelOpacity, y: impactPanelY }}
-            className="hidden md:flex flex-col justify-center gap-10 flex-1 pl-8 lg:pl-12 border-l border-white/8"
+            className="flex flex-col justify-center gap-12 flex-1 md:pl-10 lg:pl-16 md:border-l border-white/10 mt-4 md:mt-0"
           >
             {[
-              { num: "01", value: "+300% Brand Visibility", primary: true },
-              { num: "02", value: "More Direct Bookings", primary: false },
-              { num: "03", value: "Cinematic First Impressions", primary: false },
+              { num: "01", value: "+300% engagement on hotel listings", primary: true },
+              { num: "02", value: "Increase in direct booking inquiries", primary: false },
+              { num: "03", value: "Scroll-stopping visuals that convert", primary: false },
             ].map((item, i) => (
               <motion.div
                 key={item.num}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.5 + i * 0.18 }}
-                className="group flex items-start gap-4"
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.7 + i * 0.18 }}
+                className="group flex items-start gap-6"
               >
-                <span className={`text-[0.45rem] font-bold tracking-[0.2em] font-label mt-1.5 flex-shrink-0 transition-colors duration-500 ${item.primary ? "text-white/35" : "text-white/12"}`}>
+                <span className={`text-[0.6rem] font-bold tracking-[0.25em] font-label mt-1.5 flex-shrink-0 transition-colors duration-500 ${item.primary ? "text-white/40" : "text-white/20"}`}>
                   {item.num}
                 </span>
-                <span className={`font-black uppercase tracking-tight leading-tight transition-all duration-500 group-hover:text-white ${
+                <span className={`font-medium tracking-wide leading-snug transition-all duration-500 group-hover:text-white ${
                   item.primary
-                    ? "text-[1.1rem] text-white/85"
-                    : "text-[0.85rem] text-white/28"
+                    ? "text-[1.25rem] text-white/90"
+                    : "text-[1.05rem] text-white/50"
                 }`}>
                   {item.value}
                 </span>
               </motion.div>
             ))}
           </motion.div>
-
         </div>
-
-        {/* Hero Info Bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
-          className="border-t border-outline/25 pt-8 md:pt-10"
-        >
-          <div className="flex flex-col md:flex-row gap-10 md:gap-0">
-
-            {/* Left Column — Hidden on phone */}
-            <div className="hidden md:block md:w-2/5 md:pr-16 flex-shrink-0">
-              <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-white/20 block mb-3 font-label">OUR MISSION</span>
-              <p className="text-[0.65rem] uppercase tracking-[0.1em] leading-loose text-white/30 max-w-xs">
-                Cinematic excellence for luxury brands &amp; hotels — crafted from Srinagar, delivered worldwide.
-              </p>
-            </div>
-
-            {/* Thin divider — desktop only */}
-            <div className="hidden md:block w-px bg-outline/20 flex-shrink-0" />
-
-            {/* Right Column */}
-            <div className="md:flex-1 md:pl-16">
-              <p className="text-[0.65rem] uppercase leading-relaxed tracking-widest text-white/70 max-w-lg">
-                END-TO-END CINEMATIC SOLUTIONS FOR LUXURY BRANDS AND HOTELS — VIDEO EDITING, CINEMATOGRAPHY &amp; BRANDING, FROM SRINAGAR.
-              </p>
-
-              {/* Single status indicator */}
-              <div className="mt-5 flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse-red flex-shrink-0" />
-                <span className="text-[0.55rem] uppercase tracking-[0.2em] font-bold text-white/50">AVAILABLE NOW — LIMITED CAPACITY</span>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="mt-8 flex flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => setIsQuoteModalOpen(true)}
-                  className="group sm:w-auto bg-white text-black px-10 py-4 text-[0.6rem] font-bold uppercase tracking-[0.18em] hover:bg-white/90 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3"
-                >
-                  START A PROJECT
-                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform duration-300" />
-                </button>
-                <a
-                  href="#work-gallery"
-                  className="sm:w-auto border border-white/20 text-white/70 px-10 py-4 text-[0.6rem] font-bold uppercase tracking-[0.18em] hover:border-white/60 hover:text-white hover:bg-white/5 active:scale-[0.98] transition-all duration-300 text-center"
-                >
-                  VIEW MY WORK
-                </a>
-              </div>
-
-              {/* Client Portal — demoted */}
-              <div className="mt-6 pt-5 border-t border-outline/15 flex flex-wrap items-center gap-3">
-                <span className="text-[0.5rem] uppercase tracking-widest text-white/20">EXISTING CLIENTS</span>
-                <span className="text-white/15 text-xs">→</span>
-                <a
-                  href="/#portal"
-                  className="text-white/30 text-[0.5rem] font-bold uppercase tracking-widest hover:text-white/60 transition-colors duration-300"
-                >
-                  CLIENT PORTAL
-                </a>
-              </div>
-            </div>
-
-          </div>
-        </motion.div>
 
         {/* Socials Row */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.7 }}
-          className="flex items-center gap-8 border-t border-outline/25 pt-8 mt-8 md:mt-12"
+          transition={{ duration: 1, delay: 0.9 }}
+          className="flex items-center gap-8 border-t border-outline/25 pt-8 mt-16 md:mt-24 relative z-20"
         >
           <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-white/20 flex-shrink-0 font-label">FOLLOW</span>
           <div className="flex flex-wrap gap-6 md:gap-10">

@@ -39,9 +39,11 @@ interface Project {
   category: string;
   vimeoId?: string;
   youtubeId?: string;
+  muxId?: string;
   image?: string;
   description?: string;
   fullWidth?: boolean;
+  isVertical?: boolean;
 }
 
 const brandingProjects: Project[] = [
@@ -92,6 +94,18 @@ const droneProjects: Project[] = [
   },
 ];
 
+const adProjects: Project[] = [
+  {
+    id: 8,
+    year: "2025",
+    title: "SOLGRID AD EDIT",
+    category: "AD EDIT",
+    muxId: "h5SoJiwpJaT02cN7wrxHeQJQiWytCgsCdJTIO02aUxJjg",
+    description: "Vertical 9:16 high-impact social ad.",
+    isVertical: true,
+  }
+];
+
 const editingProjects: Project[] = [
   {
     id: 5,
@@ -102,68 +116,121 @@ const editingProjects: Project[] = [
   },
 ];
 
-const services = [
+const primaryServices = [
   {
     id: "01",
-    title: "Cinematic Brand Films",
-    description: "Full-scale storytelling from concept to final edit, crafted to elevate your brand visually and leave a lasting impression.",
-    tags: ["Concept & Script", "Full Production", "Color Grading", "Sound Design"],
+    title: "Video Editing",
+    description: "Raw footage transformed into polished, story-driven content — structured for retention and results.",
+    tags: ["Cuts & Assembly", "Pacing", "Story Structure", "Multi-format"],
   },
   {
     id: "02",
-    title: "Luxury Property Showcases",
-    description: "High-end visuals combining aerial and interior cinematography to drive bookings, elevate perception, and capture every detail.",
-    tags: ["Drone Aerial", "Interior Shoots", "Hotels & Villas", "Real Estate"],
+    title: "Color Grading",
+    description: "Cinematic color science applied to every frame — mood, consistency, and visual identity locked in.",
+    tags: ["DaVinci Resolve", "Look Development", "Scene Matching"],
   },
   {
     id: "03",
-    title: "Aerial & Drone Visuals",
-    description: "Professional drone cinematography capturing scale, landscape, and perspective — giving your audience a view they cannot forget.",
-    tags: ["DJI 3 Pro", "DJI Mini 4K", "4K Footage", "Landscape & Architecture"],
+    title: "Motion Graphics",
+    description: "Animated titles, transitions, and visual effects that elevate production value without slowing delivery.",
+    tags: ["After Effects", "Typography", "Lower Thirds", "Intros"],
   },
   {
     id: "04",
-    title: "Social Media Visual Campaigns",
-    description: "High-impact short-form content and edits designed for reach, engagement, and conversions across all major platforms.",
-    tags: ["Reels & Shorts", "Motion Graphics", "Platform Optimized", "Branded Content"],
+    title: "Sound Design",
+    description: "Music selection, mixing, and SFX layering that complete the emotional arc of every edit.",
+    tags: ["Audio Mix", "SFX", "Voiceover Sync", "Music Licensing"],
   },
+];
+
+const secondaryServices = [
+  {
+    id: "05",
+    title: "Cinematography",
+    description: "On-location shooting for brands and properties — available as an add-on to any editing project.",
+    tags: ["Mirrorless", "Gimbal", "Cinematic Lighting"],
+  },
+  {
+    id: "06",
+    title: "Drone & Aerial",
+    description: "Professional aerial footage for real estate, travel, and brand content.",
+    tags: ["DJI Mavic 3 Pro", "DJI Mini 4K", "4K Aerial"],
+  },
+];
+
+const whatIEdit = [
+  {
+    title: "Ads & Commercials",
+    description: "Scroll-stopping edits for paid campaigns that convert viewers into customers."
+  },
+  {
+    title: "Social Media Reels",
+    description: "Fast-paced, hook-driven edits optimized for Instagram, TikTok, and YouTube Shorts."
+  },
+  {
+    title: "YouTube Videos",
+    description: "Long-form edits with pacing, structure, and retention strategies built in."
+  },
+  {
+    title: "Brand Films",
+    description: "Cinematic storytelling edits that build trust, authority, and emotional connection."
+  }
+];
+
+const whyMyEditingStandsOut = [
+  {
+    title: "Strategic Storytelling",
+    description: "Every cut serves a purpose. I structure edits to guide the viewer through a deliberate narrative arc."
+  },
+  {
+    title: "Pacing That Holds Attention",
+    description: "I engineer rhythm and timing to maximize watch time and keep audiences engaged frame by frame."
+  },
+  {
+    title: "Emotion-Driven Craft",
+    description: "Music, color, and transitions work together to make your audience feel something — not just watch something."
+  },
+  {
+    title: "Conversion-Focused Delivery",
+    description: "Every edit is optimized for the platform and audience, designed to drive action — not just views."
+  }
 ];
 
 const skillCategories = [
   {
     title: "VIDEO EDITING",
-    skills: ["ADOBE SUITE", "DAVINCI RESOLVE", "MOTION GRAPHICS"]
+    skills: ["ADOBE PREMIERE", "DAVINCI RESOLVE", "FINAL CUT PRO"]
+  },
+  {
+    title: "POST-PRODUCTION",
+    skills: ["COLOR GRADING", "SOUND DESIGN", "MOTION GRAPHICS"]
+  },
+  {
+    title: "SHOOTING (ADD-ON)",
+    skills: ["MIRRORLESS CAMERAS", "CINEMATIC LIGHTING", "GIMBAL STABILIZATION"]
   },
   {
     title: "DRONE & AERIAL",
     skills: ["DJI 3 PRO", "DJI MINI 4K", "AERIAL CINEMATOGRAPHY"]
-  },
-  {
-    title: "SHOOTING",
-    skills: ["MIRRORLESS CAMERAS", "CINEMATIC LIGHTING", "GIMBAL STABILIZATION"]
-  },
-  {
-    title: "BRAND IDENTITY",
-    skills: ["FIGMA", "ADOBE PHOTOSHOP", "ADOBE ILLUSTRATOR", "AFTER EFFECTS"]
   }
 ];
 
 const faqs = [
   {
-    question: "Do you travel for shoots, or are you only based in Kashmir?",
-    answer: "While we are based in Kashmir, we frequently travel for high-end hotel, real-estate, and brand shoots across the globe. Travel and logistics can be factored into a custom quote."
+    question: "Can you edit footage I've already shot?",
+    answer: "Yes, absolutely. Remote editing is a core service. You can send me your raw footage, and I'll transform it into a polished, high-impact final product."
   },
   {
-    question: "How long does a typical cinematic project take from start to delivery?",
-    answer: "A standard brand or property shoot typically takes 1-3 days on location. Post-production, including color grading and sound design, takes 1-2 weeks depending on the project scope."
+    question: "What's your typical turnaround time for editing?",
+    answer: "Standard turnaround time is 3-7 days depending on the scope of the project. Rush delivery is available for urgent campaigns upon request."
   },
   {
-    question: "Do you handle the complete production process?",
-    answer: "Yes. From pre-production planning and storyboarding to shooting, drone operation, editing, and final color correction, we manage every phase in-house to ensure uncompromising quality."
+    question: "Do you also handle shooting and production?",
+    answer: "Yes, while editing is my primary focus, I also offer full on-location cinematography and drone operations as an optional add-on for clients who need end-to-end production."
   },
   {
-    question: "What equipment do you use for high-end property shoots?",
-    answer: "We utilize professional mirrorless cinema cameras, gimbal stabilization systems, and advanced DJI Drones (Mavic 3 Pro & Mini 4K) to capture world-class ground and aerial visuals."
+    question: "What formats and platforms do you deliver for?",
+    answer: "I edit and optimize for all major platforms, providing deliverables in 16:9 (YouTube/Web), 9:16 (Reels/TikTok), and 1:1 or 4:5 for feed posts, ensuring maximum impact everywhere."
   }
 ];
 
@@ -174,56 +241,65 @@ const portfolioCategories: {
   projects: Project[];
   previews: string[];
 }[] = [
-  {
-    id: 0,
-    title: "CINEMATIC FILMS",
-    description: "Story-driven visuals crafted for brands and businesses",
-    projects: cinematicProjects,
-    previews: [
-      "https://images.pexels.com/photos/3062541/pexels-photo-3062541.jpeg?auto=compress&cs=tinysrgb&w=800",
-      "https://images.pexels.com/photos/2510428/pexels-photo-2510428.jpeg?auto=compress&cs=tinysrgb&w=800"
-    ]
-  },
-  {
-    id: 1,
-    title: "AERIAL VISUALS",
-    description: "Drone cinematography for real estate, travel, and landscapes",
-    projects: droneProjects,
-    previews: [
-      "https://images.pexels.com/photos/210243/pexels-photo-210243.jpeg?auto=compress&cs=tinysrgb&w=800"
-    ]
-  },
-  {
-    id: 2,
-    title: "POST-PRODUCTION",
-    description: "Editing, color grading, and cinematic finishing",
-    projects: editingProjects,
-    previews: [
-      "https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=800"
-    ]
-  },
-  {
-    id: 3,
-    title: "BRAND STORIES",
-    description: "Creative content designed to grow your brand",
-    projects: brandingProjects,
-    previews: [
-      EcoBrewCardImg
-    ]
-  }
-];
+    {
+      id: 0,
+      title: "AD EDITS",
+      description: "Vertical & horizontal ads optimized for conversions",
+      projects: adProjects,
+      previews: [
+        "https://images.pexels.com/photos/7319324/pexels-photo-7319324.jpeg?auto=compress&cs=tinysrgb&w=800"
+      ]
+    },
+    {
+      id: 1,
+      title: "EDITING & POST",
+      description: "Editing, color grading, and cinematic finishing",
+      projects: editingProjects,
+      previews: [
+        "https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=800"
+      ]
+    },
+    {
+      id: 2,
+      title: "CINEMATIC FILMS",
+      description: "Story-driven visuals crafted for brands and businesses",
+      projects: cinematicProjects,
+      previews: [
+        "https://images.pexels.com/photos/3062541/pexels-photo-3062541.jpeg?auto=compress&cs=tinysrgb&w=800",
+        "https://images.pexels.com/photos/2510428/pexels-photo-2510428.jpeg?auto=compress&cs=tinysrgb&w=800"
+      ]
+    },
+    {
+      id: 3,
+      title: "AERIAL & DRONE",
+      description: "Breathtaking perspectives from the sky",
+      projects: droneProjects,
+      previews: [
+        "https://images.pexels.com/photos/2100075/pexels-photo-2100075.jpeg?auto=compress&cs=tinysrgb&w=800"
+      ]
+    },
+    {
+      id: 4,
+      title: "BRAND IDENTITY",
+      description: "Visual identity and logo design for modern startups",
+      projects: brandingProjects,
+      previews: [
+        "https://images.pexels.com/photos/1766604/pexels-photo-1766604.jpeg?auto=compress&cs=tinysrgb&w=800"
+      ]
+    }
+  ];
 
-const CustomSelect = ({ 
-  name, 
-  label, 
-  options, 
-  required = false, 
+const CustomSelect = ({
+  name,
+  label,
+  options,
+  required = false,
   defaultValue = "",
   theme = "dark"
-}: { 
-  name: string, 
-  label: string, 
-  options: { value: string, label: string }[], 
+}: {
+  name: string,
+  label: string,
+  options: { value: string, label: string }[],
   required?: boolean,
   defaultValue?: string
   theme?: "dark" | "light"
@@ -239,25 +315,23 @@ const CustomSelect = ({
         {name.replace('_', ' ')} {required && "*"}
       </label>
       <input type="hidden" name={name} value={selected} required={required} />
-      
+
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex justify-between items-center bg-transparent border-0 border-b py-3 px-0 text-sm uppercase tracking-widest transition-colors group text-left ${
-          theme === 'light' 
-            ? 'border-black/10 focus:border-black' 
-            : 'border-outline/30 focus:border-white'
-        }`}
+        className={`w-full flex justify-between items-center bg-transparent border-0 border-b py-3 px-0 text-sm uppercase tracking-widest transition-colors group text-left ${theme === 'light'
+          ? 'border-black/10 focus:border-black'
+          : 'border-outline/30 focus:border-white'
+          }`}
       >
-        <span className={selected 
-          ? (theme === 'light' ? "text-black" : "text-white") 
+        <span className={selected
+          ? (theme === 'light' ? "text-black" : "text-white")
           : (theme === 'light' ? "text-black/20" : "text-outline/40")
         }>
           {selectedLabel}
         </span>
-        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${
-          theme === 'light' ? 'text-black/40' : 'text-secondary-text'
-        } ${isOpen ? "rotate-180" : ""}`} />
+        <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${theme === 'light' ? 'text-black/40' : 'text-secondary-text'
+          } ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       <AnimatePresence>
@@ -268,11 +342,10 @@ const CustomSelect = ({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className={`absolute left-0 right-0 top-full mt-2 border z-[120] backdrop-blur-xl max-h-60 overflow-y-auto ${
-                theme === 'light' 
-                  ? 'bg-white border-black/10 shadow-xl' 
-                  : 'bg-[#0a0a0a] border-outline/20'
-              }`}
+              className={`absolute left-0 right-0 top-full mt-2 border z-[120] backdrop-blur-xl max-h-60 overflow-y-auto ${theme === 'light'
+                ? 'bg-white border-black/10 shadow-xl'
+                : 'bg-[#0a0a0a] border-outline/20'
+                }`}
             >
               {options.map((option) => (
                 <button
@@ -282,11 +355,10 @@ const CustomSelect = ({
                     setSelected(option.value);
                     setIsOpen(false);
                   }}
-                  className={`w-full text-left px-4 py-3 text-[0.625rem] uppercase tracking-widest transition-colors ${
-                    theme === 'light'
-                      ? (selected === option.value ? "text-black bg-black/5" : "text-black/60 hover:bg-black/5")
-                      : (selected === option.value ? "text-white bg-white/5" : "text-secondary-text hover:bg-white/5")
-                  }`}
+                  className={`w-full text-left px-4 py-3 text-[0.625rem] uppercase tracking-widest transition-colors ${theme === 'light'
+                    ? (selected === option.value ? "text-black bg-black/5" : "text-black/60 hover:bg-black/5")
+                    : (selected === option.value ? "text-white bg-white/5" : "text-secondary-text hover:bg-white/5")
+                    }`}
                 >
                   {option.label}
                 </button>
@@ -307,7 +379,7 @@ export default function App() {
   const [scrolled, setScrolled] = useState(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [formStatus, setFormStatus] = useState("idle"); 
+  const [formStatus, setFormStatus] = useState("idle");
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<number | null>(0);
   const [isRightClickOverlayOpen, setIsRightClickOverlayOpen] = useState(false);
@@ -325,7 +397,7 @@ export default function App() {
     };
 
     window.addEventListener('contextmenu', handleContextMenu);
-    
+
     // Disable automatic browser scroll restoration to prevent layout jumps on refresh
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
@@ -364,10 +436,10 @@ export default function App() {
     const handleIntersection = (entries: IntersectionObserverEntry[]) => {
       // Find the most relevant intersecting entry
       const intersectingEntry = entries.find(entry => entry.isIntersecting);
-      
+
       if (intersectingEntry) {
         const id = intersectingEntry.target.id;
-        
+
         // Manual override for hero
         if (id === 'home') {
           setActiveLink("HOME");
@@ -396,7 +468,7 @@ export default function App() {
     };
 
     const observer = new IntersectionObserver(handleIntersection, observerOptions);
-    
+
     // observe all primary section containers
     const sections = ['home', 'work', 'services', 'about', 'faq', 'contact'];
     sections.forEach(id => {
@@ -422,9 +494,9 @@ export default function App() {
   const handleQuoteSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormStatus("submitting");
-    
+
     const formData = new FormData(e.currentTarget);
-    
+
     try {
       const response = await fetch("https://formspree.io/f/xdaykevo", { // Updated with user's Form ID
         method: "POST",
@@ -433,7 +505,7 @@ export default function App() {
           'Accept': 'application/json'
         }
       });
-      
+
       if (response.ok) {
         setFormStatus("success");
       } else {
@@ -448,22 +520,21 @@ export default function App() {
   return (
     <div className="min-h-screen bg-background text-on-surface selection:bg-white selection:text-black">
       {/* Navigation */}
-      <nav 
-        className={`fixed top-0 w-full z-[100] transition-all duration-500 ${
-          scrolled 
-            ? (navTheme === "dark" 
-                ? "bg-black/80 backdrop-blur-md border-b border-outline/20 py-4" 
-                : "bg-[#f8f8f8]/80 backdrop-blur-md border-b border-black/10 py-4") 
-            : "bg-transparent border-b border-transparent py-6"
-        }`}
+      <nav
+        className={`fixed top-0 w-full z-[100] transition-all duration-500 ${scrolled
+          ? (navTheme === "dark"
+            ? "bg-black/80 backdrop-blur-md border-b border-outline/20 py-4"
+            : "bg-[#f8f8f8]/80 backdrop-blur-md border-b border-black/10 py-4")
+          : "bg-transparent border-b border-transparent py-6"
+          }`}
       >
         <div className="flex justify-between items-center w-full px-8 max-w-screen-2xl mx-auto">
           <a href="#" aria-label="Wasim Pakhtoon — Home" className="shrink-0 flex items-center group">
-            <img 
-              src={LogoImg} 
-              alt="Wasim Pakhtoon — Cinematic Video Editor and Cinematographer in Kashmir" 
+            <img
+              src={LogoImg}
+              alt="Wasim Pakhtoon — Cinematic Video Editor and Cinematographer in Kashmir"
               loading="eager"
-              className={`h-8 w-auto object-left object-contain transition-all duration-500 group-hover:opacity-70 ${navTheme === 'light' ? 'invert' : ''}`} 
+              className={`h-8 w-auto object-left object-contain transition-all duration-500 group-hover:opacity-70 ${navTheme === 'light' ? 'invert' : ''}`}
             />
           </a>
 
@@ -475,34 +546,32 @@ export default function App() {
                   href={link.href}
                   whileHover={{ y: -2, opacity: 1 }}
                   transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                  className={`font-label uppercase tracking-[0.15em] text-[0.6875rem] font-medium transition-colors ${
-                    navTheme === "dark" 
-                      ? (activeLink === link.name ? "text-white opacity-100" : "text-white opacity-60")
-                      : (activeLink === link.name ? "text-black opacity-100" : "text-black opacity-60")
-                  }`}
+                  className={`font-label uppercase tracking-[0.15em] text-[0.6875rem] font-medium transition-colors ${navTheme === "dark"
+                    ? (activeLink === link.name ? "text-white opacity-100" : "text-white opacity-60")
+                    : (activeLink === link.name ? "text-black opacity-100" : "text-black opacity-60")
+                    }`}
                 >
                   {link.name}
                 </motion.a>
               ))}
             </div>
-            
+
             <motion.a
               href="https://wa.me/919541591652?text=Hi%20Wasim%2C%20I%20saw%20your%20website%20and%20I%E2%80%99m%20interested%20in%20working%20with%20you."
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ y: -2, opacity: 1 }}
               transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-              className={`font-label uppercase tracking-[0.15em] text-[0.625rem] font-bold border-b py-1 transition-all duration-500 ${
-                navTheme === "dark"
-                  ? "text-white border-white/20 hover:border-white"
-                  : "text-black border-black/20 hover:border-black"
-              }`}
+              className={`font-label uppercase tracking-[0.15em] text-[0.625rem] font-bold border-b py-1 transition-all duration-500 ${navTheme === "dark"
+                ? "text-white border-white/20 hover:border-white"
+                : "text-black border-black/20 hover:border-black"
+                }`}
             >
               LET'S TALK
             </motion.a>
           </div>
-            
-          <button 
+
+          <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             className={`md:hidden p-2 hover:bg-white/5 transition-colors z-50 rounded-full ${navTheme === 'light' ? 'text-black' : 'text-white'}`}
             aria-label="Toggle Menu"
@@ -545,17 +614,16 @@ export default function App() {
                     setActiveLink(link.name);
                     setIsMenuOpen(false);
                   }}
-                  className={`text-4xl font-black uppercase tracking-[0.1em] transition-colors ${
-                    activeLink === link.name ? "text-white" : "text-white/30"
-                  }`}
+                  className={`text-4xl font-black uppercase tracking-[0.1em] transition-colors ${activeLink === link.name ? "text-white" : "text-white/30"
+                    }`}
                 >
                   {link.name}
                 </motion.a>
               ))}
             </div>
-            
+
             {/* Bottom Section */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -605,13 +673,13 @@ export default function App() {
         </div>
 
         {/* Cinematic Scroll Indicator */}
-        <motion.div 
+        <motion.div
           style={{ opacity: scrollIndicatorOpacity }}
           className="fixed right-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col items-center gap-5 z-40 pointer-events-none"
         >
           <span className="text-[0.5rem] [writing-mode:vertical-lr] tracking-[0.4em] font-light text-white/30 uppercase">SCROLL</span>
           <div className="w-px h-16 bg-white/10 overflow-hidden relative">
-            <motion.div 
+            <motion.div
               animate={{ top: ["-100%", "100%"] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
               className="absolute left-0 w-full h-[80%] bg-gradient-to-b from-transparent via-white/50 to-transparent"
@@ -627,12 +695,12 @@ export default function App() {
           className="flex items-center gap-3 mb-8 md:mb-12 mt-12 md:mt-0 relative z-20"
         >
           <span className="w-1.5 h-1.5 rounded-full bg-white/80 animate-pulse flex-shrink-0 shadow-[0_0_8px_rgba(255,255,255,0.6)]" />
-          <span className="text-[0.6rem] uppercase tracking-[0.25em] font-bold text-white/70 font-label">ONLY 2 PROJECT SLOTS AVAILABLE THIS MONTH</span>
+          <span className="text-[0.6rem] uppercase tracking-[0.25em] font-bold text-white/70 font-label">VIDEO EDITOR & POST-PRODUCTION SPECIALIST</span>
         </motion.div>
 
         {/* Hero Content Area */}
         <div className="flex flex-col md:flex-row justify-between gap-16 lg:gap-24 relative z-20">
-          
+
           {/* Left Side: Headline, Subheadline, CTAs */}
           <div className="flex flex-col max-w-[100%] md:max-w-[60%] lg:max-w-[65%] flex-shrink-0">
             {/* Main Headline */}
@@ -643,22 +711,22 @@ export default function App() {
               className="text-[clamp(2.75rem,6.5vw,7.5rem)] font-black tracking-tighter uppercase leading-[0.88] mb-8"
             >
               <span className="sr-only">
-                Wasim Pakhtoon — Video Editor &amp; Cinematographer in Kashmir. Professional cinematic video production, drone footage, hotel videography, color grading, and brand identity design in Srinagar, Kashmir, India.
+                Wasim Pakhtoon — Video Editor &amp; Post-Production Specialist. Professional video editing services, ads, reels, YouTube videos, and brand films. Based in Srinagar, Kashmir, available worldwide.
               </span>
               <span aria-hidden="true" className="relative block overflow-hidden">
-                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }} className="block">CINEMATIC</motion.span>
+                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }} className="block">I TURN RAW</motion.span>
               </span>
               <span aria-hidden="true" className="relative block overflow-hidden">
-                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 }} className="block">CONTENT THAT</motion.span>
+                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.2 }} className="block">FOOTAGE INTO</motion.span>
               </span>
               <span aria-hidden="true" className="relative block overflow-hidden text-white/80">
-                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.3 }} className="block">DRIVES LUXURY</motion.span>
+                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.3 }} className="block">VIDEOS THAT</motion.span>
               </span>
               <span aria-hidden="true" className="relative block overflow-hidden text-white/80">
-                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.4 }} className="block">BOOKINGS</motion.span>
+                <motion.span initial={{ y: "110%" }} animate={{ y: 0 }} transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.4 }} className="block">DRIVE RESULTS</motion.span>
               </span>
             </motion.h1>
-            
+
             {/* Subheadline */}
             <motion.p
               initial={{ opacity: 0, y: 20 }}
@@ -666,11 +734,11 @@ export default function App() {
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.5 }}
               className="text-white/80 text-lg md:text-xl lg:text-2xl font-medium max-w-xl tracking-wide leading-relaxed mb-12"
             >
-              End-to-end cinematic solutions for luxury hotels & premium brands
+              Ads &middot; Reels &middot; Brand Films &middot; YouTube — edited for attention, engagement, and conversions.
             </motion.p>
-            
+
             {/* CTAs */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.6 }}
@@ -681,21 +749,21 @@ export default function App() {
                   onClick={() => setIsQuoteModalOpen(true)}
                   className="group w-full sm:w-auto bg-white text-black px-10 py-5 text-[0.65rem] font-bold uppercase tracking-[0.2em] hover:bg-white/90 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-4"
                 >
-                  START A PROJECT
+                  GET A QUOTE
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </button>
                 <a
                   href="#work-gallery"
                   className="group w-full sm:w-auto border border-transparent text-white/60 px-6 py-5 text-[0.65rem] font-bold uppercase tracking-[0.2em] hover:text-white transition-all duration-300 flex items-center justify-center gap-3"
                 >
-                  VIEW MY WORK
+                  VIEW MY EDITS
                   <ArrowDown className="w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-y-1 transition-all duration-300" />
                 </a>
               </div>
-              
+
               {/* Trust Signal */}
               <div className="flex items-center gap-4 opacity-80">
-                <span className="text-[0.6rem] uppercase tracking-widest text-white/40 font-medium">TRUSTED BY LUXURY HOTELS & BRANDS</span>
+                <span className="text-[0.6rem] uppercase tracking-widest text-white/40 font-medium">TRUSTED BY BRANDS & CREATORS WORLDWIDE</span>
                 <div className="h-px bg-white/10 flex-1 max-w-[120px]" />
               </div>
             </motion.div>
@@ -707,9 +775,9 @@ export default function App() {
             className="flex flex-col justify-center gap-12 flex-1 md:pl-10 lg:pl-16 md:border-l border-white/10 mt-4 md:mt-0"
           >
             {[
-              { num: "01", value: "+300% engagement on hotel listings", primary: true },
-              { num: "02", value: "Increase in direct booking inquiries", primary: false },
-              { num: "03", value: "Scroll-stopping visuals that convert", primary: false },
+              { num: "01", value: "Strategic editing built for viewer retention", primary: true },
+              { num: "02", value: "Color grading & sound that elevate every frame", primary: false },
+              { num: "03", value: "Fast turnaround without compromising quality", primary: false },
             ].map((item, i) => (
               <motion.div
                 key={item.num}
@@ -721,11 +789,10 @@ export default function App() {
                 <span className={`text-[0.6rem] font-bold tracking-[0.25em] font-label mt-1.5 flex-shrink-0 transition-colors duration-500 ${item.primary ? "text-white/40" : "text-white/20"}`}>
                   {item.num}
                 </span>
-                <span className={`font-medium tracking-wide leading-snug transition-all duration-500 group-hover:text-white ${
-                  item.primary
-                    ? "text-[1.25rem] text-white/90"
-                    : "text-[1.05rem] text-white/50"
-                }`}>
+                <span className={`font-medium tracking-wide leading-snug transition-all duration-500 group-hover:text-white ${item.primary
+                  ? "text-[1.25rem] text-white/90"
+                  : "text-[1.05rem] text-white/50"
+                  }`}>
                   {item.value}
                 </span>
               </motion.div>
@@ -760,68 +827,6 @@ export default function App() {
       {/* View My Work */}
       <section className="bg-[#f8f8f8]" id="work">
         <div className="px-8 py-32 max-w-screen-2xl mx-auto">
-          {/* Pexels Global Reach Section */}
-          <div className="mb-32">
-            <div className="bg-white border border-black/5 p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-10 group hover:border-black/10 transition-colors duration-500 mb-8 border-l-4 border-l-black/20 hover:border-l-black shadow-sm">
-              <div className="max-w-xl">
-                <h3 className="text-sm md:text-base font-black uppercase tracking-tighter text-black mb-3">Global Reach & Authority</h3>
-                <p className="text-[0.6875rem] text-black/40 uppercase tracking-[0.1em] leading-relaxed">
-                  Featured photography reaching hundreds of thousands of viewers worldwide on Pexels. Establishing visual authority through compelling, high-quality imagery.
-                </p>
-              </div>
-              
-              <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 items-start sm:items-center w-full md:w-auto">
-                <div>
-                  <h4 className="text-5xl md:text-6xl font-black text-black tracking-tighter">125.2K<span className="text-black/30 text-3xl">+</span></h4>
-                  <div className="text-[0.625rem] text-black/30 uppercase tracking-ultra font-bold mt-2">TOTAL VIEWS</div>
-                </div>
-                
-                <a 
-                  href="https://www.pexels.com/@wxeim-768574136/" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="w-full sm:w-auto border border-black/10 text-black px-8 py-5 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-black hover:text-white transition-all duration-300 text-center flex items-center justify-center group-hover:border-black/30"
-                >
-                  VIEW ACCOUNT <span className="ml-2 font-normal text-base leading-none transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
-                </a>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {pexelsGrid.map((img, idx) => {
-                const altTexts = [
-                  "Cinematic drone shot over Kashmir landscape — aerial videography by Wasim Pakhtoon",
-                  "Hotel photography and cinematic shoot in Kashmir — luxury property videography",
-                  "Brand content creation and visual storytelling in Kashmir by Wasim Pakhtoon",
-                  "Real estate and architectural photography in Srinagar, Kashmir",
-                ];
-                return (
-                  <motion.div 
-                    key={idx}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: idx * 0.1 }}
-                    className="aspect-[3/4] bg-black/[0.03] overflow-hidden group relative cursor-zoom-in"
-                  >
-                    <img 
-                      src={img} 
-                      alt={altTexts[idx]}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
-                    />
-                    <div className="absolute inset-0 border border-black/5 group-hover:border-black/10 transition-colors pointer-events-none z-10" />
-                    <div className="absolute top-4 left-4 z-20 flex items-center gap-2 transition-opacity duration-500">
-                      <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-                      <span className="text-[0.5rem] tracking-ultra text-white font-bold uppercase">PEXELS</span>
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-
           {/* Portfolio Header */}
           <div id="work-gallery" className="border-t border-black/10 pt-10 mb-12">
             <div className="flex flex-col md:flex-row justify-between md:items-end gap-6 mb-10">
@@ -840,11 +845,10 @@ export default function App() {
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id === -1 ? null : cat.id)}
-                  className={`px-5 py-2.5 text-[0.55rem] font-bold uppercase tracking-[0.18em] transition-all duration-300 border ${
-                    (cat.id === -1 && activeCategory === null) || activeCategory === cat.id
-                      ? "bg-black text-white border-black"
-                      : "bg-white text-black/50 border-black/10 hover:border-black/30 hover:text-black"
-                  }`}
+                  className={`px-5 py-2.5 text-[0.55rem] font-bold uppercase tracking-[0.18em] transition-all duration-300 border ${(cat.id === -1 && activeCategory === null) || activeCategory === cat.id
+                    ? "bg-black text-white border-black"
+                    : "bg-white text-black/50 border-black/10 hover:border-black/30 hover:text-black"
+                    }`}
                 >
                   {cat.title}
                 </button>
@@ -868,7 +872,7 @@ export default function App() {
                   className={`group relative overflow-hidden bg-black ${project.fullWidth ? "md:col-span-2" : ""}`}
                 >
                   {/* Media */}
-                  <div className="aspect-video w-full overflow-hidden relative">
+                  <div className={`${project.isVertical ? "aspect-[9/16]" : "aspect-video"} w-full overflow-hidden relative`}>
                     {project.vimeoId ? (
                       <div className="w-full h-full pointer-events-none">
                         <iframe
@@ -889,6 +893,17 @@ export default function App() {
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                           title={`${project.title} — aerial visuals by Wasim Pakhtoon`}
                           loading="eager"
+                        />
+                      </div>
+                    ) : project.muxId ? (
+                      <div className="w-full h-full overflow-hidden bg-black">
+                        <iframe
+                          src={`https://player.mux.com/${project.muxId}?autoplay=1&muted=1&loop=1&controls=0`}
+                          className="w-full h-full object-cover"
+                          frameBorder="0"
+                          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                          allowFullScreen
+                          title={`${project.title} — ad edit by Wasim Pakhtoon`}
                         />
                       </div>
                     ) : (
@@ -938,6 +953,136 @@ export default function App() {
               <p className="text-[0.65rem] uppercase tracking-[0.2em]">No projects in this category yet.</p>
             </div>
           )}
+          
+          {/* Pexels Global Reach Section */}
+          <div className="mt-32">
+            <div className="bg-white border border-black/5 p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-10 group hover:border-black/10 transition-colors duration-500 mb-8 border-l-4 border-l-black/20 hover:border-l-black shadow-sm">
+              <div className="max-w-xl">
+                <h3 className="text-sm md:text-base font-black uppercase tracking-tighter text-black mb-3">Global Reach & Authority</h3>
+                <p className="text-[0.6875rem] text-black/40 uppercase tracking-[0.1em] leading-relaxed">
+                  Featured photography reaching hundreds of thousands of viewers worldwide on Pexels. Establishing visual authority through compelling, high-quality imagery.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-8 sm:gap-12 items-start sm:items-center w-full md:w-auto">
+                <div>
+                  <h4 className="text-5xl md:text-6xl font-black text-black tracking-tighter">125.2K<span className="text-black/30 text-3xl">+</span></h4>
+                  <div className="text-[0.625rem] text-black/30 uppercase tracking-ultra font-bold mt-2">TOTAL VIEWS</div>
+                </div>
+
+                <a
+                  href="https://www.pexels.com/@wxeim-768574136/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full sm:w-auto border border-black/10 text-black px-8 py-5 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-black hover:text-white transition-all duration-300 text-center flex items-center justify-center group-hover:border-black/30"
+                >
+                  VIEW ACCOUNT <span className="ml-2 font-normal text-base leading-none transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">↗</span>
+                </a>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {pexelsGrid.map((img, idx) => {
+                const altTexts = [
+                  "Cinematic drone shot over Kashmir landscape — aerial videography by Wasim Pakhtoon",
+                  "Hotel photography and cinematic shoot in Kashmir — luxury property videography",
+                  "Brand content creation and visual storytelling in Kashmir by Wasim Pakhtoon",
+                  "Real estate and architectural photography in Srinagar, Kashmir",
+                ];
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="aspect-[3/4] bg-black/[0.03] overflow-hidden group relative cursor-zoom-in"
+                  >
+                    <img
+                      src={img}
+                      alt={altTexts[idx]}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700"
+                    />
+                    <div className="absolute inset-0 border border-black/5 group-hover:border-black/10 transition-colors pointer-events-none z-10" />
+                    <div className="absolute top-4 left-4 z-20 flex items-center gap-2 transition-opacity duration-500">
+                      <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+                      <span className="text-[0.5rem] tracking-ultra text-white font-bold uppercase">PEXELS</span>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What I Edit Section */}
+      <section className="bg-white border-t border-black/10" id="what-i-edit">
+        <div className="px-8 py-24 md:py-32 max-w-screen-2xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between gap-12 mb-16">
+            <div className="max-w-xl">
+              <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-black/25 mb-3 block">SPECIALTIES</span>
+              <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black leading-none">What I Edit</h2>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {whatIEdit.map((item, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="bg-[#f8f8f8] p-8 md:p-10 border border-black/5 hover:border-black/20 transition-all duration-500 group"
+              >
+                <h3 className="text-lg font-black uppercase tracking-tight text-black mb-4 group-hover:text-black/80">{item.title}</h3>
+                <p className="text-[0.65rem] uppercase tracking-[0.12em] text-black/40 leading-relaxed font-medium group-hover:text-black/60 transition-colors">
+                  {item.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Why My Editing Stands Out */}
+      <section className="bg-[#0a0a0a]" id="why-i-stand-out">
+        <div className="px-8 py-24 md:py-32 max-w-screen-2xl mx-auto">
+          <div className="flex flex-col md:flex-row justify-between gap-12 mb-16 border-b border-white/10 pb-12">
+            <div className="max-w-2xl">
+              <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-white/30 mb-3 block">THE APPROACH</span>
+              <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-white leading-none mb-6">Why My Editing Stands Out</h2>
+              <p className="text-[0.7rem] uppercase tracking-[0.15em] text-white/50 leading-relaxed max-w-xl">
+                I don't just cut clips together. I craft videos strategically.
+              </p>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+            {whyMyEditingStandsOut.map((item, idx) => (
+              <motion.div 
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="flex gap-6 group"
+              >
+                <span className="text-[0.6rem] font-bold tracking-[0.25em] font-label mt-1.5 flex-shrink-0 text-white/20 group-hover:text-white/40 transition-colors">
+                  0{idx + 1}
+                </span>
+                <div>
+                  <h3 className="text-xl font-black uppercase tracking-tight text-white/90 mb-4">{item.title}</h3>
+                  <p className="text-[0.65rem] uppercase tracking-[0.15em] text-white/40 leading-loose max-w-md">
+                    {item.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -949,14 +1094,14 @@ export default function App() {
           {/* Section Header */}
           <div className="border-t border-white/10 pt-8 mb-16 md:mb-24 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
             <div>
-              <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-white/25 block mb-3">WHAT WE DO</span>
+              <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-white/25 block mb-3">SERVICES</span>
               <motion.h2
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className="text-[clamp(2.2rem,6vw,5.5rem)] font-black uppercase tracking-tighter leading-[0.88] text-white"
               >
-                Cinematic services.<br />Built for results.
+                Post-Production.<br />And beyond.
               </motion.h2>
             </div>
             <motion.p
@@ -966,58 +1111,114 @@ export default function App() {
               transition={{ delay: 0.15 }}
               className="hidden md:block text-[0.6rem] uppercase tracking-[0.18em] leading-loose text-white/30 max-w-xs text-right"
             >
-              Every service is a complete production system — not just a task.
+              Editing is my primary focus. Production is available as an add-on.
             </motion.p>
           </div>
 
-          {/* Services List */}
-          <div className="flex flex-col">
-            {services.map((service, index) => (
-              <motion.div
-                key={service.id}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
-                className="group grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-10 md:py-14 border-b border-white/8 items-start hover:border-white/20 transition-all duration-500 cursor-default"
-              >
-                {/* Index */}
-                <div className="md:col-span-1">
-                  <span className="text-[0.5rem] font-bold text-white/15 tracking-[0.25em] group-hover:text-white/30 transition-colors duration-500">
-                    {service.id}
-                  </span>
-                </div>
-
-                {/* Title */}
-                <div className="md:col-span-4">
-                  <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white/60 group-hover:text-white transition-colors duration-500 leading-tight">
-                    {service.title}
-                  </h3>
-                </div>
-
-                {/* Description + Tags */}
-                <div className="md:col-span-6 flex flex-col gap-6">
-                  <p className="text-[0.65rem] md:text-[0.75rem] uppercase tracking-[0.12em] leading-loose text-white/30 group-hover:text-white/55 transition-colors duration-500 max-w-lg">
-                    {service.description}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {service.tags.map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-[0.45rem] uppercase tracking-[0.18em] font-bold border border-white/10 text-white/25 px-3 py-1.5 group-hover:border-white/20 group-hover:text-white/40 transition-all duration-500"
-                      >
-                        {tag}
-                      </span>
-                    ))}
+          {/* Primary Services List */}
+          <div className="mb-20">
+            <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/40 mb-8 border-b border-white/10 pb-4">PRIMARY: POST-PRODUCTION</h3>
+            <div className="flex flex-col">
+              {primaryServices.map((service, index) => (
+                <motion.div
+                  key={service.id}
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
+                  className="group grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-10 md:py-14 border-b border-white/8 items-start hover:border-white/20 transition-all duration-500 cursor-default"
+                >
+                  {/* Index */}
+                  <div className="md:col-span-1">
+                    <span className="text-[0.5rem] font-bold text-white/15 tracking-[0.25em] group-hover:text-white/30 transition-colors duration-500">
+                      {service.id}
+                    </span>
                   </div>
-                </div>
 
-                {/* Arrow */}
-                <div className="md:col-span-1 flex justify-end items-start pt-2">
-                  <ArrowRight className="w-4 h-4 text-white/10 group-hover:text-white/50 group-hover:translate-x-1 transition-all duration-500" />
-                </div>
-              </motion.div>
-            ))}
+                  {/* Title */}
+                  <div className="md:col-span-4">
+                    <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white/60 group-hover:text-white transition-colors duration-500 leading-tight">
+                      {service.title}
+                    </h3>
+                  </div>
+
+                  {/* Description + Tags */}
+                  <div className="md:col-span-6 flex flex-col gap-6">
+                    <p className="text-[0.65rem] md:text-[0.75rem] uppercase tracking-[0.12em] leading-loose text-white/30 group-hover:text-white/55 transition-colors duration-500 max-w-lg">
+                      {service.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {service.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[0.45rem] uppercase tracking-[0.18em] font-bold border border-white/10 text-white/25 px-3 py-1.5 group-hover:border-white/20 group-hover:text-white/40 transition-all duration-500"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Arrow */}
+                  <div className="md:col-span-1 flex justify-end items-start pt-2">
+                    <ArrowRight className="w-4 h-4 text-white/10 group-hover:text-white/50 group-hover:translate-x-1 transition-all duration-500" />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Secondary Services List */}
+          <div>
+            <h3 className="text-sm font-black uppercase tracking-[0.2em] text-white/40 mb-8 border-b border-white/10 pb-4">SECONDARY: PRODUCTION (OPTIONAL)</h3>
+            <div className="flex flex-col">
+              {secondaryServices.map((service, index) => (
+                <motion.div
+                  key={service.id}
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1], delay: index * 0.07 }}
+                  className="group grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8 py-10 md:py-14 border-b border-white/8 items-start hover:border-white/20 transition-all duration-500 cursor-default"
+                >
+                  {/* Index */}
+                  <div className="md:col-span-1">
+                    <span className="text-[0.5rem] font-bold text-white/15 tracking-[0.25em] group-hover:text-white/30 transition-colors duration-500">
+                      {service.id}
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <div className="md:col-span-4">
+                    <h3 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white/60 group-hover:text-white transition-colors duration-500 leading-tight">
+                      {service.title}
+                    </h3>
+                  </div>
+
+                  {/* Description + Tags */}
+                  <div className="md:col-span-6 flex flex-col gap-6">
+                    <p className="text-[0.65rem] md:text-[0.75rem] uppercase tracking-[0.12em] leading-loose text-white/30 group-hover:text-white/55 transition-colors duration-500 max-w-lg">
+                      {service.description}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {service.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="text-[0.45rem] uppercase tracking-[0.18em] font-bold border border-white/10 text-white/25 px-3 py-1.5 group-hover:border-white/20 group-hover:text-white/40 transition-all duration-500"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Arrow */}
+                  <div className="md:col-span-1 flex justify-end items-start pt-2">
+                    <ArrowRight className="w-4 h-4 text-white/10 group-hover:text-white/50 group-hover:translate-x-1 transition-all duration-500" />
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           {/* Bottom CTA */}
@@ -1068,7 +1269,7 @@ export default function App() {
                     viewport={{ once: true }}
                     className="text-[clamp(2.4rem,6vw,5.5rem)] font-black tracking-tighter uppercase leading-[0.88] mb-10 text-black"
                   >
-                    Vision.<br />Precision.<br />Cinematic.
+                    Precision.<br />Storytelling.<br />Results.
                   </motion.h2>
 
                   {/* Divider */}
@@ -1077,9 +1278,9 @@ export default function App() {
                   {/* Short Bio — 3 scannable lines */}
                   <div className="flex flex-col gap-5 mb-16">
                     {[
-                      "A cinematic filmmaker based in Srinagar, Kashmir.",
-                      "I craft visual stories for luxury hotels, premium brands, and global clients.",
-                      "Every project — from concept to final delivery — is handled end-to-end.",
+                      "A video editor and post-production specialist based in Srinagar, Kashmir.",
+                      "I craft high-impact edits for brands, creators, and businesses worldwide.",
+                      "From raw footage to final delivery — every frame is shaped with precision and purpose.",
                     ].map((line, i) => (
                       <motion.p
                         key={i}
@@ -1140,12 +1341,12 @@ export default function App() {
                 </div>
                 <h2 className="text-3xl font-black uppercase tracking-tighter leading-none text-black">FREQUENTLY ASKED.</h2>
               </div>
-              
+
               <div className="md:col-span-8">
                 <div className="flex flex-col border-t border-black/10">
                   {faqs.map((faq, index) => (
                     <div key={index} className="border-b border-black/10">
-                      <button 
+                      <button
                         onClick={() => setActiveFaq(activeFaq === index ? null : index)}
                         className="w-full flex justify-between items-center py-6 text-left focus:outline-none group"
                       >
@@ -1179,20 +1380,55 @@ export default function App() {
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="bg-[#0a0a0a]" id="cta">
+        <div className="px-8 md:px-12 py-32 md:py-48 max-w-screen-2xl mx-auto text-center flex flex-col items-center">
+          <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-white/30 block mb-6">NEXT PHASE</span>
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-[clamp(2.5rem,7vw,7rem)] font-black tracking-tighter uppercase leading-[0.82] mb-6 text-white"
+          >
+            READY TO ELEVATE<br />YOUR VIDEOS?
+          </motion.h2>
+          <p className="text-[0.7rem] uppercase tracking-[0.15em] text-white/50 leading-relaxed max-w-xl mb-12">
+            Let's discuss your next project.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={() => setIsQuoteModalOpen(true)}
+              className="group bg-white text-black px-10 py-5 text-[0.6rem] font-black uppercase tracking-[0.18em] hover:bg-white/90 active:scale-[0.98] transition-all duration-300 flex items-center justify-center gap-3"
+            >
+              START A PROJECT
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+            </button>
+            <a
+              href="https://wa.me/919541591652?text=Hi%20Wasim%2C%20I%20saw%20your%20website%20and%20I%E2%80%99m%20interested%20in%20working%20with%20you."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border border-white/15 text-white/70 px-10 py-5 text-[0.6rem] font-black uppercase tracking-[0.18em] hover:border-white hover:text-white active:scale-[0.98] transition-all duration-300 text-center flex items-center justify-center gap-2"
+            >
+              CHAT ON WHATSAPP
+            </a>
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
       <section className="bg-white" id="contact">
         <div className="px-8 md:px-12 py-24 md:py-36 max-w-screen-2xl mx-auto">
           <div className="border-t border-black/10 pt-12 md:pt-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-16 md:gap-8">
               <div className="md:col-span-8">
-                <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-black/25 block mb-8">NEXT PHASE</span>
+                <span className="text-[0.5rem] uppercase tracking-[0.25em] font-bold text-black/25 block mb-8">CONTACT</span>
                 <motion.h2
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   className="text-[clamp(2.5rem,7vw,7rem)] font-black tracking-tighter uppercase leading-[0.82] mb-12 text-black"
                 >
-                  READY TO BUILD<br />YOUR VISION?
+                  GET IN<br />TOUCH.
                 </motion.h2>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
@@ -1212,7 +1448,7 @@ export default function App() {
                   </a>
                 </div>
               </div>
-              
+
               <div className="md:col-span-4 flex flex-col justify-between">
                 <div className="space-y-8">
                   <div>
@@ -1302,14 +1538,14 @@ export default function App() {
               onClick={() => setIsQuoteModalOpen(false)}
               className="absolute inset-0 bg-black/90 backdrop-blur-xl"
             />
-            
+
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="relative w-full max-w-2xl bg-white border border-black/5 p-8 md:p-12 overflow-y-auto max-h-[90vh] shadow-[0_30px_100px_rgba(0,0,0,0.1)]"
             >
-              <button 
+              <button
                 onClick={() => setIsQuoteModalOpen(false)}
                 className="absolute top-6 right-6 text-black/40 hover:text-black transition-colors"
               >
@@ -1329,7 +1565,7 @@ export default function App() {
                   <p className="text-[0.6875rem] uppercase tracking-widest text-black/60 leading-relaxed max-w-xs mx-auto">
                     YOUR REQUEST HAS BEEN RECEIVED. WE’LL REVIEW EVERYTHING PERSONALLY AND GET BACK TO YOU SHORTLY.
                   </p>
-                  <button 
+                  <button
                     onClick={() => {
                       setIsQuoteModalOpen(false);
                       setTimeout(() => setFormStatus("idle"), 500);
@@ -1364,45 +1600,45 @@ export default function App() {
                         <label className="text-[0.625rem] uppercase tracking-ultra font-bold text-black/40">PHONE / WHATSAPP</label>
                         <input name="phone" type="text" className="w-full bg-transparent border-0 border-b border-black/10 focus:border-black focus:ring-0 py-3 px-0 placeholder:text-black/10 text-sm uppercase tracking-widest text-black transition-colors" placeholder="+00 000 000 000" />
                       </div>
-                      <CustomSelect 
-                        name="project_type" 
-                        label="SELECT TYPE" 
+                      <CustomSelect
+                        name="project_type"
+                        label="SELECT TYPE"
                         theme="light"
-                        required 
+                        required
                         options={[
                           { value: "editing", label: "VIDEO EDITING" },
                           { value: "branding", label: "BRANDING" },
                           { value: "shoot", label: "CINEMATIC SHOOT" },
                           { value: "social", label: "SOCIAL CONTENT" },
                           { value: "other", label: "OTHER" },
-                        ]} 
+                        ]}
                       />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                      <CustomSelect 
-                        name="budget" 
-                        label="SELECT BUDGET" 
+                      <CustomSelect
+                        name="budget"
+                        label="SELECT BUDGET"
                         theme="light"
-                        required 
+                        required
                         options={[
                           { value: "under500", label: "UNDER $500" },
                           { value: "500-1000", label: "$500 – $1,000" },
                           { value: "1000-3000", label: "$1,000 – $3,000" },
                           { value: "3000-5000", label: "$3,000 – $5,000" },
                           { value: "5000+", label: "$5,000+" },
-                        ]} 
+                        ]}
                       />
-                      <CustomSelect 
-                        name="timeline" 
-                        label="TIMELINE" 
+                      <CustomSelect
+                        name="timeline"
+                        label="TIMELINE"
                         theme="light"
                         defaultValue="standard"
                         options={[
                           { value: "standard", label: "STANDARD (1-2 WEEKS)" },
                           { value: "urgent", label: "URGENT (1-3 DAYS)" },
                           { value: "flexible", label: "FLEXIBLE" },
-                        ]} 
+                        ]}
                       />
                     </div>
 
@@ -1417,7 +1653,7 @@ export default function App() {
                     </div>
 
                     <div className="pt-8">
-                      <button 
+                      <button
                         disabled={formStatus === "submitting"}
                         className="w-full bg-black text-white py-4 text-[0.625rem] font-bold uppercase tracking-ultra hover:bg-black/90 transition-all disabled:opacity-50 disabled:cursor-wait flex items-center justify-center gap-4"
                       >
@@ -1451,7 +1687,7 @@ export default function App() {
           </motion.button>
         )}
       </AnimatePresence>
-      
+
       {/* Right Click Glassmorphism Overlay */}
       <AnimatePresence>
         {isRightClickOverlayOpen && (
@@ -1464,12 +1700,12 @@ export default function App() {
             className="fixed inset-0 z-[1000] flex items-center justify-center p-6"
           >
             {/* Darker Backdrop for contrast on white sections */}
-            <motion.div 
+            <motion.div
               initial={{ backdropFilter: "blur(0px)", backgroundColor: "rgba(0,0,0,0)" }}
               animate={{ backdropFilter: "blur(12px)", backgroundColor: "rgba(0,0,0,0.5)" }}
-              className="absolute inset-0" 
+              className="absolute inset-0"
             />
-            
+
             {/* Glass Card */}
             <motion.div
               initial={{ opacity: 0, scale: 0.98 }}

@@ -99,9 +99,27 @@ const adProjects: Project[] = [
     id: 8,
     year: "2025",
     title: "SOLGRID AD EDIT",
-    category: "AD EDIT",
+    category: "AD EDIT · USA",
     muxId: "h5SoJiwpJaT02cN7wrxHeQJQiWytCgsCdJTIO02aUxJjg",
-    description: "Vertical 9:16 high-impact social ad.",
+    description: "U.S. Based Client — Vertical 9:16 high-impact social ad.",
+    isVertical: true,
+  },
+  {
+    id: 9,
+    year: "2025",
+    title: "MUTATE JUNIOR",
+    category: "AD EDIT · NIT SRINAGAR",
+    muxId: "tQ8Ak5cm8zSi3xysZGaLTfRHFgdQRPCK00whbogqe3N4",
+    description: "NIT Srinagar — Dynamic educational course for kids.",
+    isVertical: true,
+  },
+  {
+    id: 10,
+    year: "2025",
+    title: "VERTICAL AD SHOWCASE",
+    category: "AD EDIT · USA",
+    muxId: "N4yd8SFJxTzY02IgFdnoiqGTcgmeaAE12SBbbDaQT7u00",
+    description: "U.S. Based Client — High-impact vertical storytelling and conversion-focused editing.",
     isVertical: true,
   }
 ];
@@ -921,7 +939,7 @@ export default function App() {
 
                     {/* Category Tag — top left */}
                     <div className="absolute top-4 left-4 z-10">
-                      <span className="bg-white/10 backdrop-blur-sm text-white text-[0.45rem] font-bold uppercase tracking-[0.2em] px-3 py-1.5 border border-white/10">
+                      <span className="bg-black text-white text-[0.45rem] font-bold uppercase tracking-[0.2em] px-3 py-1.5 border border-white/10">
                         {project.category}
                       </span>
                     </div>
@@ -953,7 +971,7 @@ export default function App() {
               <p className="text-[0.65rem] uppercase tracking-[0.2em]">No projects in this category yet.</p>
             </div>
           )}
-          
+
           {/* Pexels Global Reach Section */}
           <div className="mt-32">
             <div className="bg-white border border-black/5 p-8 md:p-12 flex flex-col md:flex-row justify-between items-start md:items-center gap-10 group hover:border-black/10 transition-colors duration-500 mb-8 border-l-4 border-l-black/20 hover:border-l-black shadow-sm">
@@ -1027,10 +1045,10 @@ export default function App() {
               <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black leading-none">What I Edit</h2>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {whatIEdit.map((item, idx) => (
-              <motion.div 
+              <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -1060,10 +1078,10 @@ export default function App() {
               </p>
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
             {whyMyEditingStandsOut.map((item, idx) => (
-              <motion.div 
+              <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}

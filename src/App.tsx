@@ -874,9 +874,9 @@ export default function App() {
                   {/* Media */}
                   <div className={`${project.isVertical ? "aspect-[9/16]" : "aspect-video"} w-full overflow-hidden relative`}>
                     {project.vimeoId ? (
-                      <div className="w-full h-full pointer-events-none">
+                      <div className="w-full h-full">
                         <iframe
-                          src={`https://player.vimeo.com/video/${project.vimeoId}?background=1&autoplay=1&muted=1&loop=1&badge=0&autopause=0`}
+                          src={`https://player.vimeo.com/video/${project.vimeoId}?autoplay=1&muted=0&loop=1&badge=0&autopause=0`}
                           className="w-full h-full object-cover scale-[1.05] group-hover:scale-110 transition-transform duration-700"
                           frameBorder="0"
                           allow="autoplay; fullscreen; picture-in-picture"
@@ -887,7 +887,7 @@ export default function App() {
                     ) : project.youtubeId ? (
                       <div className="w-full h-full overflow-hidden bg-black">
                         <iframe
-                          src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1&mute=1&loop=1&playlist=${project.youtubeId}&controls=0&rel=0&showinfo=0&modestbranding=1&vq=hd1080`}
+                          src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1&mute=0&loop=1&playlist=${project.youtubeId}&controls=1&rel=0&showinfo=0&modestbranding=1&vq=hd1080`}
                           className="w-[100.5%] h-[100.5%] -ml-[0.25%] -mt-[0.25%]"
                           frameBorder="0"
                           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -898,7 +898,7 @@ export default function App() {
                     ) : project.muxId ? (
                       <div className="w-full h-full overflow-hidden bg-black">
                         <iframe
-                          src={`https://player.mux.com/${project.muxId}?autoplay=1&muted=1&loop=1&controls=0`}
+                          src={`https://player.mux.com/${project.muxId}?autoplay=1&muted=0&loop=1`}
                           className="w-full h-full object-cover"
                           frameBorder="0"
                           allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
@@ -917,7 +917,7 @@ export default function App() {
                     )}
 
                     {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                     {/* Category Tag — top left */}
                     <div className="absolute top-4 left-4 z-10">

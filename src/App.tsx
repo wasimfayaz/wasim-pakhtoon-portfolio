@@ -4,7 +4,7 @@
  */
 
 import { motion, AnimatePresence, useScroll, useTransform } from "motion/react";
-import { ArrowDown, ArrowRight, X, CheckCircle2, ChevronDown, Menu, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowRight, X, CheckCircle2, ChevronDown, Menu, ArrowUp, Play } from "lucide-react";
 import React, { useState, useEffect, useRef } from "react";
 
 // Image Imports
@@ -398,6 +398,7 @@ export default function App() {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState("idle");
+  const [activeProjectId, setActiveProjectId] = useState<number | null>(null);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [activeCategory, setActiveCategory] = useState<number | null>(0);
   const [isRightClickOverlayOpen, setIsRightClickOverlayOpen] = useState(false);
@@ -890,67 +891,84 @@ export default function App() {
                   className={`group relative overflow-hidden bg-black ${project.fullWidth ? "md:col-span-2" : ""}`}
                 >
                   {/* Media */}
-                  <div className={`${project.isVertical ? "aspect-[9/16]" : "aspect-video"} w-full overflow-hidden relative`}>
-                    {project.vimeoId ? (
-                      <div className="w-full h-full">
-                        <iframe
-                          src={`https://player.vimeo.com/video/${project.vimeoId}?autoplay=1&muted=0&loop=1&badge=0&autopause=0`}
-                          className="w-full h-full object-cover scale-[1.05] group-hover:scale-110 transition-transform duration-700"
-                          frameBorder="0"
-                          allow="autoplay; fullscreen; picture-in-picture"
-                          title={`${project.title} — cinematic video production by Wasim Pakhtoon`}
-                          loading="lazy"
-                        />
-                      </div>
-                    ) : project.youtubeId ? (
-                      <div className="w-full h-full overflow-hidden bg-black">
-                        <iframe
-                          src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1&mute=0&loop=1&playlist=${project.youtubeId}&controls=1&rel=0&showinfo=0&modestbranding=1&vq=hd1080`}
-                          className="w-[100.5%] h-[100.5%] -ml-[0.25%] -mt-[0.25%]"
-                          frameBorder="0"
-                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                          title={`${project.title} — aerial visuals by Wasim Pakhtoon`}
-                          loading="eager"
-                        />
-                      </div>
-                    ) : project.muxId ? (
-                      <div className="w-full h-full overflow-hidden bg-black">
-                        <iframe
-                          src={`https://player.mux.com/${project.muxId}?autoplay=1&muted=0&loop=1`}
-                          className="w-full h-full object-cover"
-                          frameBorder="0"
-                          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-                          allowFullScreen
-                          title={`${project.title} — ad edit by Wasim Pakhtoon`}
-                        />
+                  <div 
+                    className={`${project.isVertical ? "aspect-[9/16]" : "aspect-video"} w-full overflow-hidden relative cursor-pointer group/media`}
+                    onClick={() => setActiveProjectId(activeProjectId === project.id ? null : project.id)}
+                  >
+                    {activeProjectId === project.id ? (
+                      <div className="w-full h-full bg-black">
+                        {project.vimeoId ? (
+                          <iframe
+                            src={`https://player.vimeo.com/video/${project.vimeoId}?autoplay=1&muted=0&loop=1&badge=0&autopause=0`}
+                            className="w-full h-full object-cover"
+                            frameBorder="0"
+                            allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer"
+                            title={`${project.title} — cinematic video production by Wasim Pakhtoon`}
+                          />
+                        ) : project.youtubeId ? (
+                          <iframe
+                            src={`https://www.youtube-nocookie.com/embed/${project.youtubeId}?autoplay=1&mute=0&loop=1&playlist=${project.youtubeId}&controls=1&rel=0&showinfo=0&modestbranding=1&vq=hd1080`}
+                            className="w-full h-full"
+                            frameBorder="0"
+                            allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer"
+                            title={`${project.title} — aerial visuals by Wasim Pakhtoon`}
+                          />
+                        ) : project.muxId ? (
+                          <iframe
+                            src={`https://player.mux.com/${project.muxId}?autoplay=1&muted=0&loop=1`}
+                            className="w-full h-full object-cover"
+                            frameBorder="0"
+                            allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+                            allowFullScreen
+                            title={`${project.title} — ad edit by Wasim Pakhtoon`}
+                          />
+                        ) : (
+                          <img
+                            src={project.image}
+                            alt={project.title}
+                            className="w-full h-full object-cover"
+                          />
+                        )}
                       </div>
                     ) : (
-                      <img
-                        src={project.image}
-                        alt={`${project.title} — ${project.catTitle} by Wasim Pakhtoon`}
-                        loading="lazy"
-                        decoding="async"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                      />
+                      <div className="w-full h-full relative">
+                        <img
+                          src={project.image || (project.muxId ? `https://image.mux.com/${project.muxId}/thumbnail.jpg` : "https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg?auto=compress&cs=tinysrgb&w=800")}
+                          alt={`${project.title} — ${project.catTitle} by Wasim Pakhtoon`}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                        />
+                        {/* Play Icon Overlay */}
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover/media:bg-black/40 transition-colors duration-300">
+                          <motion.div 
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-white/30 flex items-center justify-center backdrop-blur-sm bg-white/10 group-hover/media:border-white transition-all duration-500"
+                          >
+                            <Play className="w-6 h-6 md:w-8 md:h-8 text-white fill-white" />
+                          </motion.div>
+                        </div>
+                      </div>
                     )}
 
                     {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                     {/* Category Tag — top left */}
-                    <div className="absolute top-4 left-4 z-10">
+                    <div className="absolute top-4 left-4 z-10 pointer-events-none">
                       <span className="bg-black text-white text-[0.45rem] font-bold uppercase tracking-[0.2em] px-3 py-1.5 border border-white/10">
                         {project.category}
                       </span>
                     </div>
 
                     {/* Year tag — top right */}
-                    <div className="absolute top-4 right-4 z-10">
+                    <div className="absolute top-4 right-4 z-10 pointer-events-none">
                       <span className="text-white/40 text-[0.45rem] font-bold uppercase tracking-[0.2em]">{project.year}</span>
                     </div>
 
                     {/* Title — bottom */}
-                    <div className="absolute bottom-0 left-0 right-0 p-5 z-10">
+                    <div className="absolute bottom-0 left-0 right-0 p-5 z-10 pointer-events-none">
                       <h3 className="text-base md:text-lg font-black uppercase tracking-tighter text-white leading-tight mb-1">
                         {project.title}
                       </h3>

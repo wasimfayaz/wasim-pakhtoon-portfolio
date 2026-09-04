@@ -10,7 +10,7 @@ import {
 /* ------------------------------------------------------------------ */
 const WHATSAPP_NUMBER = '919596390069';          // +91 95963 90069
 const WHATSAPP_DISPLAY = '+91 95963 90069';
-const EMAIL = 'waxim.hq@gmail.com';
+const EMAIL = 'contact@wasimpakhtoon.com';
 
 function waLink(message: string) {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;

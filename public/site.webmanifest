@@ -1,0 +1,13 @@
+{
+  "name": "Wasim Pakhtoon — Web Developer & Designer",
+  "short_name": "Wasim Pakhtoon",
+  "description": "Web developer and designer in Srinagar, Kashmir. Fast, SEO-friendly websites for hotels, travel agencies and businesses.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#047857",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

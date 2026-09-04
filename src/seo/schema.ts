@@ -57,6 +57,7 @@ export function professionalServiceSchema() {
     name: `${SITE.name} — Web Development & Design`,
     url: `${SITE.domain}/`,
     image: SITE.ogImage,
+    logo: `${SITE.domain}/icon-512.png`,
     description:
       'Professional web development and web design in Srinagar and across Kashmir. Custom business websites, ecommerce, redesigns, and SEO-friendly builds.',
     founder: { '@id': PERSON_ID },

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite-react-ssg dev --port=3000 --host=0.0.0.0",
-    "build": "vite-react-ssg build && node scripts/postbuild.mjs",
+    "build": "node scripts/gen-images.mjs && vite-react-ssg build && node scripts/postbuild.mjs",
     "preview": "vite preview --port=3000 --host=0.0.0.0",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"
